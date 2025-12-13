@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>O-Meet (Jitsi) - Video Conferencing for Odoo</title>
+    <style>
+        body {
+            font-family: 'Roboto', 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        h1 {
+            color: #1a73e8;
+            font-size: 2.5em;
+            border-bottom: 3px solid #1a73e8;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #0f9d58;
+            font-size: 1.8em;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #34a853;
+            font-size: 1.3em;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .feature-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #1a73e8;
+        }
+        .feature-box h3 {
+            margin-top: 0;
+            color: #1a73e8;
+        }
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        .code-box {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin: 5px;
+        }
+        .badge-blue { background: #1a73e8; color: white; }
+        .badge-green { background: #0f9d58; color: white; }
+        .badge-yellow { background: #f4b400; color: white; }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <h1>🎥 O-Meet (Jitsi) - Google Meet-Style Video Conferencing</h1>
+        <p style="font-size: 1.2em; color: #666;">
+            Professional video conferencing solution for Odoo 18 with Google Meet-inspired interface and Jitsi integration.
+        </p>
+        <div>
+            <span class="badge badge-blue">Odoo 18.0</span>
+            <span class="badge badge-green">Calendar Integration</span>
+            <span class="badge badge-yellow">JWT Authentication</span>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>✨ Key Features</h2>
+        <div class="feature-grid">
+            <div class="feature-box">
+                <h3>⚡ Instant Meetings</h3>
+                <p>Create and join meetings instantly with one click. No scheduling needed for quick calls.</p>
+            </div>
+            <div class="feature-box">
+                <h3>📅 Scheduled Meetings</h3>
+                <p>Plan meetings in advance with date, time, and duration. Integrated with Odoo Calendar.</p>
+            </div>
+            <div class="feature-box">
+                <h3>🔗 Public Join Links</h3>
+                <p>Anyone with the meeting link can join - no Odoo login required!</p>
+            </div>
+            <div class="feature-box">
+                <h3>🎨 Modern Dashboard</h3>
+                <p>Beautiful Google Meet-style interface with quick actions and meeting management.</p>
+            </div>
+            <div class="feature-box">
+                <h3>🔐 JWT Security</h3>
+                <p>Optional JWT authentication for secure meetings with moderator privileges.</p>
+            </div>
+            <div class="feature-box">
+                <h3>📱 Mobile Friendly</h3>
+                <p>Works seamlessly on desktop and mobile browsers with WebRTC support.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>🚀 Quick Start</h2>
+        <h3>Create Instant Meeting</h3>
+        <ol>
+            <li>Go to <strong>O-Meet → Dashboard</strong></li>
+            <li>Click <strong>"New Meeting"</strong> button</li>
+            <li>Meeting opens in new tab automatically</li>
+            <li>Share the URL with participants</li>
+        </ol>
+
+        <h3>Create Scheduled Meeting</h3>
+        <ol>
+            <li>Go to <strong>O-Meet → My Meetings → Create</strong></li>
+            <li>Set <strong>Meeting Type</strong>: "Scheduled"</li>
+            <li>Choose date, time, and duration</li>
+            <li>Save and copy the meeting URL</li>
+            <li>Share with attendees</li>
+        </ol>
+
+        <h3>Join a Meeting</h3>
+        <ul>
+            <li><strong>Option 1:</strong> Dashboard → Enter meeting code → Join</li>
+            <li><strong>Option 2:</strong> My Meetings → Click "Join" button</li>
+            <li><strong>Option 3:</strong> Open shared meeting URL directly</li>
+        </ul>
+    </section>
+
+    <section class="section">
+        <h2>📋 Features in Detail</h2>
+        
+        <h3>Meeting Management</h3>
+        <ul>
+            <li><strong>States:</strong> Draft → Ready → Started → Ended</li>
+            <li><strong>Types:</strong> Instant vs Scheduled with visual badges</li>
+            <li><strong>Views:</strong> Dashboard, Kanban, List, Form with rich details</li>
+            <li><strong>Actions:</strong> Join Meeting, Copy Link buttons everywhere</li>
+            <li><strong>Integration:</strong> Full Odoo Calendar integration</li>
+        </ul>
+
+        <h3>Calendar Integration</h3>
+        <ul>
+            <li>Create meetings directly from Calendar events</li>
+            <li>Automatic meeting link generation</li>
+            <li>Sync meeting schedules with Odoo Calendar</li>
+            <li>Send invitations with meeting links</li>
+        </ul>
+
+        <h3>Security Features</h3>
+        <ul>
+            <li>JWT token authentication support</li>
+            <li>Configurable moderator privileges</li>
+            <li>Self-hosted Jitsi server support</li>
+            <li>Secure meeting room generation</li>
+        </ul>
+    </section>
+
+    <section class="section">
+        <h2>⚙️ Configuration</h2>
+        
+        <h3>System Parameters</h3>
+        <p>Configure your Jitsi server via <strong>Settings → Technical → System Parameters</strong>:</p>
+        <div class="code-box">
+jitsi.server_url = https://meet.jit.si (or your server)
+jitsi.server.domain = meet.jit.si
+jitsi.jwt.app_id = your_app_id (optional)
+jitsi.jwt.app_secret = your_secret (optional)
+        </div>
+
+        <div class="highlight">
+            <strong>💡 Pro Tip:</strong> For production use, deploy your own Jitsi server for better control, 
+            privacy, and performance. The module works with both meet.jit.si and self-hosted instances.
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>🎯 Use Cases</h2>
+        
+        <h3>Sales Team</h3>
+        <ul>
+            <li>Instant client calls from CRM</li>
+            <li>Schedule product demo meetings</li>
+            <li>Share meeting links in email campaigns</li>
+        </ul>
+
+        <h3>Support Team</h3>
+        <ul>
+            <li>Quick screen sharing sessions</li>
+            <li>Scheduled customer onboarding</li>
+            <li>Internal team standups</li>
+        </ul>
+
+        <h3>HR Department</h3>
+        <ul>
+            <li>Remote interview scheduling</li>
+            <li>Team meetings and all-hands</li>
+            <li>New employee onboarding</li>
+        </ul>
+    </section>
+
+    <section class="section">
+        <h2>🔧 Technical Details</h2>
+        <ul>
+            <li><strong>Version:</strong> 1.1.0</li>
+            <li><strong>Odoo Version:</strong> 18.0</li>
+            <li><strong>License:</strong> LGPL-3</li>
+            <li><strong>Dependencies:</strong> base, web, website, calendar</li>
+            <li><strong>Python Dependencies:</strong> PyJWT (for JWT authentication)</li>
+            <li><strong>Browser Support:</strong> Chrome, Firefox, Edge, Safari (WebRTC required)</li>
+        </ul>
+    </section>
+
+    <section class="section">
+        <h2>📱 Browser Compatibility</h2>
+        <p>O-Meet works on all modern browsers with WebRTC support:</p>
+        <ul>
+            <li>✅ Google Chrome (recommended)</li>
+            <li>✅ Mozilla Firefox</li>
+            <li>✅ Microsoft Edge</li>
+            <li>✅ Safari (macOS and iOS)</li>
+            <li>✅ Mobile browsers (Android & iOS)</li>
+        </ul>
+    </section>
+
+    <section class="section">
+        <h2>🆘 Support</h2>
+        <p>Need help? Here are some resources:</p>
+        <ul>
+            <li>Check module documentation in <code>README.md</code></li>
+            <li>Review troubleshooting guides in module folder</li>
+            <li>Test with meet.jit.si before deploying your own server</li>
+            <li>Ensure browser allows camera/microphone access</li>
+        </ul>
+    </section>
+
+    <section class="section">
+        <h2>🌟 Why Choose O-Meet?</h2>
+        <ul>
+            <li>✅ <strong>Free & Open Source:</strong> LGPL-3 licensed</li>
+            <li>✅ <strong>No Per-User Cost:</strong> Unlike proprietary solutions</li>
+            <li>✅ <strong>Privacy-Focused:</strong> Host your own Jitsi server</li>
+            <li>✅ <strong>Seamless Integration:</strong> Native Odoo experience</li>
+            <li>✅ <strong>Modern UI:</strong> Google Meet-inspired design</li>
+            <li>✅ <strong>Enterprise Ready:</strong> JWT authentication & security</li>
+        </ul>
+    </section>
+
+    <section class="section" style="text-align: center; padding: 30px; background: linear-gradient(135deg, #1a73e8 0%, #0f9d58 100%); color: white; border-radius: 10px;">
+        <h2 style="color: white;">Ready to Start Meeting? 🎉</h2>
+        <p style="font-size: 1.2em;">Install O-Meet now and transform your Odoo video conferencing experience!</p>
+    </section>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Define Client Action for Dashboard -->
+    <record id="action_office_dashboard" model="ir.actions.client">
+        <field name="name">Office Dashboard</field>
+        <field name="tag">office_dashboard</field>
+    </record>
+
+    <!-- Main Office Menu -->
+    <menuitem id="menu_office_root"
+              name="Office"
+              sequence="10"
+              web_icon="office_document_creator,static/description/icon.png"
+              groups="base.group_user"/>
+
+    <!-- Dashboard Menu -->
+    <menuitem id="menu_office_dashboard"
+              name="Dashboard"
+              parent="menu_office_root"
+              action="action_office_dashboard"
+              sequence="0"/>
+
+    <!-- My Drive -->
+    <menuitem id="menu_office_documents"
+              name="My Drive"
+              parent="menu_office_root"
+              action="action_office_document"
+              sequence="1"/>
+
+    <!-- Recent -->
+    <menuitem id="menu_office_recent"
+              name="Recent"
+              parent="menu_office_root"
+              action="action_office_document_recent"
+              sequence="2"/>
+
+    <!-- Starred -->
+    <menuitem id="menu_office_starred"
+              name="Starred"
+              parent="menu_office_root"
+              action="action_office_document_starred"
+              sequence="3"/>
+
+    <!-- Shared with Me -->
+    <menuitem id="menu_office_shared"
+              name="Shared with Me"
+              parent="menu_office_root"
+              action="action_office_document_shared"
+              sequence="4"/>
+
+    <!-- Folders -->
+    <menuitem id="menu_office_folders"
+              name="Folders"
+              parent="menu_office_root"
+              action="action_office_folder"
+              sequence="5"/>
+
+    <!-- Trash -->
+    <menuitem id="menu_office_trash"
+              name="Trash"
+              parent="menu_office_root"
+              action="action_office_document_trash"
+              sequence="6"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_office_config"
+              name="Configuration"
+              parent="menu_office_root"
+              sequence="99"
+              groups="group_office_manager"/>
+</odoo>

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_office_document_user,office.document.user,model_office_document,base.group_user,1,1,1,1
+access_office_folder_user,office.folder.user,model_office_folder,base.group_user,1,1,1,1
+access_office_document_manager,office.document.manager,model_office_document,group_office_manager,1,1,1,1
+access_office_folder_manager,office.folder.manager,model_office_folder,group_office_manager,1,1,1,1
+access_office_document_share_wizard,office.document.share.wizard,model_office_document_share_wizard,base.group_user,1,1,1,1
+access_office_document_move_wizard,office.document.move.wizard,model_office_document_move_wizard,base.group_user,1,1,1,1

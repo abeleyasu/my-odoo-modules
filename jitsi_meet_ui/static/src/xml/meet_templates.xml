@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="jitsi_meet_ui.MeetDashboard" owl="1">
+        <div class="o_meet_dashboard p-4">
+            <h4>Meetings</h4>
+            <t t-if="state.isLoading">
+                <div>Loading...</div>
+            </t>
+            <t t-else="">
+                <t t-foreach="state.meetings" t-as="m" t-key="m.id">
+                    <div class="card mb-2">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong><t t-esc="m.name"/></strong>
+                                <div class="text-muted"><t t-esc="m.start_datetime"/></div>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" t-on-click.prevent="() => this.join(m.id)">Join</button>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </div>
+    </t>
+</templates>
