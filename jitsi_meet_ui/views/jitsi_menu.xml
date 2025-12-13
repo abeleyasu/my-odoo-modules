@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="action_jitsi_meeting" model="ir.actions.act_window">
+    <field name="name">O-Meet</field>
+    <field name="res_model">jitsi.meeting</field>
+    <field name="view_mode">kanban,list,form</field>
+    <field name="context">{'search_default_my_meetings': 1}</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        Create your first meeting!
+      </p>
+      <p>
+        Start an instant meeting or schedule one for later.
+      </p>
+    </field>
+  </record>
+
+  <!-- Dashboard Action -->
+  <record id="action_omeet_dashboard" model="ir.actions.act_url">
+    <field name="name">Dashboard</field>
+    <field name="url">/o-meet/dashboard</field>
+    <field name="target">self</field>
+  </record>
+
+  <menuitem id="menu_jitsi_root" name="O-Meet" sequence="90" web_icon="jitsi_meet_ui,static/description/icon.svg"/>
+  <menuitem id="menu_jitsi_dashboard" name="Dashboard" parent="menu_jitsi_root" action="action_omeet_dashboard" sequence="1"/>
+  <menuitem id="menu_jitsi_meetings" name="My Meetings" parent="menu_jitsi_root" action="action_jitsi_meeting" sequence="10"/>
+
+</odoo>

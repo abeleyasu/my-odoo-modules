@@ -1,0 +1,41 @@
+# -*- coding: utf-8 -*-
+{
+    'name': 'O-Meet (Jitsi)',
+    'version': '1.1.0',
+    'category': 'Discuss',
+    'summary': 'Google Meet-like UI using Jitsi for Odoo 18 with Calendar Integration',
+    'description': 'Production-ready O-Meet experience: create and join Jitsi-powered meetings with a Google Meet-style UI. Includes calendar integration and JWT authentication.',
+
+    'author': 'Your Company',
+    'website': 'https://www.yourcompany.com',
+    'depends': [
+        'base',
+        'web',
+        'website',
+        'calendar',
+    ],
+    'external_dependencies': {
+        'python': ['jwt'],
+    },
+    'data': [
+        'security/ir.model.access.csv',
+        'views/jitsi_menu.xml',
+        'views/jitsi_views.xml',
+        'views/templates.xml',
+        'views/calendar_views.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'jitsi_meet_ui/static/src/js/create_instant_meeting.js',
+            'jitsi_meet_ui/static/src/xml/create_instant_meeting.xml',
+        ],
+    },
+    'images': [
+        'static/description/icon.png',
+    ],
+    'post_init_hook': 'post_init_hook',
+    'uninstall_hook': 'uninstall_hook',
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+}

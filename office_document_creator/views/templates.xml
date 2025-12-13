@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Create Document Dashboard -->
+    <template id="create_document_dashboard" name="Create Document Dashboard">
+        <t t-name="office_document_creator.create_dashboard">
+            <div class="o_office_dashboard">
+                <div class="o_office_create_buttons">
+                    <h3>Create New Document</h3>
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <a href="/office/create/word" class="o_office_create_card word">
+                                <i class="fa fa-file-word-o fa-4x"/>
+                                <h4>Word Document</h4>
+                                <p>Create a new text document</p>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="/office/create/excel" class="o_office_create_card excel">
+                                <i class="fa fa-file-excel-o fa-4x"/>
+                                <h4>Excel Spreadsheet</h4>
+                                <p>Create a new spreadsheet</p>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="/office/create/powerpoint" class="o_office_create_card powerpoint">
+                                <i class="fa fa-file-powerpoint-o fa-4x"/>
+                                <h4>PowerPoint Presentation</h4>
+                                <p>Create a new presentation</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Public share page -->
+    <template id="public_share_page" name="Shared Document">
+        <t t-call="web.layout">
+            <div class="container my-5">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <i t-if="doc.document_type == 'word'" class="fa fa-file-word-o fa-3x me-3" style="color:#2B5797"/>
+                            <i t-if="doc.document_type == 'excel'" class="fa fa-file-excel-o fa-3x me-3" style="color:#217346"/>
+                            <i t-if="doc.document_type == 'powerpoint'" class="fa fa-file-powerpoint-o fa-3x me-3" style="color:#D24726"/>
+                            <div>
+                                <h4 class="mb-1"><t t-esc="doc.name"/></h4>
+                                <small class="text-muted">Shared document</small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <a t-att-href="download_url" class="btn btn-primary me-2">
+                                <i class="fa fa-download me-1"/> Download
+                            </a>
+                            <a t-if="open_action_url" t-att-href="open_action_url" class="btn btn-outline-primary">
+                                <i class="fa fa-edit me-1"/> Open to Edit (sign in required)
+                            </a>
+                            <span t-if="not open_action_url and not can_edit" class="text-muted ms-2">View-only link</span>
+                        </div>
+                        <p class="text-muted mb-0">If you were expecting edit access, please sign in or contact the owner.</p>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
