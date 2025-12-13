@@ -46,7 +46,12 @@ Features:
             'office_document_creator/static/src/xml/office_templates.xml',
         ],
     },
-    'images': ['static/description/icon.png'],
+    'images': [
+        'static/description/images/main_screenshot.png',
+        'static/description/images/feature_1.png',
+        'static/description/images/feature_2.png',
+        'static/description/images/feature_3.png',
+    ],
     'installable': True,
     'application': True,
     'auto_install': False,

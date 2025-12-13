@@ -31,7 +31,9 @@
         ],
     },
     'images': [
-        'static/description/icon.png',
+        'static/description/images/main_screenshot.png',
+        'static/description/images/feature_1.png',
+        'static/description/images/feature_2.png',
     ],
     'post_init_hook': 'post_init_hook',
     'uninstall_hook': 'uninstall_hook',
