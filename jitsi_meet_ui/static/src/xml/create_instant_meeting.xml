@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="jitsi_meet_ui.CreateInstantMeetingButton" owl="1">
+        <button class="btn btn-primary" t-on-click="onClick" title="Start Instant Meeting">
+            <i class="fa fa-video-camera"/> New Meeting
+        </button>
+    </t>
+</templates>

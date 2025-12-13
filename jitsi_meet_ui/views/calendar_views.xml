@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Calendar Event Form View -->
+    <record id="view_calendar_event_form_jitsi" model="ir.ui.view">
+        <field name="name">calendar.event.form.jitsi</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+        <field name="arch" type="xml">
+            <!-- Add O-Meet button after Odoo meeting button -->
+            <xpath expr="//button[@name='set_discuss_videocall_location']" position="after">
+                <button name="action_create_jitsi_meeting" type="object" 
+                        class="btn btn-link ps-0"
+                        invisible="videocall_location or not user_can_edit"
+                        context="{'recurrence_update': recurrence_update}">
+                    <span class="fa fa-plus"></span><span> O-Meet</span>
+                </button>
+            </xpath>
+            
+            <!-- Add videocall_source field visibility -->
+            <xpath expr="//field[@name='videocall_location']" position="after">
+                <field name="videocall_source" invisible="1"/>
+                <field name="jitsi_meeting_id" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add System Parameters Configuration View -->
+    <record id="view_jitsi_config_settings" model="ir.ui.view">
+        <field name="name">jitsi.config.settings</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app name="jitsi_meet_ui" string="O-Meet">
+                    <block title="O-Meet (Jitsi) Settings">
+                        <setting help="Configure Jitsi server URL">
+                            <field name="jitsi_server_url" placeholder="https://meet.jit.si"/>
+                            <div class="text-muted">
+                                Custom Jitsi server URL (leave blank for meet.jit.si)
+                            </div>
+                        </setting>
+                        
+                        <setting help="Configure JWT tokens for automatic moderator authentication">
+                            <label for="jitsi_jwt_app_id" string="JWT Authentication"/>
+                            <div class="text-muted mt8">
+                                Optional: Enable automatic moderator login without OAuth
+                            </div>
+                            <div class="content-group mt16">
+                                <div class="row">
+                                    <label for="jitsi_jwt_app_id" string="App ID" class="col-lg-3 o_light_label"/>
+                                    <field name="jitsi_jwt_app_id" placeholder="my-app-id"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="jitsi_jwt_app_secret" string="App Secret" class="col-lg-3 o_light_label"/>
+                                    <field name="jitsi_jwt_app_secret" password="True" placeholder="secret-key"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="jitsi_server_domain" string="Server Domain" class="col-lg-3 o_light_label"/>
+                                    <field name="jitsi_server_domain" placeholder="meet.jit.si"/>
+                                </div>
+                            </div>
+                            <div class="alert alert-info mt16" role="alert">
+                                <strong>Note:</strong> JWT authentication requires your Jitsi server to be configured with token authentication. 
+                                Leave these fields blank to use the public meet.jit.si service (requires OAuth login for moderators).
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

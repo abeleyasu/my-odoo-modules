@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Google Meet Style Dashboard -->
+    <template id="omeet_dashboard" name="O-Meet Dashboard">
+        <t t-call="website.layout">
+            <div class="o_meet_dashboard_wrap">
+                <div class="container-fluid py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-10 col-xl-8">
+                            <!-- Header -->
+                            <div class="text-center mb-5">
+                                <h1 class="display-4 fw-bold mb-3">Video calls and meetings for everyone</h1>
+                                <p class="lead text-muted">Connect, collaborate and celebrate from anywhere with O-Meet</p>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="d-flex justify-content-center gap-3 mb-5 flex-wrap">
+                                <button class="btn btn-primary btn-lg px-4 py-3 rounded-pill" id="new-meeting-btn">
+                                    <i class="fa fa-video-camera me-2"></i> New meeting
+                                </button>
+                                <div class="input-group" style="max-width: 400px;">
+                                    <input type="text" class="form-control form-control-lg rounded-start-pill" 
+                                           placeholder="Enter a code or link" id="meeting-code-input"/>
+                                    <button class="btn btn-outline-primary rounded-end-pill px-4" id="join-code-btn">Join</button>
+                                </div>
+                            </div>
+
+                            <!-- Meeting List -->
+                            <t t-if="meetings">
+                                <div class="mt-5">
+                                    <h4 class="mb-4">Your meetings</h4>
+                                    <div class="row g-3">
+                                        <t t-foreach="meetings" t-as="meeting">
+                                            <div class="col-md-6">
+                                                <div class="card h-100 shadow-sm">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title"><t t-esc="meeting.name"/></h5>
+                                                        <p class="card-text text-muted">
+                                                            <i class="fa fa-calendar me-2"></i>
+                                                            <t t-esc="meeting.start_datetime.strftime('%b %d, %Y at %I:%M %p')"/>
+                                                        </p>
+                                                        <p class="card-text small">
+                                                            <i class="fa fa-link me-2"></i>
+                                                            <span class="text-muted" t-att-id="'link-' + str(meeting.id)"><t t-esc="meeting.meeting_url"/></span>
+                                                        </p>
+                                                        <div class="d-flex gap-2">
+                                                            <a t-att-href="meeting.meeting_url" target="_blank" class="btn btn-primary btn-sm">
+                                                                <i class="fa fa-sign-in me-1"></i> Join
+                                                            </a>
+                                                            <button class="btn btn-outline-secondary btn-sm copy-link-btn" 
+                                                                    t-att-data-link="meeting.meeting_url">
+                                                                <i class="fa fa-copy me-1"></i> Copy link
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+                            </t>
+
+                            <!-- Hero Image / Info -->
+                            <div class="text-center mt-5 pt-5">
+                                <div class="text-muted">
+                                    <h5>Get a link that you can share</h5>
+                                    <p>Click <strong>New meeting</strong> to get a link that you can send to people that you want to meet with</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JavaScript for Dashboard Actions -->
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // New Meeting Button
+                        document.getElementById('new-meeting-btn').addEventListener('click', function() {
+                            fetch('/o-meet/instant', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    jsonrpc: '2.0',
+                                    method: 'call',
+                                    params: {}
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.result &amp;&amp; data.result.url) {
+                                    window.open(data.result.url, '_blank');
+                                }
+                            })
+                            .catch(err => console.error('Error creating meeting:', err));
+                        });
+
+                        // Join by Code
+                        document.getElementById('join-code-btn').addEventListener('click', function() {
+                            const code = document.getElementById('meeting-code-input').value.trim();
+                            if (code) {
+                                // Extract room code from URL or use as-is
+                                const roomMatch = code.match(/\/o-meet\/join\/([a-zA-Z0-9-]+)/);
+                                const room = roomMatch ? roomMatch[1] : code;
+                                window.open('/o-meet/join/' + room, '_blank');
+                            }
+                        });
+
+                        // Copy Link Buttons
+                        document.querySelectorAll('.copy-link-btn').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                const link = this.dataset.link;
+                                navigator.clipboard.writeText(link).then(() => {
+                                    // Show feedback
+                                    const icon = this.querySelector('i');
+                                    icon.classList.remove('fa-copy');
+                                    icon.classList.add('fa-check');
+                                    setTimeout(() => {
+                                        icon.classList.remove('fa-check');
+                                        icon.classList.add('fa-copy');
+                                    }, 2000);
+                                });
+                            });
+                        });
+                    });
+                </script>
+
+                <!-- Custom Styles -->
+                <style>
+                    .o_meet_dashboard_wrap {
+                        min-height: 80vh;
+                        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                    }
+                    .btn-primary {
+                        background-color: #1a73e8;
+                        border-color: #1a73e8;
+                    }
+                    .btn-primary:hover {
+                        background-color: #1557b0;
+                        border-color: #1557b0;
+                    }
+                    .card {
+                        border: none;
+                        transition: transform 0.2s;
+                    }
+                    .card:hover {
+                        transform: translateY(-4px);
+                    }
+                </style>
+            </div>
+        </t>
+    </template>
+
+    <!-- Meeting Room Template (Jitsi Embed) -->
+    <template id="jitsi_room_template" name="O-Meet Room">
+        <t t-call="website.layout">
+            <div class="container-fluid p-0">
+                <div id="jitsi-meet-container" style="height: 100vh;" 
+                     t-att-data-jitsi-server="jitsi_server" 
+                     t-att-data-room="room"
+                     t-att-data-meeting-title="meeting_title"
+                     t-att-data-user-name="user_name"
+                     t-att-data-user-email="user_email"
+                     t-att-data-jwt-token="jwt_token"
+                     t-att-data-is-moderator="is_moderator"></div>
+                
+                <script>
+                    (function() {
+                        // Load external_api.js from the configured Jitsi server
+                        const container = document.getElementById('jitsi-meet-container');
+                        const server = container.dataset.jitsiServer || 'https://meet.jit.si';
+                        const apiScript = document.createElement('script');
+                        apiScript.src = server + '/external_api.js';
+                        apiScript.onload = initJitsi;
+                        apiScript.onerror = function() {
+                            console.error('Failed to load Jitsi external_api.js from ' + server);
+                            container.innerHTML = '&lt;div class="alert alert-danger m-5"&gt;Failed to load meeting. Please check server configuration.&lt;/div&gt;';
+                        };
+                        document.head.appendChild(apiScript);
+                        
+                        function initJitsi() {
+                            try {
+                                const room = container.dataset.room || '';
+                                const title = container.dataset.meetingTitle || 'Meeting';
+                                const userName = container.dataset.userName || 'Guest';
+                                const userEmail = container.dataset.userEmail || '';
+                                const jwtToken = container.dataset.jwtToken || null;
+                                const isModerator = container.dataset.isModerator === 'True';
+                                const domain = new URL(server).hostname;
+                            
+                            const options = {
+                                roomName: room,
+                                parentNode: container,
+                                width: '100%',
+                                height: '100%',
+                                userInfo: {
+                                    displayName: userName,
+                                    email: userEmail
+                                },
+                                configOverwrite: {
+                                    startWithAudioMuted: false,
+                                    startWithVideoMuted: false,
+                                    prejoinPageEnabled: false,  // Skip prejoin page
+                                },
+                                interfaceConfigOverwrite: {
+                                    TOOLBAR_BUTTONS: [
+                                        'microphone', 'camera', 'closedcaptions', 'desktop', 
+                                        'fullscreen', 'fodeviceselection', 'hangup', 'profile',
+                                        'chat', 'recording', 'livestreaming', 'etherpad', 'sharedvideo',
+                                        'settings', 'raisehand', 'videoquality', 'filmstrip',
+                                        'feedback', 'stats', 'shortcuts', 'tileview', 'download',
+                                        'help', 'mute-everyone'
+                                    ],
+                                }
+                            };
+                            
+                            // Add JWT token if available (for moderator authentication)
+                            if (jwtToken) {
+                                options.jwt = jwtToken;
+                            }
+                            
+                            const api = new JitsiMeetExternalAPI(domain, options);
+                            
+                            // Ensure display name is set
+                            api.addEventListener('videoConferenceJoined', function() {
+                                api.executeCommand('displayName', userName);
+                                if (userEmail) {
+                                    api.executeCommand('email', userEmail);
+                                }
+                            });
+                        } catch (e) {
+                            console.error('Failed to load Jitsi Meet:', e);
+                            container.innerHTML = '&lt;div class="alert alert-danger m-5"&gt;Failed to load meeting. Please check your connection.&lt;/div&gt;';
+                        }
+                    }
+                    })();
+                </script>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_office_manager" model="res.groups">
+        <field name="name">Office Manager</field>
+        <field name="category_id" ref="base.module_category_productivity"/>
+    </record>
+
+    <record id="office_document_user_rule" model="ir.rule">
+        <field name="name">Office Document: User Access</field>
+        <field name="model_id" ref="model_office_document"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">['|', ('owner_id','=',user.id), ('shared_user_ids','in',[user.id])]</field>
+    </record>
+
+    <record id="office_folder_user_rule" model="ir.rule">
+        <field name="name">Office Folder: User Access</field>
+        <field name="model_id" ref="model_office_folder"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">['|', ('owner_id','=',user.id), ('parent_id.owner_id','=',user.id)]</field>
+    </record>
+
+    <record id="office_document_manager_rule" model="ir.rule">
+        <field name="name">Office Document: Manager Access</field>
+        <field name="model_id" ref="model_office_document"/>
+        <field name="groups" eval="[(4, ref('group_office_manager'))]"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+    </record>
+
+    <record id="office_folder_manager_rule" model="ir.rule">
+        <field name="name">Office Folder: Manager Access</field>
+        <field name="model_id" ref="model_office_folder"/>
+        <field name="groups" eval="[(4, ref('group_office_manager'))]"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+    </record>
+</odoo>

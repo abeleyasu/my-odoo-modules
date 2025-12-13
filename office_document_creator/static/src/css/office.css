@@ -1,0 +1,603 @@
+/* ========================================
+   Office Document Creator - Google Drive Style
+   ======================================== */
+
+/* Dashboard Container */
+.o_office_dashboard {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    position: relative;
+}
+
+.o_office_dashboard.o_drag_over {
+    background-color: #e3f2fd;
+}
+
+.o_dashboard_container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Drag Overlay */
+.o_drag_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(25, 118, 210, 0.1);
+    border: 3px dashed #1976d2;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.o_drag_content {
+    text-align: center;
+    padding: 40px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
+
+.o_drag_content i {
+    color: #1976d2;
+}
+
+/* Sidebar */
+.o_dashboard_sidebar {
+    width: 256px;
+    background: white;
+    border-right: 1px solid #e0e0e0;
+    padding: 16px;
+    flex-shrink: 0;
+}
+
+.o_new_btn {
+    width: 100%;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    transition: box-shadow 0.2s;
+}
+
+.o_new_btn:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.o_new_dropdown {
+    min-width: 200px;
+    padding: 8px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+.o_new_dropdown .dropdown-item {
+    padding: 10px 16px;
+    font-size: 14px;
+}
+
+.o_new_dropdown .dropdown-item:hover {
+    background-color: #f5f5f5;
+}
+
+.o_new_dropdown .dropdown-item i {
+    width: 20px;
+}
+
+/* Sidebar Navigation */
+.o_sidebar_nav .nav-link {
+    color: #5f6368;
+    padding: 10px 16px;
+    border-radius: 0 24px 24px 0;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.o_sidebar_nav .nav-link:hover {
+    background-color: #f1f3f4;
+    color: #202124;
+}
+
+.o_sidebar_nav .nav-link.active {
+    background-color: #e8f0fe;
+    color: #1967d2;
+}
+
+.o_sidebar_nav .nav-link i {
+    width: 24px;
+}
+
+/* Storage Info */
+.o_storage_info {
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.o_storage_bar .progress {
+    background-color: #e0e0e0;
+}
+
+/* Main Content */
+.o_dashboard_main {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+}
+
+/* Header with Search */
+.o_dashboard_header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.o_search_container {
+    flex: 1;
+    max-width: 720px;
+}
+
+.o_search_container .input-group {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.o_search_container .input-group-text {
+    border: none;
+    padding-left: 16px;
+}
+
+.o_search_container .form-control {
+    border: none;
+    padding: 12px 16px 12px 8px;
+    font-size: 16px;
+}
+
+.o_search_container .form-control:focus {
+    box-shadow: none;
+}
+
+.o_view_controls .btn {
+    padding: 8px 12px;
+}
+
+/* Quick Create Cards */
+.o_quick_create {
+    margin-bottom: 32px;
+}
+
+.o_quick_create h5 {
+    color: #5f6368;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.o_create_cards {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.o_create_card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 32px;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid #e0e0e0;
+    min-width: 140px;
+}
+
+.o_create_card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.o_create_card .o_card_icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.o_create_card .o_card_icon i {
+    font-size: 36px;
+}
+
+.o_create_card span {
+    font-size: 14px;
+    color: #3c4043;
+    font-weight: 500;
+}
+
+/* Document Type Colors */
+.o_create_card.word .o_card_icon i { color: #2B5797; }
+.o_create_card.word:hover { border-color: #2B5797; }
+
+.o_create_card.excel .o_card_icon i { color: #217346; }
+.o_create_card.excel:hover { border-color: #217346; }
+
+.o_create_card.powerpoint .o_card_icon i { color: #D24726; }
+.o_create_card.powerpoint:hover { border-color: #D24726; }
+
+/* Tabs */
+.o_dashboard_tabs .nav-tabs {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.o_dashboard_tabs .nav-link {
+    color: #5f6368;
+    border: none;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.o_dashboard_tabs .nav-link:hover {
+    color: #202124;
+    border: none;
+}
+
+.o_dashboard_tabs .nav-link.active {
+    color: #1967d2;
+    border: none;
+    border-bottom: 3px solid #1967d2;
+    background: transparent;
+}
+
+/* Section Header */
+.o_section_header {
+    display: flex;
+    align-items: center;
+}
+
+.o_section_header h5 {
+    color: #3c4043;
+    font-weight: 500;
+}
+
+/* Loading & Empty States */
+.o_loading,
+.o_empty_state {
+    color: #5f6368;
+}
+
+.o_empty_state i {
+    opacity: 0.5;
+}
+
+/* Document Grid */
+.o_documents_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.o_doc_card {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    /* allow dropdowns and floating menus to escape card bounds */
+    overflow: visible;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.o_doc_card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-color: #dadce0;
+}
+
+.o_doc_preview {
+    height: 120px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 4px solid #e0e0e0;
+}
+
+.o_doc_info {
+    padding: 12px;
+}
+
+.o_doc_name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #3c4043;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+}
+
+.o_doc_meta {
+    font-size: 12px;
+}
+
+.o_doc_actions {
+    padding: 0 8px 8px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+/* Ensure dropdown menus are above other content and not clipped */
+.o_doc_actions .dropdown-menu,
+.o_new_dropdown,
+.dropdown-menu {
+    z-index: 3000;
+}
+
+/* Modal styles for custom OWL modals used in the dashboard */
+.o_rename_modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4000;
+}
+.o_modal_backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+}
+.o_modal_dialog {
+    position: relative;
+    width: 520px;
+    max-width: 95%;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 12px 40px rgba(23,32,50,0.35);
+    padding: 0;
+    z-index: 4001;
+}
+.o_modal_header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f3f4;
+}
+.o_modal_body {
+    padding: 16px 20px;
+}
+.o_modal_footer {
+    padding: 12px 20px;
+    border-top: 1px solid #f1f3f4;
+}
+
+.o_doc_actions .btn-link {
+    padding: 4px 8px;
+}
+
+/* Document List View */
+.o_documents_list {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.o_documents_list .table {
+    margin: 0;
+}
+
+.o_documents_list .table thead th {
+    border-top: none;
+    font-weight: 500;
+    color: #5f6368;
+    font-size: 13px;
+    padding: 12px 16px;
+    background: #f8f9fa;
+}
+
+.o_documents_list .table tbody tr {
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.o_documents_list .table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.o_documents_list .table td {
+    padding: 12px 16px;
+    vertical-align: middle;
+}
+
+.o_doc_row .o_doc_name {
+    font-weight: 500;
+    color: #3c4043;
+}
+
+/* Kanban View Styles */
+.o_office_kanban .o_kanban_record {
+    margin: 8px;
+}
+
+.o_office_doc_card {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    transition: all 0.2s;
+    border: 1px solid #e0e0e0 !important;
+}
+
+.o_office_doc_card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.o_office_doc_card .o_kanban_image_wrapper {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-right: 16px;
+}
+
+.o_office_doc_card .o_kanban_card_content {
+    display: flex;
+    align-items: center;
+}
+
+.o_office_doc_card .o_kanban_details {
+    flex: 1;
+    min-width: 0;
+}
+
+.o_office_doc_card .o_kanban_record_title a {
+    font-weight: 500;
+    color: #3c4043;
+    text-decoration: none;
+}
+
+.o_office_doc_card .o_kanban_record_subtitle {
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Folder Cards */
+.o_office_folder_kanban .o_kanban_record {
+    margin: 8px;
+}
+
+.o_office_folder_card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.2s;
+    border: 1px solid #e0e0e0 !important;
+}
+
+.o_office_folder_card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.o_folder_link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.o_folder_name {
+    font-weight: 500;
+    color: #3c4043;
+}
+
+.o_folder_count {
+    font-size: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .o_dashboard_sidebar {
+        width: 200px;
+    }
+    
+    .o_documents_grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .o_dashboard_container {
+        flex-direction: column;
+    }
+    
+    .o_dashboard_sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 12px;
+    }
+    
+    .o_sidebar_nav {
+        display: flex;
+        overflow-x: auto;
+        gap: 8px;
+    }
+    
+    .o_sidebar_nav .nav {
+        flex-direction: row !important;
+    }
+    
+    .o_sidebar_nav .nav-link {
+        white-space: nowrap;
+        border-radius: 24px;
+    }
+    
+    .o_storage_info {
+        display: none;
+    }
+    
+    .o_create_cards {
+        justify-content: center;
+    }
+    
+    .o_create_card {
+        min-width: 100px;
+        padding: 16px;
+    }
+    
+    .o_documents_grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.o_doc_card,
+.o_create_card {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Form View Improvements */
+.o_form_view .oe_title h1 input {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+/* Tree View Improvements */
+.o_list_view .o_data_row td {
+    vertical-align: middle;
+}
+
+.o_list_view .o_field_boolean_favorite button {
+    padding: 0;
+}
+
+/* Scrollbar Styling */
+.o_dashboard_main::-webkit-scrollbar {
+    width: 8px;
+}
+
+.o_dashboard_main::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.o_dashboard_main::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.o_dashboard_main::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}

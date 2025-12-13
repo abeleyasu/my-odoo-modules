@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Folder List View -->
+    <record id="view_office_folder_tree" model="ir.ui.view">
+        <field name="name">office.folder.tree</field>
+        <field name="model">office.folder</field>
+        <field name="arch" type="xml">
+            <list string="Folders">
+                <field name="is_starred" widget="boolean_favorite" nolabel="1"/>
+                <field name="name" decoration-bf="1"/>
+                <field name="parent_id"/>
+                <field name="owner_id" widget="many2one_avatar_user"/>
+                <field name="document_count"/>
+                <button name="action_open_folder" type="object" string="Open" icon="fa-folder-open" class="btn-link"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Folder Kanban View -->
+    <record id="view_office_folder_kanban" model="ir.ui.view">
+        <field name="name">office.folder.kanban</field>
+        <field name="model">office.folder</field>
+        <field name="arch" type="xml">
+            <kanban string="Folders" class="o_office_folder_kanban">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="color"/>
+                <field name="document_count"/>
+                <field name="is_starred"/>
+                <templates>
+                    <t t-name="kanban-menu">
+                        <a role="menuitem" type="object" name="action_open_folder" class="dropdown-item">
+                            <i class="fa fa-folder-open me-2"/>Open
+                        </a>
+                        <a role="menuitem" type="object" name="action_toggle_star" class="dropdown-item">
+                            <i class="fa fa-star me-2"/>Toggle Star
+                        </a>
+                        <a role="menuitem" type="edit" class="dropdown-item">
+                            <i class="fa fa-pencil me-2"/>Edit
+                        </a>
+                        <div class="dropdown-divider"/>
+                        <a role="menuitem" type="delete" class="dropdown-item text-danger">
+                            <i class="fa fa-trash me-2"/>Delete
+                        </a>
+                    </t>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card o_office_folder_card" t-attf-class="#{kanban_color(record.color.raw_value)}">
+                            <div class="o_kanban_card_content">
+                                <a type="object" name="action_open_folder" class="o_folder_link">
+                                    <i class="fa fa-folder fa-3x text-warning"/>
+                                    <div class="o_folder_name mt-2">
+                                        <strong><field name="name"/></strong>
+                                        <t t-if="record.is_starred.raw_value">
+                                            <i class="fa fa-star text-warning ms-1"/>
+                                        </t>
+                                    </div>
+                                    <div class="o_folder_count text-muted">
+                                        <field name="document_count"/> documents
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Folder Form View -->
+    <record id="view_office_folder_form" model="ir.ui.view">
+        <field name="name">office.folder.form</field>
+        <field name="model">office.folder</field>
+        <field name="arch" type="xml">
+            <form string="Folder">
+                <header>
+                    <button name="action_open_folder" type="object" string="Open Folder" class="oe_highlight" icon="fa-folder-open"/>
+                    <button name="action_toggle_star" type="object" string="Star" icon="fa-star-o" invisible="is_starred"/>
+                    <button name="action_toggle_star" type="object" string="Unstar" icon="fa-star" class="text-warning" invisible="not is_starred"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Folder Name..."/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="parent_id" domain="[('owner_id', '=', uid), ('id', '!=', id)]"/>
+                            <field name="owner_id" readonly="1" widget="many2one_avatar_user"/>
+                            <field name="color" widget="color_picker"/>
+                        </group>
+                        <group>
+                            <field name="document_count" readonly="1"/>
+                            <field name="is_starred"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" placeholder="Add a description..."/>
+                    </group>
+                    <notebook>
+                        <page string="Documents" name="documents">
+                            <field name="document_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="document_type"/>
+                                    <field name="file_size_human"/>
+                                    <field name="write_date" widget="relative"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Sub-Folders" name="subfolders">
+                            <field name="child_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="document_count"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Sharing" name="sharing">
+                            <field name="shared_user_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Folder Search View -->
+    <record id="view_office_folder_search" model="ir.ui.view">
+        <field name="name">office.folder.search</field>
+        <field name="model">office.folder</field>
+        <field name="arch" type="xml">
+            <search string="Search Folders">
+                <field name="name"/>
+                <field name="owner_id"/>
+                <filter string="My Folders" name="my_folders" domain="[('owner_id', '=', uid)]"/>
+                <filter string="Starred" name="starred" domain="[('is_starred', '=', True)]"/>
+                <filter string="Root Folders" name="root" domain="[('parent_id', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Parent Folder" name="group_parent" context="{'group_by': 'parent_id'}"/>
+                    <filter string="Owner" name="group_owner" context="{'group_by': 'owner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Folder Action -->
+    <record id="action_office_folder" model="ir.actions.act_window">
+        <field name="name">Folders</field>
+        <field name="res_model">office.folder</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_office_folder_search"/>
+        <field name="context">{'search_default_my_folders': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first folder!
+            </p>
+            <p>
+                Organize your documents into folders for easy access.
+            </p>
+        </field>
+    </record>
+</odoo>

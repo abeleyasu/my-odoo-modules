@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Jitsi Meeting Form View -->
+    <record id="view_jitsi_meeting_form" model="ir.ui.view">
+        <field name="name">jitsi.meeting.form</field>
+        <field name="model">jitsi.meeting</field>
+        <field name="arch" type="xml">
+            <form string="Meeting">
+                <header>
+                    <button name="action_join" type="object" string="Join Meeting" 
+                            class="oe_highlight" icon="fa-sign-in"
+                            invisible="state == 'ended'"/>
+                    <button name="action_copy_link" type="object" string="Copy Meeting Link" 
+                            icon="fa-copy"/>
+                    <field name="state" widget="statusbar" 
+                           statusbar_visible="draft,ready,started,ended"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_join" type="object" 
+                                class="oe_stat_button" icon="fa-video-camera"
+                                invisible="state == 'ended'">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Join</span>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <widget name="web_ribbon" title="Instant" bg_color="bg-success" 
+                            invisible="meeting_type != 'instant'"/>
+                    <widget name="web_ribbon" title="Scheduled" bg_color="bg-info" 
+                            invisible="meeting_type != 'scheduled'"/>
+                    
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Meeting Title" required="1"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group>
+                            <field name="meeting_type"/>
+                            <field name="start_datetime" 
+                                   invisible="meeting_type == 'instant'"/>
+                            <field name="duration" widget="float_time"
+                                   invisible="meeting_type == 'instant'"/>
+                            <field name="owner_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="meeting_url" widget="url" readonly="1"/>
+                            <field name="join_url" invisible="1"/>
+                            <field name="room_name" invisible="1"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Participants">
+                        <field name="attendee_ids" widget="many2many_tags" 
+                               options="{'color_field': 'color', 'no_create_edit': True}"/>
+                    </group>
+                    
+                    <div class="alert alert-info" role="alert">
+                        <i class="fa fa-info-circle" title="Information"/> 
+                        <strong>Share this link:</strong>
+                        <br/>
+                        <span class="text-muted"><field name="meeting_url" readonly="1"/></span>
+                    </div>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Jitsi Meeting List View -->
+    <record id="view_jitsi_meeting_tree" model="ir.ui.view">
+        <field name="name">jitsi.meeting.tree</field>
+        <field name="model">jitsi.meeting</field>
+        <field name="arch" type="xml">
+            <list string="Meetings" sample="1">
+                <field name="name" string="Meeting Title"/>
+                <field name="meeting_type" widget="badge" 
+                       decoration-success="meeting_type == 'instant'"
+                       decoration-info="meeting_type == 'scheduled'"/>
+                <field name="start_datetime" optional="show"/>
+                <field name="duration" widget="float_time" optional="hide"/>
+                <field name="state" widget="badge" 
+                       decoration-muted="state == 'draft'"
+                       decoration-info="state == 'ready'"
+                       decoration-success="state == 'started'"
+                       decoration-danger="state == 'ended'"/>
+                <field name="owner_id" widget="many2one_avatar_user"/>
+                <field name="meeting_url" string="Link" optional="show"/>
+                <button name="action_join" type="object" string="Join" 
+                        icon="fa-sign-in" class="btn-primary"
+                        invisible="state == 'ended'"/>
+                <button name="action_copy_link" type="object" string="Copy Link" 
+                        icon="fa-copy" class="btn-secondary"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Jitsi Meeting Kanban View -->
+    <record id="view_jitsi_meeting_kanban" model="ir.ui.view">
+        <field name="name">jitsi.meeting.kanban</field>
+        <field name="model">jitsi.meeting</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1">
+                <field name="name"/>
+                <field name="start_datetime"/>
+                <field name="meeting_type"/>
+                <field name="state"/>
+                <field name="meeting_url"/>
+                <field name="owner_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary">
+                                        <strong><field name="name"/></strong>
+                                    </div>
+                                    <div class="o_secondary">
+                                        <span t-if="record.meeting_type.raw_value == 'instant'" 
+                                              class="badge bg-success">
+                                            <i class="fa fa-bolt"/> Instant
+                                        </span>
+                                        <span t-if="record.meeting_type.raw_value == 'scheduled'" 
+                                              class="badge bg-info">
+                                            <i class="fa fa-calendar"/> Scheduled
+                                        </span>
+                                        <span t-attf-class="badge {{record.state.raw_value == 'started' ? 'bg-success' : 'bg-secondary'}}">
+                                            <field name="state"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_card_content">
+                                <div class="o_kanban_card_body">
+                                    <div>
+                                        <i class="fa fa-clock-o"/> 
+                                        <field name="start_datetime" widget="date"/>
+                                    </div>
+                                    <div class="text-muted small">
+                                        <i class="fa fa-user"/> 
+                                        <field name="owner_id"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_card_footer">
+                                <button name="action_join" type="object" 
+                                        class="btn btn-primary btn-sm" 
+                                        t-if="record.state.raw_value != 'ended'">
+                                    <i class="fa fa-sign-in"/> Join
+                                </button>
+                                <button name="action_copy_link" type="object" 
+                                        class="btn btn-secondary btn-sm">
+                                    <i class="fa fa-copy"/> Copy Link
+                                </button>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_jitsi_meeting_search" model="ir.ui.view">
+        <field name="name">jitsi.meeting.search</field>
+        <field name="model">jitsi.meeting</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="owner_id"/>
+                <filter string="My Meetings" name="my_meetings" 
+                        domain="[('owner_id', '=', uid)]"/>
+                <filter string="Instant" name="instant" 
+                        domain="[('meeting_type', '=', 'instant')]"/>
+                <filter string="Scheduled" name="scheduled" 
+                        domain="[('meeting_type', '=', 'scheduled')]"/>
+                <separator/>
+                <filter string="Active" name="active" 
+                        domain="[('state', 'in', ['draft', 'ready', 'started'])]"/>
+                <filter string="Ended" name="ended" 
+                        domain="[('state', '=', 'ended')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_type" string="Type" 
+                            context="{'group_by': 'meeting_type'}"/>
+                    <filter name="group_by_state" string="State" 
+                            context="{'group_by': 'state'}"/>
+                    <filter name="group_by_owner" string="Organizer" 
+                            context="{'group_by': 'owner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>
