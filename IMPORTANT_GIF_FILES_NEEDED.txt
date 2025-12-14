@@ -1,0 +1,41 @@
+⚠️  IMPORTANT: GIF FILES NEEDED
+================================
+
+The Office Document Creator description page (index.html) has been updated to include
+animated GIF demonstrations, but the actual GIF files are not yet in the repository.
+
+REQUIRED GIF FILES:
+==================
+Please upload the following GIF files to:
+  office_document_creator/static/description/
+
+Files needed:
+  1. One-Click Creation.gif
+  2. One-Click Creation 2.gif
+  3. Real-Time Editing.gif
+  4. _Multi-Format Upload.gif
+  5. Smart Sharing.gif
+  6. Trash & Restore.gif
+
+CURRENT STATUS:
+===============
+✅ HTML description updated with GIF references
+✅ Manifest updated with GIF paths in 'images' list
+✅ Pricing configured ($250 for Office, $200 for Meet)
+✅ License changed to OPL-1 (proprietary/paid)
+⏳ GIF files need to be uploaded
+
+HOW TO ADD GIFS:
+================
+1. Place the 6 GIF files in: office_document_creator/static/description/
+2. Commit them to the repository:
+   git add office_document_creator/static/description/*.gif
+   git commit -m "Add feature demonstration GIFs"
+   git push
+
+DETAILED INSTRUCTIONS:
+======================
+See GIF_PLACEMENT_INSTRUCTIONS.md for complete details.
+
+The HTML is already configured to display these GIFs. Once you upload them,
+they will automatically appear on the Odoo App Store listing!
