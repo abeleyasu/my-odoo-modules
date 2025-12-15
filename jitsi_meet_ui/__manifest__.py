@@ -4,7 +4,15 @@
     'version': '1.1.0',
     'category': 'Discuss',
     'summary': 'Google Meet-like UI using Jitsi for Odoo 18 with Calendar Integration',
-    'description': 'Production-ready O-Meet experience: create and join Jitsi-powered meetings with a Google Meet-style UI. Includes calendar integration and JWT authentication.',
+    'description': """
+O-Meet (Jitsi) - Premium Edition
+=================================
+Premium video conferencing solution ($200 USD) with Google Meet-style interface.
+
+Production-ready O-Meet experience: create and join Jitsi-powered meetings with a 
+Google Meet-style UI. Includes calendar integration, JWT authentication, and 
+professional support.
+    """,
 
     'author': 'Your Company',
     'website': 'https://www.yourcompany.com',
@@ -35,9 +43,11 @@
         'static/description/images/feature_1.png',
         'static/description/images/feature_2.png',
     ],
+    'price': 200.00,
+    'currency': 'USD',
     'post_init_hook': 'post_init_hook',
     'uninstall_hook': 'uninstall_hook',
     'installable': True,
     'application': True,
-    'license': 'LGPL-3',
+    'license': 'OPL-1',
 }

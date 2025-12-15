@@ -5,9 +5,11 @@
     'category': 'Productivity',
     'summary': 'Google Drive-like document creation and management',
     'description': """
-Office Document Creator
-========================
-Google Drive-like document creation and management for Odoo Community Edition.
+Office Document Creator - Premium Edition
+==========================================
+Professional document management with Google Drive-like interface for Odoo.
+
+This is a premium module ($250 USD) with comprehensive features:
 
 Features:
 - Create Word, Excel, PowerPoint, Text documents
@@ -22,6 +24,7 @@ Features:
 - Make copies of documents
 - Storage statistics with document type breakdown
 - Enterprise-ready with comprehensive format support
+- Professional support included
     """,
     'author': 'Your Company',
     'website': 'https://www.yourcompany.com',
@@ -51,9 +54,18 @@ Features:
         'static/description/images/feature_1.png',
         'static/description/images/feature_2.png',
         'static/description/images/feature_3.png',
+        'static/description/images/One-Click Creation.gif',
+        'static/description/images/One-Click Creation 2.gif',
+        'static/description/images/Real-Time Editing.gif',
+        'static/description/images/_Multi-Format Upload.gif',
+        'static/description/images/Smart Sharing.gif',
+        'static/description/images/Folder Organization.gif',
+        'static/description/images/Trash & Restore.gif',
     ],
+    'price': 250.00,
+    'currency': 'USD',
     'installable': True,
     'application': True,
     'auto_install': False,
-    'license': 'LGPL-3',
+    'license': 'OPL-1',
 }
