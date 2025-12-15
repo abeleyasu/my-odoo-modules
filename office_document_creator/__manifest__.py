@@ -50,6 +50,8 @@ Features:
         ],
     },
     'images': [
+        'static/description/banner.gif',
+        'static/description/icon.png',
         'static/description/images/main_screenshot.png',
         'static/description/images/feature_1.png',
         'static/description/images/feature_2.png',
