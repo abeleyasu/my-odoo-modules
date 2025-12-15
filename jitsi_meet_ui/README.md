@@ -1,5 +1,15 @@
 # O-Meet (Jitsi) — Odoo Module
 
+## 💎 Commercial Module - $200 USD
+
+**License:** OPL-1 (Odoo Proprietary License)  
+**Price:** $200.00 USD (one-time payment)  
+**Purchase:** Available on Odoo App Store
+
+This is a **paid module** that requires a valid license to use. Purchase includes lifetime license, updates, and support.
+
+## Overview
+
 This module provides an O-Meet (Google Meet-like) experience inside Odoo using Jitsi Meet as the video backend. It includes calendar integration, JWT support for moderator authentication, and an embedded client via the Jitsi External API.
 
 This README documents the architecture, Odoo configuration keys, Jitsi/Prosody requirements and common troubleshooting steps (what was fixed during setup).

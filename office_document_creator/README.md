@@ -1,5 +1,13 @@
 # Office Document Creator for Odoo 18
 
+## 💎 Commercial Module - $250 USD
+
+**License:** OPL-1 (Odoo Proprietary License)  
+**Price:** $250.00 USD (one-time payment)  
+**Purchase:** Available on Odoo App Store
+
+This is a **paid module** that requires a valid license to use. Purchase includes lifetime license, updates, and support.
+
 ## Overview
 This module provides a "Google Drive-like" document creation and management experience within Odoo Community Edition, seamlessly integrated with ONLYOFFICE. It allows users to create, edit, and organize Word, Excel, and PowerPoint documents directly from Odoo without needing the Enterprise "Documents" app.
 

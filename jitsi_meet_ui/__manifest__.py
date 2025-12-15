@@ -39,5 +39,7 @@
     'uninstall_hook': 'uninstall_hook',
     'installable': True,
     'application': True,
-    'license': 'LGPL-3',
+    'license': 'OPL-1',
+    'price': 200.00,
+    'currency': 'USD',
 }

@@ -2,9 +2,13 @@
 
 Repository for custom Odoo 18 modules ready for the Odoo App Store.
 
+## 💎 Commercial Modules
+
+Both modules are **paid/proprietary software** licensed under OPL-1 (Odoo Proprietary License).
+
 ## Modules
 
-### 1. jitsi_meet_ui (O-Meet)
+### 1. O-Meet (jitsi_meet_ui) - $200 USD
 **Google Meet-style video conferencing for Odoo 18**
 
 - 📹 Instant and scheduled meetings
@@ -13,7 +17,10 @@ Repository for custom Odoo 18 modules ready for the Odoo App Store.
 - 🔐 JWT authentication support
 - 🎨 Modern Google Meet-inspired UI
 
-### 2. office_document_creator
+**Price:** $200 USD (one-time)  
+**License:** OPL-1
+
+### 2. Office Document Creator - $250 USD
 **Google Drive-like document management for Odoo Community Edition**
 
 - 📝 Create Word, Excel, PowerPoint documents
@@ -21,6 +28,9 @@ Repository for custom Odoo 18 modules ready for the Odoo App Store.
 - 📂 Folder organization
 - 🔗 Document sharing
 - 🗑️ Trash and restore functionality
+
+**Price:** $250 USD (one-time)  
+**License:** OPL-1
 
 ## Structure
 
@@ -35,7 +45,7 @@ my-odoo-modules/
 │   │   └── images/            # Screenshots
 │   ├── doc/
 │   │   └── index.rst          # Documentation
-│   ├── LICENSE                # LGPL-3 license
+│   ├── LICENSE                # OPL-1 license
 │   └── __manifest__.py        # Module manifest
 │
 └── office_document_creator/   # Office module
@@ -45,7 +55,7 @@ my-odoo-modules/
     │   └── images/            # Screenshots
     ├── doc/
     │   └── index.rst          # Documentation
-    ├── LICENSE                # LGPL-3 license
+    ├── LICENSE                # OPL-1 license
     └── __manifest__.py        # Module manifest
 ```
 
@@ -59,7 +69,7 @@ my-odoo-modules/
 ## License
 
 - Repository: MIT License
-- Modules: LGPL-3 (see LICENSE file in each module folder)
+- Modules: OPL-1 (Odoo Proprietary License) - Paid modules (see LICENSE file in each module folder)
 
 ## Odoo Version
 
