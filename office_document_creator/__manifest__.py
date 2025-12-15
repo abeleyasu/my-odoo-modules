@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'Office Document Creator',
+    'name': 'Office Document Creator | Odoo Drive',
     'version': '18.0.4.0.0',
     'category': 'Productivity',
     'summary': 'Google Drive-like document creation and management',
@@ -26,8 +26,8 @@ Features:
 - Enterprise-ready with comprehensive format support
 - Professional support included
     """,
-    'author': 'Your Company',
-    'website': 'https://www.yourcompany.com',
+    'author': 'alkezon',
+    'website': 'https://www.alkezon.online',
     'depends': [
         'base',
         'mail',
