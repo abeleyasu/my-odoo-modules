@@ -5,27 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Office Document Creator - Premium Document Management for Odoo</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
-        body {
+        :where(.odc-app) {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: #1a1a1a;
             background: #ffffff;
         }
-        
-        .container {
+
+        :where(.odc-app) * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :where(.odc-app) .container {
             max-width: 1400px;
             margin: 0 auto;
             background: white;
         }
-        
+
         /* Hero Section - Premium Gradient */
-        .hero-section {
+        :where(.odc-app) .hero-section {
             background: linear-gradient(135deg, #7c3aed 0%, #2563eb 50%, #0891b2 100%);
             color: white;
             padding: 80px 60px;
@@ -33,20 +33,17 @@
             position: relative;
             overflow: hidden;
         }
-        
-        .hero-section::before {
+
+        :where(.odc-app) .hero-section::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
                         radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
             pointer-events: none;
         }
-        
-        .hero-section h1 {
+
+        :where(.odc-app) .hero-section h1 {
             font-size: 3.5em;
             font-weight: 800;
             margin-bottom: 24px;
@@ -55,8 +52,8 @@
             z-index: 1;
             text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
         }
-        
-        .hero-section .subtitle {
+
+        :where(.odc-app) .hero-section .subtitle {
             font-size: 1.35em;
             margin-bottom: 36px;
             opacity: 0.95;
@@ -68,8 +65,8 @@
             font-weight: 300;
             line-height: 1.8;
         }
-        
-        .badge-container {
+
+        :where(.odc-app) .badge-container {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
@@ -78,8 +75,8 @@
             position: relative;
             z-index: 1;
         }
-        
-        .badge {
+
+        :where(.odc-app) .badge {
             display: inline-flex;
             align-items: center;
             padding: 12px 24px;
@@ -92,33 +89,33 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
-        .badge:hover {
+
+        :where(.odc-app) .badge:hover {
             background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
-        
+
         /* Section Styling */
-        .section {
+        :where(.odc-app) .section {
             padding: 80px 60px;
             border-bottom: 1px solid #f0f0f0;
         }
-        
-        .section:nth-child(even) {
+
+        :where(.odc-app) .section:nth-child(even) {
             background: #fafafa;
         }
-        
-        .section:last-child {
+
+        :where(.odc-app) .section:last-child {
             border-bottom: none;
         }
-        
-        .section-header {
+
+        :where(.odc-app) .section-header {
             text-align: center;
             margin-bottom: 60px;
         }
-        
-        .section-header h2 {
+
+        :where(.odc-app) .section-header h2 {
             color: #1a1a1a;
             font-size: 2.75em;
             font-weight: 800;
@@ -127,8 +124,8 @@
             position: relative;
             display: inline-block;
         }
-        
-        .section-header h2::after {
+
+        :where(.odc-app) .section-header h2::after {
             content: '';
             position: absolute;
             bottom: -12px;
@@ -139,32 +136,32 @@
             background: linear-gradient(90deg, #7c3aed 0%, #2563eb 100%);
             border-radius: 3px;
         }
-        
-        .section-header p {
+
+        :where(.odc-app) .section-header p {
             color: #666;
             font-size: 1.15em;
             max-width: 800px;
             margin: 24px auto 0;
             line-height: 1.8;
         }
-        
-        h3 {
+
+        :where(.odc-app) h3 {
             color: #1a1a1a;
             font-size: 1.6em;
             font-weight: 700;
             margin: 32px 0 16px;
             letter-spacing: -0.01em;
         }
-        
+
         /* Feature Grid - Modern Cards */
-        .feature-grid {
+        :where(.odc-app) .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 32px;
             margin: 40px 0;
         }
-        
-        .feature-box {
+
+        :where(.odc-app) .feature-box {
             background: white;
             padding: 36px;
             border-radius: 16px;
@@ -174,8 +171,8 @@
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
-        
-        .feature-box::before {
+
+        :where(.odc-app) .feature-box::before {
             content: '';
             position: absolute;
             top: 0;
@@ -186,33 +183,33 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-        
-        .feature-box:hover {
+
+        :where(.odc-app) .feature-box:hover {
             transform: translateY(-8px);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
             border-color: #7c3aed;
         }
-        
-        .feature-box:hover::before {
+
+        :where(.odc-app) .feature-box:hover::before {
             opacity: 1;
         }
-        
-        .feature-box h3 {
+
+        :where(.odc-app) .feature-box h3 {
             color: #1a1a1a;
             font-size: 1.35em;
             margin: 0 0 16px 0;
             font-weight: 700;
         }
-        
-        .feature-box p {
+
+        :where(.odc-app) .feature-box p {
             color: #666;
             line-height: 1.7;
             margin: 0;
             font-size: 1.02em;
         }
-        
+
         /* Image Containers - Modern Design */
-        .image-container {
+        :where(.odc-app) .image-container {
             text-align: center;
             margin: 40px 0;
             padding: 32px;
@@ -221,8 +218,8 @@
             border: 1px solid #e5e5e5;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
         }
-        
-        .image-container img {
+
+        :where(.odc-app) .image-container img {
             max-width: 100%;
             height: auto;
             border-radius: 16px;
@@ -230,41 +227,41 @@
             border: 1px solid #e5e5e5;
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        .image-container img:hover {
+
+        :where(.odc-app) .image-container img:hover {
             transform: scale(1.01);
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16);
         }
-        
-        .image-caption {
+
+        :where(.odc-app) .image-caption {
             margin-top: 20px;
             color: #666;
             font-size: 0.95em;
             font-style: italic;
         }
-        
+
         /* Feature Demo Sections */
-        .feature-demo {
+        :where(.odc-app) .feature-demo {
             margin-bottom: 64px;
         }
-        
-        .feature-demo h3 {
+
+        :where(.odc-app) .feature-demo h3 {
             color: #1a1a1a;
             border-left: 5px solid #7c3aed;
             padding-left: 20px;
             margin-bottom: 16px;
             font-weight: 700;
         }
-        
-        .feature-demo p {
+
+        :where(.odc-app) .feature-demo p {
             color: #666;
             margin-bottom: 24px;
             font-size: 1.08em;
             line-height: 1.8;
         }
-        
+
         /* Highlight & Warning Boxes */
-        .highlight {
+        :where(.odc-app) .highlight {
             background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
             padding: 32px;
             border-radius: 16px;
@@ -272,14 +269,14 @@
             margin: 40px 0;
             box-shadow: 0 4px 16px rgba(16, 185, 129, 0.1);
         }
-        
-        .highlight strong {
+
+        :where(.odc-app) .highlight strong {
             color: #065f46;
             font-size: 1.15em;
             font-weight: 700;
         }
-        
-        .warning {
+
+        :where(.odc-app) .warning {
             background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
             padding: 32px;
             border-radius: 16px;
@@ -287,29 +284,29 @@
             margin: 40px 0;
             box-shadow: 0 4px 16px rgba(245, 158, 11, 0.1);
         }
-        
-        .warning strong {
+
+        :where(.odc-app) .warning strong {
             color: #92400e;
             font-size: 1.15em;
             font-weight: 700;
         }
-        
+
         /* Comparison Table - Premium Style */
-        .comparison-table-wrapper {
+        :where(.odc-app) .comparison-table-wrapper {
             overflow-x: auto;
             margin: 40px 0;
             border-radius: 16px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
         }
-        
-        .comparison-table {
+
+        :where(.odc-app) .comparison-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
             background: white;
         }
-        
-        .comparison-table th {
+
+        :where(.odc-app) .comparison-table th {
             background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
             color: white;
             padding: 20px 18px;
@@ -318,62 +315,63 @@
             font-size: 1.05em;
             letter-spacing: 0.01em;
         }
-        
-        .comparison-table th:first-child {
+
+        :where(.odc-app) .comparison-table th:first-child {
             border-top-left-radius: 16px;
         }
-        
-        .comparison-table th:last-child {
+
+        :where(.odc-app) .comparison-table th:last-child {
             border-top-right-radius: 16px;
         }
-        
-        .comparison-table td {
+
+        :where(.odc-app) .comparison-table td {
             padding: 18px;
             border-bottom: 1px solid #f0f0f0;
             color: #1a1a1a;
             font-size: 1.02em;
         }
-        
-        .comparison-table tbody tr {
+
+        :where(.odc-app) .comparison-table tbody tr {
             transition: background-color 0.2s ease;
         }
-        
-        .comparison-table tbody tr:hover {
+
+        :where(.odc-app) .comparison-table tbody tr:hover {
             background-color: #fafafa;
         }
-        
-        .comparison-table tbody tr:last-child td {
+
+        :where(.odc-app) .comparison-table tbody tr:last-child td {
             border-bottom: none;
         }
-        
-        .comparison-table tbody tr:last-child td:first-child {
+
+        :where(.odc-app) .comparison-table tbody tr:last-child td:first-child {
             border-bottom-left-radius: 16px;
         }
-        
-        .comparison-table tbody tr:last-child td:last-child {
+
+        :where(.odc-app) .comparison-table tbody tr:last-child td:last-child {
             border-bottom-right-radius: 16px;
         }
-        
+
         /* Lists */
-        ul, ol {
+        :where(.odc-app) ul,
+        :where(.odc-app) ol {
             margin: 24px 0;
             padding-left: 32px;
         }
-        
-        li {
+
+        :where(.odc-app) li {
             margin: 14px 0;
             color: #333;
             line-height: 1.8;
             font-size: 1.02em;
         }
-        
-        li strong {
+
+        :where(.odc-app) li strong {
             color: #1a1a1a;
             font-weight: 600;
         }
-        
+
         /* CTA Section */
-        .cta-section {
+        :where(.odc-app) .cta-section {
             text-align: center;
             padding: 80px 60px;
             background: linear-gradient(135deg, #7c3aed 0%, #2563eb 50%, #0891b2 100%);
@@ -381,19 +379,16 @@
             position: relative;
             overflow: hidden;
         }
-        
-        .cta-section::before {
+
+        :where(.odc-app) .cta-section::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
             pointer-events: none;
         }
-        
-        .cta-section h2 {
+
+        :where(.odc-app) .cta-section h2 {
             font-size: 2.75em;
             margin-bottom: 24px;
             font-weight: 800;
@@ -401,17 +396,17 @@
             position: relative;
             z-index: 1;
         }
-        
-        .cta-section p {
+
+        :where(.odc-app) .cta-section p {
             font-size: 1.35em;
             opacity: 0.95;
             position: relative;
             z-index: 1;
             font-weight: 300;
         }
-        
+
         /* Info Boxes */
-        .info-box {
+        :where(.odc-app) .info-box {
             background: white;
             padding: 36px;
             border-radius: 16px;
@@ -420,28 +415,28 @@
             border-left: 5px solid #7c3aed;
             border: 1px solid #e5e5e5;
         }
-        
-        .info-box h3 {
+
+        :where(.odc-app) .info-box h3 {
             color: #7c3aed;
             margin-top: 0;
             font-weight: 700;
         }
-        
+
         /* Step List */
-        .step-list {
+        :where(.odc-app) .step-list {
             counter-reset: step-counter;
             list-style: none;
             padding-left: 0;
         }
-        
-        .step-list li {
+
+        :where(.odc-app) .step-list li {
             counter-increment: step-counter;
             position: relative;
             padding-left: 60px;
             margin-bottom: 28px;
         }
-        
-        .step-list li::before {
+
+        :where(.odc-app) .step-list li::before {
             content: counter(step-counter);
             position: absolute;
             left: 0;
@@ -458,65 +453,65 @@
             font-size: 1.1em;
             box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
         }
-        
+
         /* Responsive Design */
         @media (max-width: 1024px) {
-            .section {
+            :where(.odc-app) .section {
                 padding: 60px 40px;
             }
         }
-        
+
         @media (max-width: 768px) {
-            .hero-section {
+            :where(.odc-app) .hero-section {
                 padding: 60px 32px;
             }
-            
-            .hero-section h1 {
+
+            :where(.odc-app) .hero-section h1 {
                 font-size: 2.25em;
             }
-            
-            .hero-section .subtitle {
+
+            :where(.odc-app) .hero-section .subtitle {
                 font-size: 1.15em;
             }
-            
-            .section {
+
+            :where(.odc-app) .section {
                 padding: 48px 24px;
             }
-            
-            .section-header h2 {
+
+            :where(.odc-app) .section-header h2 {
                 font-size: 2.25em;
             }
-            
-            .feature-grid {
+
+            :where(.odc-app) .feature-grid {
                 grid-template-columns: 1fr;
                 gap: 24px;
             }
-            
-            .comparison-table th,
-            .comparison-table td {
+
+            :where(.odc-app) .comparison-table th,
+            :where(.odc-app) .comparison-table td {
                 padding: 14px 10px;
                 font-size: 0.92em;
             }
-            
-            .image-container {
+
+            :where(.odc-app) .image-container {
                 padding: 24px;
             }
         }
-        
+
         @media (max-width: 480px) {
-            .hero-section {
+            :where(.odc-app) .hero-section {
                 padding: 48px 20px;
             }
-            
-            .hero-section h1 {
+
+            :where(.odc-app) .hero-section h1 {
                 font-size: 1.85em;
             }
-            
-            .section {
+
+            :where(.odc-app) .section {
                 padding: 36px 20px;
             }
-            
-            .badge {
+
+            :where(.odc-app) .badge {
                 font-size: 0.85em;
                 padding: 10px 18px;
             }
@@ -524,7 +519,8 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="odc-app">
+        <div class="container">
         <div class="hero-section">
             <h1>📁 Office Document Creator - Premium Edition</h1>
             <p class="subtitle">
@@ -974,6 +970,7 @@
         <div class="cta-section">
             <h2>Ready to Transform Your Document Management? 🚀</h2>
             <p>Install Office Document Creator now and bring Google Drive experience to your Odoo!</p>
+        </div>
         </div>
     </div>
 </body>

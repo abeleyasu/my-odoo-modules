@@ -50,6 +50,7 @@ Features:
         ],
     },
     'images': [
+        'static/description/images/one-click-creation.gif',
         'static/description/banner.gif',
         'static/description/icon.png',
         'static/description/images/main_screenshot.png',
