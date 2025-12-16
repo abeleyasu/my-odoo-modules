@@ -39,6 +39,7 @@ professional support.
         ],
     },
     'images': [
+        'static/description/banner.gif',
         'static/description/images/main_screenshot.png',
         'static/description/images/feature_1.png',
         'static/description/images/feature_2.png',
