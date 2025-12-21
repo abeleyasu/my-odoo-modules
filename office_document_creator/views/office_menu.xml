@@ -3,6 +3,7 @@
     <!-- Define Client Action for Dashboard -->
     <record id="action_office_dashboard" model="ir.actions.client">
         <field name="name">Office Dashboard</field>
+        <!-- Use legacy tag for compatibility; JS registers both old and new -->
         <field name="tag">office_dashboard</field>
     </record>
 

@@ -5,18 +5,30 @@
         <field name="category_id" ref="base.module_category_productivity"/>
     </record>
 
+    <!-- Document Access Rule: Owner OR shared via legacy field OR shared via access records -->
     <record id="office_document_user_rule" model="ir.rule">
         <field name="name">Office Document: User Access</field>
         <field name="model_id" ref="model_office_document"/>
         <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-        <field name="domain_force">['|', ('owner_id','=',user.id), ('shared_user_ids','in',[user.id])]</field>
+        <field name="domain_force">[
+            '|', '|',
+            ('owner_id', '=', user.id),
+            ('shared_user_ids', 'in', [user.id]),
+            ('access_ids.user_id', '=', user.id)
+        ]</field>
     </record>
 
+    <!-- Folder Access Rule: Owner OR parent owner OR shared via access records -->
     <record id="office_folder_user_rule" model="ir.rule">
         <field name="name">Office Folder: User Access</field>
         <field name="model_id" ref="model_office_folder"/>
         <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-        <field name="domain_force">['|', ('owner_id','=',user.id), ('parent_id.owner_id','=',user.id)]</field>
+        <field name="domain_force">[
+            '|', '|',
+            ('owner_id', '=', user.id),
+            ('parent_id.owner_id', '=', user.id),
+            ('access_ids.user_id', '=', user.id)
+        ]</field>
     </record>
 
     <record id="office_document_manager_rule" model="ir.rule">

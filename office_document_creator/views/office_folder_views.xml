@@ -11,7 +11,7 @@
                 <field name="parent_id"/>
                 <field name="owner_id" widget="many2one_avatar_user"/>
                 <field name="document_count"/>
-                <button name="action_open_folder" type="object" string="Open" icon="fa-folder-open" class="btn-link"/>
+                <button name="action_open" type="object" string="Open" icon="fa-folder-open" class="btn-link"/>
             </list>
         </field>
     </record>
@@ -25,39 +25,56 @@
                 <field name="id"/>
                 <field name="name"/>
                 <field name="color"/>
+                <field name="color_index"/>
                 <field name="document_count"/>
                 <field name="is_starred"/>
+                <field name="access_count"/>
                 <templates>
                     <t t-name="kanban-menu">
-                        <a role="menuitem" type="object" name="action_open_folder" class="dropdown-item">
+                        <a role="menuitem" type="object" name="action_open" class="dropdown-item">
                             <i class="fa fa-folder-open me-2"/>Open
                         </a>
+                        <a role="menuitem" type="object" name="action_share" class="dropdown-item">
+                            <i class="fa fa-share-alt me-2"/>Share
+                        </a>
                         <a role="menuitem" type="object" name="action_toggle_star" class="dropdown-item">
-                            <i class="fa fa-star me-2"/>Toggle Star
+                            <i class="fa fa-star me-2"/>Star/Unstar
                         </a>
                         <a role="menuitem" type="edit" class="dropdown-item">
-                            <i class="fa fa-pencil me-2"/>Edit
+                            <i class="fa fa-pencil me-2"/>Rename
+                        </a>
+                        <a role="menuitem" type="object" name="action_set_color" class="dropdown-item">
+                            <i class="fa fa-paint-brush me-2"/>Change Color
                         </a>
                         <div class="dropdown-divider"/>
-                        <a role="menuitem" type="delete" class="dropdown-item text-danger">
-                            <i class="fa fa-trash me-2"/>Delete
+                        <a role="menuitem" type="object" name="action_move_to_trash" class="dropdown-item text-danger">
+                            <i class="fa fa-trash me-2"/>Move to Trash
                         </a>
                     </t>
                     <t t-name="kanban-box">
-                        <div class="oe_kanban_card o_office_folder_card" t-attf-class="#{kanban_color(record.color.raw_value)}">
-                            <div class="o_kanban_card_content">
-                                <a type="object" name="action_open_folder" class="o_folder_link">
-                                    <i class="fa fa-folder fa-3x text-warning"/>
-                                    <div class="o_folder_name mt-2">
-                                        <strong><field name="name"/></strong>
-                                        <t t-if="record.is_starred.raw_value">
-                                            <i class="fa fa-star text-warning ms-1"/>
-                                        </t>
-                                    </div>
-                                    <div class="o_folder_count text-muted">
-                                        <field name="document_count"/> documents
-                                    </div>
-                                </a>
+                        <div class="oe_kanban_card o_office_folder_card" t-attf-class="#{kanban_color(record.color_index.raw_value)}">
+                            <div class="o_kanban_card_content p-3">
+                                <div class="d-flex align-items-start">
+                                    <a type="object" name="action_open" class="o_folder_link text-decoration-none flex-grow-1">
+                                        <div class="d-flex align-items-center">
+                                            <i class="fa fa-folder fa-2x me-3" t-attf-style="color: #{record.color.raw_value || '#FFC107'}"/>
+                                            <div>
+                                                <div class="o_folder_name fw-bold">
+                                                    <field name="name"/>
+                                                    <t t-if="record.is_starred.raw_value">
+                                                        <i class="fa fa-star text-warning ms-1"/>
+                                                    </t>
+                                                    <t t-if="record.access_count.raw_value > 0">
+                                                        <i class="fa fa-users text-info ms-1" title="Shared"/>
+                                                    </t>
+                                                </div>
+                                                <div class="o_folder_count text-muted small">
+                                                    <field name="document_count"/> items
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </t>
@@ -73,7 +90,7 @@
         <field name="arch" type="xml">
             <form string="Folder">
                 <header>
-                    <button name="action_open_folder" type="object" string="Open Folder" class="oe_highlight" icon="fa-folder-open"/>
+                    <button name="action_open" type="object" string="Open Folder" class="oe_highlight" icon="fa-folder-open"/>
                     <button name="action_toggle_star" type="object" string="Star" icon="fa-star-o" invisible="is_starred"/>
                     <button name="action_toggle_star" type="object" string="Unstar" icon="fa-star" class="text-warning" invisible="not is_starred"/>
                 </header>
@@ -144,6 +161,23 @@
                     <filter string="Owner" name="group_owner" context="{'group_by': 'owner_id'}"/>
                 </group>
             </search>
+        </field>
+    </record>
+
+    <!-- Folder Color Picker Wizard -->
+    <record id="view_office_folder_color_wizard" model="ir.ui.view">
+        <field name="name">office.folder.color.wizard</field>
+        <field name="model">office.folder</field>
+        <field name="arch" type="xml">
+            <form string="Choose Color">
+                <group>
+                    <field name="color" widget="color_picker"/>
+                </group>
+                <footer>
+                    <button string="Apply" type="object" name="action_save_color" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
         </field>
     </record>
 

@@ -5,3 +5,14 @@ access_office_document_manager,office.document.manager,model_office_document,gro
 access_office_folder_manager,office.folder.manager,model_office_folder,group_office_manager,1,1,1,1
 access_office_document_share_wizard,office.document.share.wizard,model_office_document_share_wizard,base.group_user,1,1,1,1
 access_office_document_move_wizard,office.document.move.wizard,model_office_document_move_wizard,base.group_user,1,1,1,1
+access_office_document_access_user,office.document.access.user,model_office_document_access,base.group_user,1,1,1,1
+access_office_document_access_manager,office.document.access.manager,model_office_document_access,group_office_manager,1,1,1,1
+access_office_share_link_user,office.share.link.user,model_office_share_link,base.group_user,1,1,1,1
+access_office_share_link_public,office.share.link.public,model_office_share_link,base.group_public,1,0,0,0
+access_office_share_link_manager,office.share.link.manager,model_office_share_link,group_office_manager,1,1,1,1
+access_office_document_version_user,office.document.version.user,model_office_document_version,base.group_user,1,1,1,1
+access_office_document_version_manager,office.document.version.manager,model_office_document_version,group_office_manager,1,1,1,1
+access_office_document_comment_user,office.document.comment.user,model_office_document_comment,base.group_user,1,1,1,1
+access_office_document_comment_manager,office.document.comment.manager,model_office_document_comment,group_office_manager,1,1,1,1
+access_office_document_activity_user,office.document.activity.user,model_office_document_activity,base.group_user,1,0,1,0
+access_office_document_activity_manager,office.document.activity.manager,model_office_document_activity,group_office_manager,1,1,1,1

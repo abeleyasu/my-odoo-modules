@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="office_document_creator.OfficeDashboard" owl="1">
+        <div class="o_office_dashboard" 
+             t-on-dragover="onDragOver" 
+             t-on-dragleave="onDragLeave" 
+             t-on-drop="onDrop"
+             t-att-class="state.dragOver ? 'o_drag_over' : ''">
+            
+            <!-- Hidden file input for uploads -->
+                 <input type="file" 
+                     t-ref="fileInput"
+                     class="d-none" 
+                     multiple="multiple"
+                     t-on-change="onFileInputChange"/>
+            
+            <!-- Drag overlay -->
+            <div class="o_drag_overlay" t-if="state.dragOver">
+                <div class="o_drag_content">
+                    <i class="fa fa-cloud-upload fa-4x mb-3"/>
+                    <h3>Drop files here to upload</h3>
+                    <p class="text-muted">Supported: Word, Excel, PowerPoint, PDF, Text, CSV, RTF</p>
+                </div>
+            </div>
+
+            <div class="o_dashboard_container">
+                <!-- Sidebar -->
+                <aside class="o_dashboard_sidebar">
+                    <!-- New Button -->
+                    <div class="o_new_button_container mb-4">
+                        <div class="dropdown">
+                            <button class="btn btn-primary o_new_btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="fa fa-plus me-2"/>New
+                            </button>
+                            <ul class="dropdown-menu o_new_dropdown">
+                                <li>
+                                    <a class="dropdown-item" href="#" t-on-click.prevent="() => this.createDocument('word')">
+                                        <i class="fa fa-file-word-o me-2" style="color: #2B5797;"/>
+                                        Word Document
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#" t-on-click.prevent="() => this.createDocument('excel')">
+                                        <i class="fa fa-file-excel-o me-2" style="color: #217346;"/>
+                                        Excel Spreadsheet
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#" t-on-click.prevent="() => this.createDocument('powerpoint')">
+                                        <i class="fa fa-file-powerpoint-o me-2" style="color: #D24726;"/>
+                                        PowerPoint Presentation
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"/></li>
+                                <li>
+                                    <a class="dropdown-item" href="#" t-on-click.prevent="triggerFileUpload">
+                                        <i class="fa fa-upload me-2"/>
+                                        Upload File
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#" t-on-click.prevent="() => this.openFolderModal(state.currentFolder ? state.currentFolder.id : null)">
+                                        <i class="fa fa-folder me-2"/>
+                                        New Folder
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <nav class="o_sidebar_nav">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" t-on-click.prevent="openMyDocuments">
+                                    <i class="fa fa-home me-2"/>My Drive
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" t-on-click.prevent="() => this.setActiveTab('recent')">
+                                    <i class="fa fa-clock-o me-2"/>Recent
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" t-on-click.prevent="openStarred">
+                                    <i class="fa fa-star me-2"/>Starred
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" t-on-click.prevent="openShared">
+                                    <i class="fa fa-users me-2"/>Shared with me
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" t-on-click.prevent="openTrash">
+                                    <i class="fa fa-trash me-2"/>Trash
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <!-- Storage Info -->
+                    <div class="o_storage_info mt-4" t-if="state.storageStats.total_size !== undefined">
+                        <div class="o_storage_bar mb-2">
+                            <div class="progress" style="height: 4px;">
+                                <div class="progress-bar bg-primary" role="progressbar" style="width: 25%;"/>
+                            </div>
+                        </div>
+                        <small class="text-muted">
+                            <t t-esc="state.storageStats.total_size_human"/> used
+                        </small>
+                        <div class="o_storage_details mt-2">
+                            <small class="d-block text-muted">
+                                <i class="fa fa-file-word-o me-1" style="color: #2B5797;"/>
+                                <t t-esc="(state.storageStats.by_type and state.storageStats.by_type.word) or 0"/> Word
+                            </small>
+                            <small class="d-block text-muted">
+                                <i class="fa fa-file-excel-o me-1" style="color: #217346;"/>
+                                <t t-esc="(state.storageStats.by_type and state.storageStats.by_type.excel) or 0"/> Excel
+                            </small>
+                            <small class="d-block text-muted">
+                                <i class="fa fa-file-powerpoint-o me-1" style="color: #D24726;"/>
+                                <t t-esc="(state.storageStats.by_type and state.storageStats.by_type.powerpoint) or 0"/> PowerPoint
+                            </small>
+                            <small class="d-block text-muted">
+                                <i class="fa fa-file-pdf-o me-1" style="color: #E74C3C;"/>
+                                <t t-esc="(state.storageStats.by_type and state.storageStats.by_type.pdf) or 0"/> PDF
+                            </small>
+                            <small class="d-block text-muted">
+                                <i class="fa fa-file-text-o me-1" style="color: #7F8C8D;"/>
+                                <t t-esc="(state.storageStats.by_type and state.storageStats.by_type.text) or 0"/> Text
+                            </small>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Main Content -->
+                <main class="o_dashboard_main">
+                    <!-- Header with Search -->
+                    <header class="o_dashboard_header">
+                        <div class="o_search_container">
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="fa fa-search text-muted"/>
+                                </span>
+                                <input type="text" 
+                                       class="form-control border-start-0 o_search_input" 
+                                       placeholder="Search documents..."
+                                       t-att-value="state.searchQuery"
+                                       t-on-input="onSearchInput"
+                                       t-on-keydown="onSearchKeydown"/>
+                                <button class="btn btn-outline-secondary" 
+                                        type="button" 
+                                        t-on-click="clearSearch"
+                                        t-if="state.searchQuery">
+                                    <i class="fa fa-times"/>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="o_view_controls">
+                            <div class="btn-group" role="group">
+                                <button type="button" 
+                                        class="btn btn-outline-secondary"
+                                        t-att-class="state.viewMode === 'grid' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                        t-on-click="() => this.setViewMode('grid')">
+                                    <i class="fa fa-th-large"/>
+                                </button>
+                                <button type="button" 
+                                        class="btn btn-outline-secondary"
+                                        t-att-class="state.viewMode === 'list' ? 'btn-secondary' : 'btn-outline-secondary'"
+                                        t-on-click="() => this.setViewMode('list')">
+                                    <i class="fa fa-list"/>
+                                </button>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- Quick Create Cards -->
+                    <section class="o_quick_create mb-4">
+                        <h5 class="mb-3">Create new</h5>
+                        <div class="o_create_cards">
+                            <div class="o_create_card word" t-on-click="() => this.createDocument('word')">
+                                <div class="o_card_icon">
+                                    <i class="fa fa-file-word-o"/>
+                                </div>
+                                <span>Document</span>
+                            </div>
+                            <div class="o_create_card excel" t-on-click="() => this.createDocument('excel')">
+                                <div class="o_card_icon">
+                                    <i class="fa fa-file-excel-o"/>
+                                </div>
+                                <span>Spreadsheet</span>
+                            </div>
+                            <div class="o_create_card powerpoint" t-on-click="() => this.createDocument('powerpoint')">
+                                <div class="o_card_icon">
+                                    <i class="fa fa-file-powerpoint-o"/>
+                                </div>
+                                <span>Presentation</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Tabs -->
+                    <div class="o_dashboard_tabs mb-3">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link" 
+                                   t-att-class="state.activeTab === 'recent' ? 'active' : ''"
+                                   href="#"
+                                   t-on-click.prevent="() => this.setActiveTab('recent')">
+                                    <i class="fa fa-clock-o me-1"/>Recent
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   t-att-class="state.activeTab === 'starred' ? 'active' : ''"
+                                   href="#"
+                                   t-on-click.prevent="() => this.setActiveTab('starred')">
+                                    <i class="fa fa-star me-1"/>Starred
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   t-att-class="state.activeTab === 'shared' ? 'active' : ''"
+                                   href="#"
+                                   t-on-click.prevent="() => this.setActiveTab('shared')">
+                                    <i class="fa fa-users me-1"/>Shared
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   t-att-class="state.activeTab === 'folders' ? 'active' : ''"
+                                   href="#"
+                                   t-on-click.prevent="() => this.setActiveTab('folders')">
+                                    <i class="fa fa-folder-open me-1"/>Folders
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Section Title / Folder breadcrumb -->
+                    <div class="o_section_header mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <h5 class="mb-0"><t t-esc="getTabTitle()"/></h5>
+                            <span class="badge bg-secondary" t-if="getActiveDocuments().length">
+                                <t t-esc="getActiveDocuments().length"/>
+                            </span>
+                        </div>
+                        <div class="ms-auto d-flex align-items-center" t-if="state.activeTab === 'folders'">
+                            <div class="o_folder_breadcrumb me-3">
+                                <a href="#" t-on-click.prevent="() => this.selectFolder(false)">My Drive</a>
+                                <t t-foreach="state.folderPath" t-as="crumb" t-key="crumb.id">
+                                    <span class="mx-1 text-muted">/</span>
+                                    <a href="#" t-on-click.prevent="() => this.selectFolder(crumb.id)"><t t-esc="crumb.name"/></a>
+                                </t>
+                            </div>
+                            <button class="btn btn-outline-secondary btn-sm" t-on-click.prevent="() => this.openFolderModal(state.currentFolder ? state.currentFolder.id : null)">
+                                <i class="fa fa-folder me-1"/> New Folder
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Folder tree (folders tab) -->
+                    <div class="o_folder_tree_panel mb-3" t-if="state.activeTab === 'folders'">
+                        <div class="o_folder_tree_list">
+                            <t t-foreach="flattenFolders(state.folders)" t-as="folder" t-key="folder.id">
+                                <div class="o_folder_tree_row"
+                                     t-att-style="'padding-left:' + (folder.level * 16) + 'px'"
+                                     draggable="true"
+                                     t-on-dragover.prevent="onFolderDragOver"
+                                     t-on-drop.prevent="(ev) => this.onFolderDrop(folder.id, ev)"
+                                     t-on-click.prevent="() => this.selectFolder(folder.id)">
+                                    <button class="btn btn-sm btn-link p-0 me-2" t-on-click.stop="(ev) => this.toggleFolderExpand(folder.id, ev)">
+                                        <i t-att-class="folder.children &amp;&amp; folder.children.length ? (state.folderExpanded[folder.id] ? 'fa fa-caret-down' : 'fa fa-caret-right') : ''"/>
+                                    </button>
+                                    <i class="fa fa-folder text-warning me-2"/>
+                                    <span><t t-esc="folder.name"/></span>
+                                    <span class="text-muted ms-2">(<t t-esc="folder.document_count"/> docs)</span>
+                                </div>
+                            </t>
+                            <div class="o_folder_tree_row text-muted"
+                                 t-on-dragover.prevent="onFolderDragOver"
+                                 t-on-drop.prevent="(ev) => this.onFolderDrop(false, ev)">
+                                Drop here to move to My Drive
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div class="o_loading text-center py-5" t-if="state.isLoading">
+                        <i class="fa fa-spinner fa-spin fa-3x text-primary"/>
+                        <p class="mt-3 text-muted">Loading documents...</p>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div class="o_empty_state text-center py-5" t-elif="!getActiveDocuments().length">
+                        <i class="fa fa-file-o fa-4x text-muted mb-3"/>
+                        <h5>No documents found</h5>
+                        <p class="text-muted" t-if="state.activeTab === 'recent'">
+                            Create your first document using the buttons above
+                        </p>
+                        <p class="text-muted" t-elif="state.activeTab === 'starred'">
+                            Star documents to see them here
+                        </p>
+                        <p class="text-muted" t-elif="state.activeTab === 'shared'">
+                            Documents shared with you will appear here
+                        </p>
+                        <p class="text-muted" t-elif="state.activeTab === 'search'">
+                            No documents match your search
+                        </p>
+                    </div>
+
+                    <!-- Document Grid View -->
+                    <div class="o_documents_grid" t-elif="state.viewMode === 'grid'">
+                        <t t-foreach="getActiveDocuments()" t-as="doc" t-key="doc.id">
+                            <div class="o_doc_card" t-on-click="() => this.openDocument(doc.id)"
+                                 draggable="true"
+                                 t-on-dragstart.prevent="(ev) => this.onDocDragStart(doc.id, ev)"
+                                 t-on-dragend.prevent="onDocDragEnd">
+                                <div class="o_doc_preview" t-att-style="'border-top-color: ' + getDocColor(doc.document_type)">
+                                    <i t-att-class="'fa fa-3x ' + getDocIcon(doc.document_type)" 
+                                       t-att-style="'color: ' + getDocColor(doc.document_type)"/>
+                                </div>
+                                <div class="o_doc_info">
+                                    <div class="o_doc_name" t-att-title="doc.name">
+                                        <t t-esc="doc.name"/>
+                                    </div>
+                                    <div class="o_doc_meta">
+                                        <span class="text-muted"><t t-esc="formatDate(doc.write_date)"/></span>
+                                    </div>
+                                </div>
+                                <div class="o_doc_actions">
+                                    <button class="btn btn-sm btn-link" 
+                                            t-on-click.stop="(ev) => this.toggleStar(doc.id, ev)"
+                                            t-att-class="doc.is_starred ? 'text-warning' : 'text-muted'">
+                                        <i t-att-class="doc.is_starred ? 'fa fa-star' : 'fa fa-star-o'"/>
+                                    </button>
+                                    <div class="dropdown d-inline">
+                                        <button class="btn btn-sm btn-link text-muted" 
+                                                type="button"
+                                                data-bs-toggle="dropdown"
+                                                t-on-click.stop="() => {}">
+                                            <i class="fa fa-ellipsis-v"/>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" href="#" t-on-click.prevent.stop="() => this.openDocument(doc.id)">
+                                                    <i class="fa fa-external-link me-2"/>Open
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" t-on-click.prevent.stop="(ev) => this.openRenameModal(doc.id, ev)">
+                                                    <i class="fa fa-i-cursor me-2"/>Rename
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" t-on-click.prevent.stop="(ev) => this.openShare(doc.id, ev)">
+                                                    <i class="fa fa-users me-2"/>Share with users
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" t-on-click.prevent.stop="(ev) => this.openShareLinkModal(doc.id, ev)">
+                                                    <i class="fa fa-link me-2"/>Get link
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" t-on-click.prevent.stop="(ev) => this.openMoveModal(doc.id, ev)">
+                                                    <i class="fa fa-folder-open me-2"/>Organize (Move)
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" t-on-click.prevent.stop="(ev) => this.duplicateDocument(doc.id, ev)">
+                                                    <i class="fa fa-copy me-2"/>Make a copy
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="#" t-on-click.prevent.stop="(ev) => this.toggleStar(doc.id, ev)">
+                                                    <i class="fa fa-star me-2"/>
+                                                    <t t-if="doc.is_starred">Remove star</t>
+                                                    <t t-else="">Add star</t>
+                                                </a>
+                                            </li>
+                                            <li><hr class="dropdown-divider"/></li>
+                                            <li>
+                                                <a class="dropdown-item text-danger" href="#" t-on-click.prevent.stop="(ev) => this.deleteDocument(doc.id, ev)">
+                                                    <i class="fa fa-trash me-2"/>Delete
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+
+                    <!-- Document List View -->
+                    <div class="o_documents_list" t-elif="state.viewMode === 'list'">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;"></th>
+                                    <th>Name</th>
+                                    <th style="width: 120px;">Modified</th>
+                                    <th style="width: 80px;">Size</th>
+                                    <th style="width: 130px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="getActiveDocuments()" t-as="doc" t-key="doc.id">
+                                    <tr class="o_doc_row" t-on-click="() => this.openDocument(doc.id)"
+                                        draggable="true"
+                                        t-on-dragstart.prevent="(ev) => this.onDocDragStart(doc.id, ev)"
+                                        t-on-dragend.prevent="onDocDragEnd">
+                                        <td>
+                                            <i t-att-class="'fa ' + getDocIcon(doc.document_type)" 
+                                               t-att-style="'color: ' + getDocColor(doc.document_type)"/>
+                                        </td>
+                                        <td>
+                                            <span class="o_doc_name"><t t-esc="doc.name"/></span>
+                                            <i class="fa fa-star text-warning ms-2" t-if="doc.is_starred"/>
+                                        </td>
+                                        <td class="text-muted"><t t-esc="formatDate(doc.write_date)"/></td>
+                                        <td class="text-muted"><t t-esc="doc.file_size_human"/></td>
+                                        <td class="text-end">
+                                            <button class="btn btn-sm btn-link"
+                                                    t-on-click.stop="(ev) => this.openRenameModal(doc.id, ev)"
+                                                    title="Rename">
+                                                <i class="fa fa-i-cursor"/>
+                                            </button>
+                                            <button class="btn btn-sm btn-link"
+                                                    t-on-click.stop="(ev) => this.duplicateDocument(doc.id, ev)"
+                                                    title="Make a copy">
+                                                <i class="fa fa-copy"/>
+                                            </button>
+                                            <button class="btn btn-sm btn-link"
+                                                    t-on-click.stop="(ev) => this.openMoveModal(doc.id, ev)"
+                                                    title="Move">
+                                                <i class="fa fa-folder-open"/>
+                                            </button>
+                                            <button class="btn btn-sm btn-link" 
+                                                    t-on-click.stop="(ev) => this.toggleStar(doc.id, ev)"
+                                                    t-att-class="doc.is_starred ? 'text-warning' : 'text-muted'"
+                                                    title="Star">
+                                                <i t-att-class="doc.is_starred ? 'fa fa-star' : 'fa fa-star-o'"/>
+                                            </button>
+                                            <button class="btn btn-sm btn-link text-danger" 
+                                                    t-on-click.stop="(ev) => this.deleteDocument(doc.id, ev)"
+                                                    title="Delete">
+                                                <i class="fa fa-trash"/>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
+            </div>
+            <!-- Rename Modal -->
+            <div class="o_rename_modal" t-if="state.renameModal.visible">
+                <div class="o_modal_backdrop" t-on-click.prevent.stop="closeRenameModal"/>
+                <div class="o_modal_dialog">
+                    <div class="o_modal_header">
+                        <h5>Rename Document</h5>
+                    </div>
+                    <div class="o_modal_body">
+                        <div class="mb-3">
+                            <label class="form-label">New name</label>
+                            <input type="text" class="form-control" t-ref="renameInput" t-att-value="state.renameModal.name" t-on-input="(ev) => state.renameModal.name = ev.target.value"/>
+                        </div>
+                    </div>
+                    <div class="o_modal_footer text-end">
+                        <button class="btn btn-secondary me-2" t-on-click.prevent.stop="closeRenameModal">Cancel</button>
+                        <button class="btn btn-primary" t-on-click.prevent.stop="submitRename">Rename</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Folder Modal -->
+            <div class="o_rename_modal" t-if="state.folderModal.visible">
+                <div class="o_modal_backdrop" t-on-click.prevent.stop="closeFolderModal"/>
+                <div class="o_modal_dialog">
+                    <div class="o_modal_header">
+                        <h5>New Folder</h5>
+                    </div>
+                    <div class="o_modal_body">
+                        <div class="mb-3">
+                            <label class="form-label">Folder name</label>
+                            <input type="text" class="form-control" t-att-value="state.folderModal.name" t-on-input="(ev) => state.folderModal.name = ev.target.value"/>
+                        </div>
+                    </div>
+                    <div class="o_modal_footer text-end">
+                        <button class="btn btn-secondary me-2" t-on-click.prevent.stop="closeFolderModal">Cancel</button>
+                        <button class="btn btn-primary" t-on-click.prevent.stop="submitCreateFolder">Create</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Move Modal -->
+            <div class="o_rename_modal" t-if="state.moveModal.visible">
+                <div class="o_modal_backdrop" t-on-click.prevent.stop="closeMoveModal"/>
+                <div class="o_modal_dialog">
+                    <div class="o_modal_header">
+                        <h5>Move to folder</h5>
+                    </div>
+                    <div class="o_modal_body">
+                        <div class="mb-3">
+                            <label class="form-label">Destination</label>
+                            <select class="form-select" t-on-change="(ev) => state.moveModal.targetFolderId = ev.target.value ? parseInt(ev.target.value) : null">
+                                <option value="">My Drive</option>
+                                <t t-foreach="flattenFolders(state.folders)" t-as="folder" t-key="folder.id">
+                                    <option t-att-value="folder.id" t-att-selected="state.moveModal.targetFolderId === folder.id">
+                                        <t t-esc="' '.repeat(folder.level * 2) + folder.name"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="o_modal_footer text-end">
+                        <button class="btn btn-secondary me-2" t-on-click.prevent.stop="closeMoveModal">Cancel</button>
+                        <button class="btn btn-primary" t-on-click.prevent.stop="submitMove">Move</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Share link Modal -->
+            <div class="o_rename_modal" t-if="state.shareModal.visible">
+                <div class="o_modal_backdrop" t-on-click.prevent.stop="closeShareModal"/>
+                <div class="o_modal_dialog">
+                    <div class="o_modal_header">
+                        <h5>Get link</h5>
+                    </div>
+                    <div class="o_modal_body">
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="shareActive" t-att-checked="state.shareModal.active" t-on-change="(ev) => state.shareModal.active = ev.target.checked"/>
+                            <label class="form-check-label" for="shareActive">Link sharing</label>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Access</label>
+                            <select class="form-select" t-att-disabled="!state.shareModal.active" t-on-change="(ev) => state.shareModal.permission = ev.target.value">
+                                <option value="view" t-att-selected="state.shareModal.permission === 'view'">Anyone with the link (view)</option>
+                                <option value="edit" t-att-selected="state.shareModal.permission === 'edit'">Anyone with the link (edit)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Link</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" readonly="readonly" t-att-value="state.shareModal.url || 'Generate link to copy'"/>
+                                <button class="btn btn-outline-secondary" type="button" t-att-disabled="!state.shareModal.url" t-on-click.prevent.stop="copyShareLink">Copy</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="o_modal_footer text-end">
+                        <button class="btn btn-secondary me-2" t-on-click.prevent.stop="closeShareModal">Close</button>
+                        <button class="btn btn-primary" t-on-click.prevent.stop="saveShareLink">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

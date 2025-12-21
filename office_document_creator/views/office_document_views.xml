@@ -262,15 +262,24 @@
         <field name="name">office.document.share.wizard.form</field>
         <field name="model">office.document.share.wizard</field>
         <field name="arch" type="xml">
-            <form string="Share Document">
+            <form string="Share">
                 <group>
-                    <field name="document_id" readonly="1"/>
+                    <field name="document_id" readonly="1" invisible="not document_id"/>
+                    <field name="folder_id" readonly="1" invisible="not folder_id"/>
+                </group>
+                <group string="Share with People">
                     <field name="user_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                    <field name="share_permission"/>
+                    <field name="permission"/>
+                    <field name="notify_users"/>
+                    <field name="message" invisible="not notify_users" placeholder="Add a message..."/>
                 </group>
                 <group string="Link Sharing">
-                    <field name="share_link_active"/>
-                    <field name="share_link" readonly="1" invisible="not share_link" widget="CopyClipboardChar"/>
+                    <field name="enable_link"/>
+                    <field name="link_permission" invisible="not enable_link"/>
+                    <field name="link_url" readonly="1" invisible="not enable_link" widget="CopyClipboardChar"/>
+                </group>
+                <group string="Who Has Access" invisible="not document_id and not folder_id">
+                    <field name="current_access_html" nolabel="1" colspan="2"/>
                 </group>
                 <footer>
                     <button name="action_share" type="object" string="Share" class="btn-primary"/>
