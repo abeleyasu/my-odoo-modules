@@ -1,0 +1,962 @@
+/**
+ * Office Document Creator - Enhanced Dashboard Styles
+ * 
+ * Google Drive-like UI styling with:
+ * - Clean, modern design
+ * - Responsive grid/list views
+ * - Hover effects and transitions
+ * - Dark mode support
+ * - File type colors
+ * 
+ * @copyright 2025 Odoo Community
+ * @license LGPL-3.0 or later
+ */
+
+/* ============================================================================
+   CSS VARIABLES
+   ============================================================================ */
+
+:root {
+    /* Colors - Google Drive style */
+    --office-primary: #1a73e8;
+    --office-primary-hover: #1557b0;
+    --office-secondary: #5f6368;
+    --office-bg: #ffffff;
+    --office-surface: #ffffff;
+    --office-border: #e0e0e0;
+    --office-text: #202124;
+    --office-text-secondary: #5f6368;
+    --office-hover-bg: #f1f3f4;
+    
+    /* File Type Colors */
+    --color-word: #4285f4;
+    --color-excel: #0f9d58;
+    --color-powerpoint: #f4b400;
+    --color-pdf: #ea4335;
+    --color-image: #4285f4;
+    --color-video: #ea4335;
+    --color-audio: #fbbc04;
+    --color-code: #5f6368;
+    --color-archive: #ff9800;
+    
+    /* Spacing */
+    --sidebar-width: 260px;
+    --header-height: 64px;
+    
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.25s ease;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+    --shadow-md: 0 1px 3px 0 rgba(60,64,67,.3), 0 4px 8px 3px rgba(60,64,67,.15);
+    --shadow-lg: 0 2px 6px 2px rgba(60,64,67,.15), 0 8px 12px 6px rgba(60,64,67,.15);
+}
+
+/* ============================================================================
+   MAIN LAYOUT
+   ============================================================================ */
+
+.office-dashboard {
+    height: 100vh;
+    background: #ffffff !important;
+    font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--office-text);
+}
+
+.office-sidebar {
+    width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
+    background: #ffffff !important;
+    border-right: 1px solid var(--office-border);
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.office-main {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff !important;
+}
+
+.office-header {
+    height: var(--header-height);
+    background: #ffffff !important;
+    border-bottom: 1px solid var(--office-border);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.office-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #ffffff !important;
+}
+
+/* ============================================================================
+   SIDEBAR
+   ============================================================================ */
+
+.office-sidebar .nav-link {
+    color: #5f6368;
+    padding: 8px 12px;
+    border-radius: 0 20px 20px 0;
+    margin: 2px 8px 2px 0;
+    transition: background-color var(--transition-fast);
+    font-size: 14px;
+}
+
+.office-sidebar .nav-link:hover {
+    background-color: var(--office-hover-bg);
+}
+
+.office-sidebar .nav-link.active {
+    background-color: #e8f0fe;
+    color: var(--office-primary);
+    font-weight: 500;
+}
+
+.office-sidebar .nav-link i {
+    width: 20px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* New Button */
+.office-new-btn {
+    background: var(--office-surface);
+    border: 1px solid var(--office-border);
+    color: var(--office-text);
+    padding: 14px 24px;
+    border-radius: 24px;
+    font-weight: 500;
+    font-size: 14px;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-normal);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.office-new-btn:hover {
+    box-shadow: var(--shadow-lg);
+    background: #f8f9fa;
+}
+
+.office-new-btn i {
+    font-size: 24px;
+    color: var(--office-primary);
+}
+
+/* Storage Indicator */
+.office-storage {
+    padding: 16px;
+    border-top: 1px solid var(--office-border);
+}
+
+.office-storage-bar {
+    height: 4px;
+    background: #e8eaed;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.office-storage-fill {
+    height: 100%;
+    background: var(--office-primary);
+    transition: width var(--transition-normal);
+}
+
+.office-storage-fill.warning {
+    background: #fbbc04;
+}
+
+.office-storage-fill.danger {
+    background: #ea4335;
+}
+
+/* ============================================================================
+   SEARCH
+   ============================================================================ */
+
+.office-search {
+    max-width: 720px;
+    flex: 1;
+}
+
+.office-search-input {
+    background: #f1f3f4;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px 12px 48px;
+    font-size: 16px;
+    width: 100%;
+    transition: all var(--transition-normal);
+}
+
+.office-search-input:focus {
+    background: var(--office-surface);
+    box-shadow: var(--shadow-lg);
+    outline: none;
+}
+
+.office-search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--office-secondary);
+}
+
+/* ============================================================================
+   BREADCRUMB
+   ============================================================================ */
+
+.office-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.office-breadcrumb-item {
+    color: var(--office-text-secondary);
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.office-breadcrumb-item:hover {
+    color: var(--office-primary);
+}
+
+.office-breadcrumb-separator {
+    color: var(--office-border);
+}
+
+.office-breadcrumb-current {
+    color: var(--office-text);
+    font-weight: 500;
+}
+
+/* ============================================================================
+   FILE/FOLDER GRID
+   ============================================================================ */
+
+.office-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.office-item {
+    background: #ffffff;
+    border: 1px solid var(--office-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+}
+
+.office-item:hover {
+    border-color: #5f6368;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+}
+
+.office-item.selected {
+    border-color: var(--office-primary);
+    background: #e8f0fe;
+    box-shadow: 0 1px 2px 0 rgba(26,115,232,.3), 0 1px 3px 1px rgba(26,115,232,.15);
+}
+
+.office-item-content {
+    padding: 16px;
+    text-align: center;
+}
+
+.office-item-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.office-item-thumbnail {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.office-item-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--office-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+}
+
+.office-item-meta {
+    font-size: 12px;
+    color: var(--office-text-secondary);
+}
+
+/* Item Indicators */
+.office-item-starred {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: #fbbc04;
+}
+
+.office-item-shared {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    color: var(--office-primary);
+}
+
+/* File Type Colors */
+.office-item-icon.word { color: var(--color-word); }
+.office-item-icon.excel { color: var(--color-excel); }
+.office-item-icon.powerpoint { color: var(--color-powerpoint); }
+.office-item-icon.pdf { color: var(--color-pdf); }
+.office-item-icon.image { color: var(--color-image); }
+.office-item-icon.video { color: var(--color-video); }
+.office-item-icon.audio { color: var(--color-audio); }
+.office-item-icon.code { color: var(--color-code); }
+.office-item-icon.archive { color: var(--color-archive); }
+
+/* ============================================================================
+   LIST VIEW
+   ============================================================================ */
+
+.office-list {
+    width: 100%;
+}
+
+.office-list-header {
+    display: grid;
+    grid-template-columns: 40px 1fr 150px 150px 100px 80px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--office-text-secondary);
+    border-bottom: 1px solid var(--office-border);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.office-list-item {
+    display: grid;
+    grid-template-columns: 40px 1fr 150px 150px 100px 80px;
+    padding: 12px 16px;
+    align-items: center;
+    border-bottom: 1px solid var(--office-border);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.office-list-item:hover {
+    background: rgba(95, 99, 104, 0.04);
+}
+
+.office-list-item.selected {
+    background: #e8f0fe;
+}
+
+.office-list-item-icon {
+    font-size: 24px;
+}
+
+.office-list-item-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.office-list-item-name .indicators {
+    display: flex;
+    gap: 4px;
+}
+
+/* ============================================================================
+   MODALS
+   ============================================================================ */
+
+.office-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.office-modal {
+    background: var(--office-surface);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.office-modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--office-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.office-modal-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--office-text);
+}
+
+.office-modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.office-modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--office-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* ============================================================================
+   SHARE DIALOG
+   ============================================================================ */
+
+.office-share-input {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.office-share-input input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--office-border);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.office-share-list {
+    margin-bottom: 24px;
+}
+
+.office-share-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--office-border);
+}
+
+.office-share-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.office-share-info {
+    flex: 1;
+}
+
+.office-share-name {
+    font-weight: 500;
+    color: var(--office-text);
+}
+
+.office-share-email {
+    font-size: 12px;
+    color: var(--office-text-secondary);
+}
+
+.office-share-link {
+    background: #f1f3f4;
+    border-radius: 4px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.office-share-link-icon {
+    font-size: 24px;
+    color: var(--office-secondary);
+}
+
+.office-share-link-info {
+    flex: 1;
+}
+
+.office-share-link-url {
+    font-size: 12px;
+    color: var(--office-text-secondary);
+    word-break: break-all;
+}
+
+/* ============================================================================
+   CREATE MENU
+   ============================================================================ */
+
+.office-create-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.office-create-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+    border: 1px solid var(--office-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.office-create-item:hover {
+    background: #f8f9fa;
+    border-color: var(--office-primary);
+}
+
+.office-create-item i {
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.office-create-item span {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* ============================================================================
+   PREVIEW MODAL
+   ============================================================================ */
+
+.office-preview-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+}
+
+.office-preview-header {
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+}
+
+.office-preview-title {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.office-preview-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.office-preview-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.office-preview-image {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+.office-preview-video {
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.office-preview-code {
+    width: 100%;
+    height: 100%;
+}
+
+/* ============================================================================
+   UPLOAD PROGRESS
+   ============================================================================ */
+
+.office-upload-panel {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    width: 350px;
+    background: var(--office-surface);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.office-upload-header {
+    padding: 12px 16px;
+    background: var(--office-primary);
+    color: #fff;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.office-upload-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.office-upload-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--office-border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.office-upload-item-icon {
+    font-size: 20px;
+}
+
+.office-upload-item-icon.uploading {
+    color: var(--office-primary);
+    animation: spin 1s linear infinite;
+}
+
+.office-upload-item-icon.complete {
+    color: #34a853;
+}
+
+.office-upload-item-icon.error {
+    color: #ea4335;
+}
+
+.office-upload-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.office-upload-item-name {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.office-upload-item-progress {
+    height: 4px;
+    background: #e8eaed;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.office-upload-item-progress-bar {
+    height: 100%;
+    background: var(--office-primary);
+    transition: width var(--transition-fast);
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================================================
+   CONTEXT MENU
+   ============================================================================ */
+
+.office-context-menu {
+    position: fixed;
+    background: var(--office-surface);
+    border-radius: 4px;
+    box-shadow: var(--shadow-lg);
+    min-width: 200px;
+    z-index: 1200;
+    padding: 8px 0;
+}
+
+.office-context-item {
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.office-context-item:hover {
+    background: rgba(95, 99, 104, 0.08);
+}
+
+.office-context-item i {
+    width: 20px;
+    color: var(--office-secondary);
+}
+
+.office-context-divider {
+    height: 1px;
+    background: var(--office-border);
+    margin: 8px 0;
+}
+
+/* ============================================================================
+   FOLDER COLORS
+   ============================================================================ */
+
+.folder-color-gray { color: #9E9E9E !important; }
+.folder-color-red { color: #F44336 !important; }
+.folder-color-pink { color: #E91E63 !important; }
+.folder-color-purple { color: #9C27B0 !important; }
+.folder-color-deep-purple { color: #673AB7 !important; }
+.folder-color-indigo { color: #3F51B5 !important; }
+.folder-color-blue { color: #2196F3 !important; }
+.folder-color-light-blue { color: #03A9F4 !important; }
+.folder-color-cyan { color: #00BCD4 !important; }
+.folder-color-teal { color: #009688 !important; }
+.folder-color-green { color: #4CAF50 !important; }
+.folder-color-light-green { color: #8BC34A !important; }
+.folder-color-lime { color: #CDDC39 !important; }
+.folder-color-yellow { color: #FFEB3B !important; }
+.folder-color-amber { color: #FFC107 !important; }
+.folder-color-orange { color: #FF9800 !important; }
+.folder-color-deep-orange { color: #FF5722 !important; }
+.folder-color-brown { color: #795548 !important; }
+
+/* ============================================================================
+   EMPTY STATES
+   ============================================================================ */
+
+.office-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.office-empty-icon {
+    font-size: 80px;
+    color: #dadce0;
+    margin-bottom: 24px;
+}
+
+.office-empty-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--office-text);
+    margin-bottom: 8px;
+}
+
+.office-empty-description {
+    font-size: 14px;
+    color: var(--office-text-secondary);
+    margin-bottom: 24px;
+    max-width: 400px;
+}
+
+/* ============================================================================
+   FILE TYPE ICONS WITH COLORS
+   ============================================================================ */
+
+.file-type-icon {
+    position: relative;
+    display: inline-block;
+}
+
+/* Document Types */
+.file-type-icon.file-word { color: #2B579A; }
+.file-type-icon.file-excel { color: #217346; }
+.file-type-icon.file-powerpoint { color: #D24726; }
+.file-type-icon.file-pdf { color: #EA4335; }
+.file-type-icon.file-text { color: #5F6368; }
+
+/* Media Types */
+.file-type-icon.file-image { color: #4285F4; }
+.file-type-icon.file-video { color: #EA4335; }
+.file-type-icon.file-audio { color: #FBBC04; }
+
+/* Code Types */
+.file-type-icon.file-code { color: #34A853; }
+.file-type-icon.file-code-js { color: #F7DF1E; }
+.file-type-icon.file-code-python { color: #3776AB; }
+.file-type-icon.file-code-java { color: #007396; }
+.file-type-icon.file-code-cpp { color: #00599C; }
+.file-type-icon.file-code-html { color: #E34F26; }
+.file-type-icon.file-code-css { color: #1572B6; }
+
+/* Archive Types */
+.file-type-icon.file-archive { color: #FF9800; }
+
+/* Other Types */
+.file-type-icon.file-ebook { color: #9C27B0; }
+.file-type-icon.file-font { color: #795548; }
+.file-type-icon.file-design { color: #E91E63; }
+.file-type-icon.file-cad { color: #009688; }
+.file-type-icon.file-executable { color: #607D8B; }
+.file-type-icon.file-other { color: #9E9E9E; }
+
+/* Icon styling */
+.file-type-icon i {
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 768px) {
+    .office-sidebar {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        bottom: 0;
+        z-index: 1100;
+        transition: left var(--transition-normal);
+    }
+    
+    .office-sidebar.open {
+        left: 0;
+    }
+    
+    .office-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+    
+    .office-list-header,
+    .office-list-item {
+        grid-template-columns: 40px 1fr 80px;
+    }
+    
+    .office-list-header > *:nth-child(n+4),
+    .office-list-item > *:nth-child(n+4) {
+        display: none;
+    }
+}
+
+/* ============================================================================
+   UTILITIES
+   ============================================================================ */
+
+.cursor-pointer { cursor: pointer; }
+.hover-bg-light:hover { background: rgba(0,0,0,0.04); }
+.hover-shadow:hover { box-shadow: var(--shadow-md); }
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ============================================================================
+   MONACO EDITOR OVERRIDES
+   ============================================================================ */
+
+.monaco-editor {
+    border-radius: 0 0 8px 8px;
+}
+
+.monaco-editor .margin {
+    background: #1e1e1e;
+}
+
+/* ============================================================================
+   DRAG AND DROP
+   ============================================================================ */
+
+.office-dashboard.drag-over {
+    background: rgba(26, 115, 232, 0.1);
+}
+
+.office-dashboard.drag-over::after {
+    content: 'Drop files to upload';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--office-primary);
+    background: var(--office-surface);
+    padding: 40px 60px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    border: 3px dashed var(--office-primary);
+    z-index: 1000;
+}
+
+/* Item Drag States */
+.office-item.dragging,
+.office-folder-item.dragging {
+    opacity: 0.5;
+    transform: scale(0.95);
+}
+
+.office-folder-item.drag-over {
+    border-color: var(--office-primary) !important;
+    background: rgba(26, 115, 232, 0.1) !important;
+    box-shadow: 0 0 0 2px var(--office-primary);
+}
+
+/* Move Modal Folder Tree */
+.list-group-item.active {
+    background-color: var(--office-primary) !important;
+    border-color: var(--office-primary) !important;
+    color: white !important;
+}
+
+.list-group-item.active i {
+    color: white !important;
+}
+
+.list-group-item:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f8f9fa;
+}
+
+/* Sidebar drop target */
+.office-sidebar-folder.drag-over {
+    background: rgba(26, 115, 232, 0.15);
+    border-radius: 4px;
+}

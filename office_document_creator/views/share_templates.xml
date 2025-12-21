@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Office Document Creator - Public Share Templates
+    
+    Templates for public access to shared documents and folders:
+    - Password protected access
+    - Document preview (image, video, audio, code, PDF)
+    - Folder browsing
+    - Download interface
+    
+    @copyright 2025 Odoo Community
+    @license LGPL-3.0 or later
+-->
+<odoo>
+
+    <!-- Base Layout for Share Pages -->
+    <template id="share_base_layout" name="Office Share Base Layout">
+        <t t-call="web.layout">
+            <t t-set="head">
+                <meta charset="UTF-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+                <style>
+                    body { background: #f1f3f4; min-height: 100vh; }
+                    .share-header { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+                    .share-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+                    .file-icon { font-size: 64px; color: #5f6368; }
+                    .preview-container { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+                </style>
+                <t t-raw="head_content"/>
+            </t>
+            <t t-raw="0"/>
+        </t>
+    </template>
+
+    <!-- Share Not Found -->
+    <template id="share_not_found" name="Share Link Not Found">
+        <t t-call="office_document_creator.share_base_layout">
+            <div class="d-flex justify-content-center align-items-center vh-100">
+                <div class="text-center">
+                    <i class="fa fa-link-slash fa-5x text-muted mb-4"></i>
+                    <h2 class="mb-3">Link Not Found</h2>
+                    <p class="text-muted mb-4"><t t-esc="message"/></p>
+                    <a href="/" class="btn btn-primary">Go to Home</a>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Share Error -->
+    <template id="share_error" name="Share Error">
+        <t t-call="office_document_creator.share_base_layout">
+            <div class="d-flex justify-content-center align-items-center vh-100">
+                <div class="text-center">
+                    <i class="fa fa-exclamation-triangle fa-5x text-warning mb-4"></i>
+                    <h2 class="mb-3">Access Denied</h2>
+                    <p class="text-muted mb-4"><t t-esc="message"/></p>
+                    <a href="/" class="btn btn-primary">Go to Home</a>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Password Required -->
+    <template id="share_password_required" name="Password Required">
+        <t t-call="office_document_creator.share_base_layout">
+            <div class="d-flex justify-content-center align-items-center vh-100">
+                <div class="card shadow" style="max-width: 400px; width: 100%;">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-4">
+                            <i class="fa fa-lock fa-3x text-primary mb-3"></i>
+                            <h4>Password Protected</h4>
+                            <p class="text-muted">This file requires a password to access</p>
+                        </div>
+                        
+                        <t t-if="error">
+                            <div class="alert alert-danger" role="alert">
+                                <t t-esc="error"/>
+                            </div>
+                        </t>
+                        
+                        <form method="post" t-attf-action="/office/share/#{token}/password">
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" 
+                                       required="required" autofocus="autofocus"/>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fa fa-unlock me-2"></i> Access File
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Download Not Allowed -->
+    <template id="download_not_allowed" name="Download Not Allowed">
+        <t t-call="office_document_creator.share_base_layout">
+            <div class="d-flex justify-content-center align-items-center vh-100">
+                <div class="text-center">
+                    <i class="fa fa-download fa-5x text-muted mb-4"></i>
+                    <h2 class="mb-3">Download Disabled</h2>
+                    <p class="text-muted">The owner has disabled downloads for this file.</p>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Shared Document View -->
+    <template id="shared_document_view" name="Shared Document View">
+        <t t-call="office_document_creator.share_base_layout">
+            <t t-set="head_content">
+                <title><t t-esc="document.name"/> - Shared Document</title>
+            </t>
+            
+            <!-- Header -->
+            <header class="share-header sticky-top py-3 px-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="fa fa-file fa-lg text-muted"></i>
+                        <h5 class="mb-0"><t t-esc="document.name"/></h5>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <t t-if="can_download">
+                            <a t-att-href="download_url" class="btn btn-primary">
+                                <i class="fa fa-download me-2"></i> Download
+                            </a>
+                        </t>
+                        <t t-if="can_edit">
+                            <a t-attf-href="/onlyoffice/editor/#{document.attachment_id}" 
+                               class="btn btn-success" target="_blank">
+                                <i class="fa fa-edit me-2"></i> Edit
+                            </a>
+                        </t>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Preview -->
+            <div class="share-container">
+                <t t-call="office_document_creator.shared_document_preview"/>
+            </div>
+        </t>
+    </template>
+
+    <!-- Document Preview Content -->
+    <template id="shared_document_preview" name="Shared Document Preview">
+        <div class="preview-container p-4">
+            <t t-if="document.preview_type == 'image'">
+                <div class="text-center">
+                    <img t-attf-src="/web/content/#{document.attachment_id}" 
+                         class="img-fluid rounded" style="max-height: 80vh;"
+                         t-att-alt="document.name"/>
+                </div>
+            </t>
+            
+            <t t-elif="document.preview_type == 'video'">
+                <video controls="controls" class="w-100" style="max-height: 80vh;">
+                    <source t-attf-src="/web/content/#{document.attachment_id}" 
+                            t-att-type="document.mimetype"/>
+                    Your browser does not support the video tag.
+                </video>
+            </t>
+            
+            <t t-elif="document.preview_type == 'audio'">
+                <div class="text-center py-5">
+                    <i class="fa fa-music fa-5x text-primary mb-4"></i>
+                    <h4 class="mb-4"><t t-esc="document.name"/></h4>
+                    <audio controls="controls" class="w-100" style="max-width: 500px;">
+                        <source t-attf-src="/web/content/#{document.attachment_id}" 
+                                t-att-type="document.mimetype"/>
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+            </t>
+            
+            <t t-elif="document.preview_type == 'pdf'">
+                <iframe t-attf-src="/web/content/#{document.attachment_id}" 
+                        class="w-100" style="height: 80vh; border: none;"></iframe>
+            </t>
+            
+            <t t-elif="document.preview_type == 'code'">
+                <t t-call="office_document_creator.code_preview"/>
+            </t>
+            
+            <t t-elif="document.preview_type == 'text'">
+                <pre class="p-4 bg-light rounded" style="max-height: 80vh; overflow: auto;">
+                    <t t-esc="document.content or 'No content'"/>
+                </pre>
+            </t>
+            
+            <t t-else="">
+                <div class="text-center py-5">
+                    <i class="fa fa-file fa-5x text-muted mb-4"></i>
+                    <h4>No preview available</h4>
+                    <p class="text-muted mb-4">Download the file to view it</p>
+                    <t t-if="can_download">
+                        <a t-att-href="download_url" class="btn btn-primary">
+                            <i class="fa fa-download me-2"></i> Download
+                        </a>
+                    </t>
+                </div>
+            </t>
+        </div>
+        
+        <!-- File Info -->
+        <div class="mt-4 text-muted small">
+            <div class="row">
+                <div class="col-md-4">
+                    <strong>File size:</strong> 
+                    <t t-esc="'%.2f' % (document.file_size / 1024 / 1024)"/> MB
+                </div>
+                <div class="col-md-4">
+                    <strong>Type:</strong> <t t-esc="document.file_extension"/>
+                </div>
+                <div class="col-md-4">
+                    <strong>Modified:</strong> <t t-esc="document.write_date"/>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Code Preview with Syntax Highlighting -->
+    <template id="code_preview" name="Code Preview">
+        <t t-set="head_content">
+            <link rel="stylesheet" 
+                  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css"/>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+        </t>
+        
+        <div class="code-preview">
+            <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
+                <span class="badge bg-secondary">
+                    <t t-esc="document.code_language or 'plaintext'"/>
+                </span>
+            </div>
+            <pre><code t-att-class="'language-' + (document.code_language or 'plaintext')">
+                <t t-esc="document.content or '// No content'"/>
+            </code></pre>
+        </div>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('pre code').forEach((el) => {
+                    hljs.highlightElement(el);
+                });
+            });
+        </script>
+    </template>
+
+    <!-- Shared Folder View -->
+    <template id="shared_folder_view" name="Shared Folder View">
+        <t t-call="office_document_creator.share_base_layout">
+            <t t-set="head_content">
+                <title><t t-esc="folder.name"/> - Shared Folder</title>
+            </t>
+            
+            <!-- Header -->
+            <header class="share-header sticky-top py-3 px-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="fa fa-folder fa-lg" 
+                           t-att-style="'color: ' + (folder.color or '#9E9E9E')"></i>
+                        <h5 class="mb-0"><t t-esc="folder.name"/></h5>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Content -->
+            <div class="share-container">
+                <div class="preview-container p-4">
+                    <t t-if="not subfolders and not documents">
+                        <div class="text-center py-5 text-muted">
+                            <i class="fa fa-folder-open fa-3x mb-3"></i>
+                            <p>This folder is empty</p>
+                        </div>
+                    </t>
+                    
+                    <!-- Subfolders -->
+                    <t t-if="subfolders">
+                        <h6 class="text-muted mb-3">Folders</h6>
+                        <div class="row g-3 mb-4">
+                            <t t-foreach="subfolders" t-as="subfolder">
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <a t-attf-href="/office/share/#{link.token}/folder/#{subfolder.id}" 
+                                       class="text-decoration-none">
+                                        <div class="card h-100 text-center py-4 hover-shadow">
+                                            <i class="fa fa-folder fa-3x mb-2" 
+                                               t-att-style="'color: ' + (subfolder.color or '#9E9E9E')"></i>
+                                            <div class="small text-dark text-truncate px-2">
+                                                <t t-esc="subfolder.name"/>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                    
+                    <!-- Files -->
+                    <t t-if="documents">
+                        <h6 class="text-muted mb-3">Files</h6>
+                        <div class="row g-3">
+                            <t t-foreach="documents" t-as="doc">
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <a t-attf-href="/office/share/#{link.token}/document/#{doc.id}" 
+                                       class="text-decoration-none">
+                                        <div class="card h-100 text-center py-4 hover-shadow">
+                                            <t t-set="icon_class">
+                                                <t t-if="doc.file_category == 'word'">fa-file-word text-primary</t>
+                                                <t t-elif="doc.file_category == 'excel'">fa-file-excel text-success</t>
+                                                <t t-elif="doc.file_category == 'powerpoint'">fa-file-powerpoint text-warning</t>
+                                                <t t-elif="doc.file_category == 'pdf'">fa-file-pdf text-danger</t>
+                                                <t t-elif="doc.file_category == 'image'">fa-file-image text-info</t>
+                                                <t t-elif="doc.file_category == 'video'">fa-file-video text-primary</t>
+                                                <t t-elif="doc.file_category == 'audio'">fa-file-audio text-success</t>
+                                                <t t-elif="doc.file_category == 'code'">fa-file-code text-secondary</t>
+                                                <t t-elif="doc.file_category == 'archive'">fa-file-archive text-warning</t>
+                                                <t t-else="">fa-file text-muted</t>
+                                            </t>
+                                            <i t-attf-class="fa #{icon_class} fa-3x mb-2"></i>
+                                            <div class="small text-dark text-truncate px-2">
+                                                <t t-esc="doc.name"/>
+                                            </div>
+                                            <div class="small text-muted">
+                                                <t t-esc="'%.1f' % (doc.file_size / 1024)" /> KB
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Preview Templates for Specific Types -->
+    
+    <!-- Image Preview Page -->
+    <template id="preview_image" name="Image Preview">
+        <t t-call="office_document_creator.share_base_layout">
+            <t t-set="head_content">
+                <title><t t-esc="document.name"/> - Image Preview</title>
+                <style>
+                    body { background: #202124; }
+                    .preview-image { max-height: 90vh; max-width: 100%; }
+                </style>
+            </t>
+            
+            <header class="share-header bg-dark text-white py-3 px-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-truncate"><t t-esc="document.name"/></h5>
+                    <div class="d-flex gap-2">
+                        <a t-att-href="download_url" class="btn btn-outline-light btn-sm">
+                            <i class="fa fa-download"></i>
+                        </a>
+                        <a href="javascript:history.back()" class="btn btn-outline-light btn-sm">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="d-flex justify-content-center align-items-center" style="height: calc(100vh - 60px);">
+                <img t-att-src="image_url" class="preview-image" t-att-alt="document.name"/>
+            </div>
+        </t>
+    </template>
+
+    <!-- Video Preview Page -->
+    <template id="preview_video" name="Video Preview">
+        <t t-call="office_document_creator.share_base_layout">
+            <t t-set="head_content">
+                <title><t t-esc="document.name"/> - Video Preview</title>
+                <style>
+                    body { background: #202124; }
+                </style>
+            </t>
+            
+            <header class="share-header bg-dark text-white py-3 px-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-truncate"><t t-esc="document.name"/></h5>
+                    <div class="d-flex gap-2">
+                        <a t-att-href="download_url" class="btn btn-outline-light btn-sm">
+                            <i class="fa fa-download"></i>
+                        </a>
+                        <a href="javascript:history.back()" class="btn btn-outline-light btn-sm">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="d-flex justify-content-center align-items-center" style="height: calc(100vh - 60px);">
+                <video controls="controls" autoplay="autoplay" class="w-100" style="max-height: 90vh;">
+                    <source t-att-src="video_url" t-att-type="mimetype"/>
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </t>
+    </template>
+
+    <!-- Audio Preview Page -->
+    <template id="preview_audio" name="Audio Preview">
+        <t t-call="office_document_creator.share_base_layout">
+            <t t-set="head_content">
+                <title><t t-esc="document.name"/> - Audio Preview</title>
+                <style>
+                    body { background: #202124; }
+                </style>
+            </t>
+            
+            <header class="share-header bg-dark text-white py-3 px-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-truncate"><t t-esc="document.name"/></h5>
+                    <div class="d-flex gap-2">
+                        <a t-att-href="download_url" class="btn btn-outline-light btn-sm">
+                            <i class="fa fa-download"></i>
+                        </a>
+                        <a href="javascript:history.back()" class="btn btn-outline-light btn-sm">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="d-flex flex-column justify-content-center align-items-center text-white" 
+                 style="height: calc(100vh - 60px);">
+                <i class="fa fa-music fa-5x mb-4"></i>
+                <h3 class="mb-4"><t t-esc="document.name"/></h3>
+                <audio controls="controls" autoplay="autoplay" style="width: 400px; max-width: 100%;">
+                    <source t-att-src="audio_url" t-att-type="mimetype"/>
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </t>
+    </template>
+
+    <!-- PDF Preview Page -->
+    <template id="preview_pdf" name="PDF Preview">
+        <t t-call="office_document_creator.share_base_layout">
+            <t t-set="head_content">
+                <title><t t-esc="document.name"/> - PDF Preview</title>
+            </t>
+            
+            <header class="share-header py-3 px-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-truncate"><t t-esc="document.name"/></h5>
+                    <div class="d-flex gap-2">
+                        <a t-att-href="download_url" class="btn btn-primary btn-sm">
+                            <i class="fa fa-download me-1"></i> Download
+                        </a>
+                        <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+            
+            <iframe t-att-src="pdf_url" class="w-100" style="height: calc(100vh - 60px); border: none;"></iframe>
+        </t>
+    </template>
+
+    <!-- Code Preview Page -->
+    <template id="preview_code" name="Code Preview">
+        <t t-call="office_document_creator.share_base_layout">
+            <t t-set="head_content">
+                <title><t t-esc="document.name"/> - Code Preview</title>
+                <link rel="stylesheet" 
+                      href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/editor/editor.main.min.css"/>
+                <style>
+                    #monaco-container { height: calc(100vh - 120px); }
+                </style>
+            </t>
+            
+            <header class="share-header py-3 px-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-3">
+                        <h5 class="mb-0 text-truncate"><t t-esc="document.name"/></h5>
+                        <span class="badge bg-secondary"><t t-esc="language"/></span>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a t-att-href="download_url" class="btn btn-primary btn-sm">
+                            <i class="fa fa-download me-1"></i> Download
+                        </a>
+                        <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+            
+            <div id="monaco-container"></div>
+            
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+            <script>
+                require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+                require(['vs/editor/editor.main'], function() {
+                    monaco.editor.create(document.getElementById('monaco-container'), {
+                        value: <t t-raw="json.dumps(content)"/>,
+                        language: '<t t-esc="language"/>',
+                        theme: 'vs-dark',
+                        readOnly: true,
+                        automaticLayout: true,
+                        minimap: { enabled: true },
+                        fontSize: 14,
+                        lineNumbers: 'on',
+                        scrollBeyondLastLine: false,
+                        wordWrap: 'on'
+                    });
+                });
+            </script>
+        </t>
+    </template>
+
+    <!-- Text Preview Page -->
+    <template id="preview_text" name="Text Preview">
+        <t t-call="office_document_creator.share_base_layout">
+            <t t-set="head_content">
+                <title><t t-esc="document.name"/> - Text Preview</title>
+            </t>
+            
+            <header class="share-header py-3 px-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-truncate"><t t-esc="document.name"/></h5>
+                    <div class="d-flex gap-2">
+                        <a t-att-href="download_url" class="btn btn-primary btn-sm">
+                            <i class="fa fa-download me-1"></i> Download
+                        </a>
+                        <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="share-container">
+                <div class="preview-container">
+                    <pre class="p-4 mb-0" style="max-height: calc(100vh - 140px); overflow: auto; white-space: pre-wrap;">
+                        <t t-esc="content"/>
+                    </pre>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Preview Not Available -->
+    <template id="preview_not_available" name="Preview Not Available">
+        <t t-call="office_document_creator.share_base_layout">
+            <t t-set="head_content">
+                <title><t t-esc="document.name"/> - Download</title>
+            </t>
+            
+            <div class="d-flex justify-content-center align-items-center vh-100">
+                <div class="text-center">
+                    <i class="fa fa-file fa-5x text-muted mb-4"></i>
+                    <h3 class="mb-3"><t t-esc="document.name"/></h3>
+                    <p class="text-muted mb-4">Preview is not available for this file type</p>
+                    <a t-att-href="download_url" class="btn btn-primary btn-lg">
+                        <i class="fa fa-download me-2"></i> Download File
+                    </a>
+                    <div class="mt-3 text-muted small">
+                        Size: <t t-esc="'%.2f' % (document.file_size / 1024 / 1024)"/> MB
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>
