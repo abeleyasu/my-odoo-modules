@@ -15,6 +15,7 @@
         'static/description/banner.gif',
         'static/description/banner.png',
     ],
+    'icon': 'static/description/icon.png',
     'description': """
 Office Drive - Enterprise Document Management
 =============================================
