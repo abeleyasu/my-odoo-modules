@@ -3,7 +3,7 @@
 # License OPL-1 (Odoo Proprietary License v1.0)
 {
     'name': 'Office Drive - Enterprise Document Management',
-    'version': '18.0.5.0.1',
+    'version': '18.0.6.0.0',
     'category': 'Productivity/Documents',
     'summary': 'The ultimate Google Drive alternative inside Odoo. Share, Edit, and Manage files with enterprise security.',
     'author': 'Abel Eyasu',
@@ -11,7 +11,10 @@
     'license': 'OPL-1',
     'price': 100.00,
     'currency': 'USD',
-    'images': ['static/description/banner.png'],
+    'images': [
+        'static/description/banner.gif',
+        'static/description/banner.png',
+    ],
     'description': """
 Office Drive - Enterprise Document Management
 =============================================
