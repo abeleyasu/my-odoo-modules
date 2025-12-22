@@ -5,7 +5,7 @@
         <field name="name">office.document.tree</field>
         <field name="model">office.document</field>
         <field name="arch" type="xml">
-            <list string="Documents" create="false" sample="1" default_order="write_date desc">
+            <tree string="Documents" create="false" sample="1" default_order="write_date desc">
                 <field name="is_starred" widget="boolean_favorite" nolabel="1" optional="show"/>
                 <field name="icon" column_invisible="1"/>
                 <field name="color" column_invisible="1"/>
@@ -20,7 +20,7 @@
                 <button name="action_toggle_star" type="object" string="Unstar" icon="fa-star text-warning" class="btn-link" invisible="not is_starred"/>
                 <button name="action_download" type="object" string="Download" icon="fa-download" class="btn-link"/>
                 <button name="action_move_to_trash" type="object" string="Delete" icon="fa-trash" class="btn-link text-danger"/>
-            </list>
+            </tree>
         </field>
     </record>
 

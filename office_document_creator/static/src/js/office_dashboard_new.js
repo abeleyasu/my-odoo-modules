@@ -19,7 +19,6 @@ import { Component, useState, onMounted, useRef, onWillUnmount } from "@odoo/owl
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { loadJS, loadCSS } from "@web/core/assets";
-import { rpc } from "@web/core/network/rpc";
 import { session } from "@web/session";
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { _t } from "@web/core/l10n/translation";
@@ -158,6 +157,7 @@ class OfficeDashboard extends Component {
         });
         
         this.orm = useService("orm");
+        this.rpc = useService("rpc");
         this.action = useService("action");
         this.notification = useService("notification");
         this.dialog = useService("dialog");
@@ -193,7 +193,7 @@ class OfficeDashboard extends Component {
     async loadDashboardData(folderId = false) {
         this.state.loading = true;
         try {
-            const result = await rpc('/office/api/dashboard', {
+            const result = await this.rpc('/office/api/dashboard', {
                 folder_id: folderId,
             });
             
@@ -213,7 +213,7 @@ class OfficeDashboard extends Component {
     
     async loadFolderTree() {
         try {
-            this.state.folderTree = await rpc('/office/api/folder/tree');
+            this.state.folderTree = await this.rpc('/office/api/folder/tree');
         } catch (error) {
             console.error('Failed to load folder tree:', error);
         }
@@ -243,22 +243,22 @@ class OfficeDashboard extends Component {
                 await this.loadDashboardData(false);
                 break;
             case 'shared':
-                result = await rpc('/office/api/dashboard', { filter: 'shared' });
+                result = await this.rpc('/office/api/dashboard', { filter: 'shared' });
                 this.state.documents = result.documents || [];
                 this.state.folders = result.folders || [];
                 break;
             case 'starred':
-                result = await rpc('/office/api/dashboard', { filter: 'starred' });
+                result = await this.rpc('/office/api/dashboard', { filter: 'starred' });
                 this.state.documents = result.documents || [];
                 this.state.folders = [];
                 break;
             case 'recent':
-                result = await rpc('/office/api/dashboard', { filter: 'recent' });
+                result = await this.rpc('/office/api/dashboard', { filter: 'recent' });
                 this.state.documents = result.documents || [];
                 this.state.folders = [];
                 break;
             case 'trash':
-                result = await rpc('/office/api/dashboard', { filter: 'trash' });
+                result = await this.rpc('/office/api/dashboard', { filter: 'trash' });
                 this.state.documents = result.documents || [];
                 this.state.folders = result.folders || [];
                 break;
@@ -371,7 +371,7 @@ class OfficeDashboard extends Component {
         
         try {
             // Initialize upload
-            const initResult = await rpc('/office/upload/init', {
+            const initResult = await this.rpc('/office/upload/init', {
                 filename: file.name,
                 file_size: file.size,
                 folder_id: this.state.currentFolderId,
@@ -400,7 +400,7 @@ class OfficeDashboard extends Component {
             }
             
             // Complete upload
-            await rpc('/office/upload/complete', {
+            await this.rpc('/office/upload/complete', {
                 upload_id: upload_id,
             });
             
@@ -448,7 +448,7 @@ class OfficeDashboard extends Component {
         }
         
         // Upload folder structure
-        await rpc('/office/upload/folder', {
+        await this.rpc('/office/upload/folder', {
             folder_name: rootFolderName || 'Uploaded Folder',
             files: fileDataList,
             parent_folder_id: this.state.currentFolderId,
@@ -566,7 +566,7 @@ class OfficeDashboard extends Component {
         this.state.showCreateModal = false;
         
         try {
-            const result = await rpc('/office/api/document/create', {
+            const result = await this.rpc('/office/api/document/create', {
                 doc_type: type,
                 folder_id: this.state.currentFolderId,
             });
@@ -596,7 +596,7 @@ class OfficeDashboard extends Component {
         }
         
         try {
-            await rpc('/office/api/folder/create', {
+            await this.rpc('/office/api/folder/create', {
                 name: name,
                 parent_id: this.state.currentFolderId,
             });
@@ -622,7 +622,7 @@ class OfficeDashboard extends Component {
     
     async toggleDocumentStar(doc) {
         try {
-            await rpc('/office/api/document/star', {
+            await this.rpc('/office/api/document/star', {
                 document_id: doc.id,
             });
             await this.refreshData();
@@ -728,7 +728,7 @@ class OfficeDashboard extends Component {
         
         try {
             if (this.state.moveTargetType === 'document') {
-                await rpc('/office/api/document/move', {
+                await this.rpc('/office/api/document/move', {
                     document_id: this.state.moveTarget.id,
                     folder_id: targetFolderId,
                 });
@@ -738,7 +738,7 @@ class OfficeDashboard extends Component {
                     this.notification.add('Cannot move folder into itself', { type: 'warning' });
                     return;
                 }
-                await rpc('/office/api/folder/move', {
+                await this.rpc('/office/api/folder/move', {
                     folder_id: this.state.moveTarget.id,
                     target_parent_id: targetFolderId,
                 });
@@ -763,7 +763,7 @@ class OfficeDashboard extends Component {
     
     async trashDocument(doc) {
         try {
-            await rpc('/office/api/document/trash', {
+            await this.rpc('/office/api/document/trash', {
                 document_id: doc.id,
             });
             await this.refreshData();
@@ -838,12 +838,12 @@ class OfficeDashboard extends Component {
             }
             
             if (data.type === 'document') {
-                await rpc('/office/api/document/move', {
+                await this.rpc('/office/api/document/move', {
                     document_id: data.id,
                     folder_id: targetFolder.id,
                 });
             } else if (data.type === 'folder') {
-                await rpc('/office/api/folder/move', {
+                await this.rpc('/office/api/folder/move', {
                     folder_id: data.id,
                     target_parent_id: targetFolder.id,
                 });
@@ -865,12 +865,12 @@ class OfficeDashboard extends Component {
             const data = JSON.parse(event.dataTransfer.getData('application/json'));
             
             if (data.type === 'document') {
-                await rpc('/office/api/document/move', {
+                await this.rpc('/office/api/document/move', {
                     document_id: data.id,
                     folder_id: false,
                 });
             } else if (data.type === 'folder') {
-                await rpc('/office/api/folder/move', {
+                await this.rpc('/office/api/folder/move', {
                     folder_id: data.id,
                     target_parent_id: false,
                 });
@@ -917,11 +917,11 @@ class OfficeDashboard extends Component {
                 try {
                     for (const itemId of selectedItems) {
                         if (itemId.startsWith('doc_')) {
-                            await rpc('/office/api/document/trash', {
+                            await this.rpc('/office/api/document/trash', {
                                 document_id: parseInt(itemId.replace('doc_', '')),
                             });
                         } else if (itemId.startsWith('folder_')) {
-                            await rpc('/office/api/folder/trash', {
+                            await this.rpc('/office/api/folder/trash', {
                                 folder_id: parseInt(itemId.replace('folder_', '')),
                             });
                         }
@@ -940,7 +940,7 @@ class OfficeDashboard extends Component {
     async starSelected() {
         for (const itemId of this.state.selectedItems) {
             if (itemId.startsWith('doc_')) {
-                await rpc('/office/api/document/star', {
+                await this.rpc('/office/api/document/star', {
                     document_id: parseInt(itemId.replace('doc_', '')),
                 });
             }
@@ -981,7 +981,7 @@ class OfficeDashboard extends Component {
     async addUserAccess(userId, permission) {
         const targetType = this.state.shareTarget.is_folder ? 'folder' : 'document';
         
-        await rpc('/office/api/share/grant', {
+        await this.rpc('/office/api/share/grant', {
             target_type: targetType,
             target_id: this.state.shareTarget.id,
             user_id: userId,
@@ -989,7 +989,7 @@ class OfficeDashboard extends Component {
         });
         
         // Reload access list
-        this.state.shareAccessList = await rpc('/office/api/share/access_list', {
+        this.state.shareAccessList = await this.rpc('/office/api/share/access_list', {
             target_type: targetType,
             target_id: this.state.shareTarget.id,
         });
@@ -1022,7 +1022,7 @@ class OfficeDashboard extends Component {
     }
     
     async performSearch() {
-        const results = await rpc('/office/api/search', {
+        const results = await this.rpc('/office/api/search', {
             query: this.state.searchQuery,
         });
         
@@ -1225,12 +1225,12 @@ class OfficeDashboard extends Component {
             this.state.selectedUserForShare = null;
             
             // Use existing RPC endpoints
-            this.state.shareAccessList = await rpc('/office/api/share/access_list', {
+            this.state.shareAccessList = await this.rpc('/office/api/share/access_list', {
                 target_type: targetType,
                 target_id: targetId,
             });
             
-            this.state.shareLink = await rpc('/office/api/share/link', {
+            this.state.shareLink = await this.rpc('/office/api/share/link', {
                 target_type: targetType,
                 target_id: targetId,
             });
@@ -1254,7 +1254,7 @@ class OfficeDashboard extends Component {
             // Use dedicated user search endpoint for reliability
             const existingUserIds = this.state.shareAccessList.map(a => a.user_id);
             
-            const users = await rpc('/office/api/users/search', {
+            const users = await this.rpc('/office/api/users/search', {
                 query: query,
                 exclude_ids: existingUserIds,
                 limit: 10,
@@ -1300,7 +1300,7 @@ class OfficeDashboard extends Component {
                 try {
                     // Use dedicated user search endpoint
                     const existingUserIds = this.state.shareAccessList.map(a => a.user_id);
-                    const found = await rpc('/office/api/users/search', {
+                    const found = await this.rpc('/office/api/users/search', {
                         query: raw,
                         exclude_ids: existingUserIds,
                         limit: 1,
@@ -1331,7 +1331,7 @@ class OfficeDashboard extends Component {
             const targetId = this.state.shareTarget.id;
             
             // Use existing RPC endpoint
-            await rpc('/office/api/share/grant', {
+            await this.rpc('/office/api/share/grant', {
                 target_type: targetType,
                 target_id: targetId,
                 user_id: targetUser.id,
@@ -1363,7 +1363,7 @@ class OfficeDashboard extends Component {
             const targetType = this.state.shareTarget.type;
             const targetId = this.state.shareTarget.id;
             
-            await rpc('/office/api/share/grant', {
+            await this.rpc('/office/api/share/grant', {
                 target_type: targetType,
                 target_id: targetId,
                 user_id: userId,
@@ -1390,7 +1390,7 @@ class OfficeDashboard extends Component {
             const targetType = this.state.shareTarget.type;
             const targetId = this.state.shareTarget.id;
             
-            await rpc('/office/api/share/revoke', {
+            await this.rpc('/office/api/share/revoke', {
                 target_type: targetType,
                 target_id: targetId,
                 user_id: userId,
@@ -1414,7 +1414,7 @@ class OfficeDashboard extends Component {
             const targetType = this.state.shareTarget.type;
             const targetId = this.state.shareTarget.id;
             
-            this.state.shareLink = await rpc('/office/api/share/link/update', {
+            this.state.shareLink = await this.rpc('/office/api/share/link/update', {
                 target_type: targetType,
                 target_id: targetId,
                 active: enable,
@@ -1450,7 +1450,7 @@ class OfficeDashboard extends Component {
             const targetType = this.state.shareTarget.type;
             const targetId = this.state.shareTarget.id;
             
-            this.state.shareLink = await rpc('/office/api/share/link/update', {
+            this.state.shareLink = await this.rpc('/office/api/share/link/update', {
                 target_type: targetType,
                 target_id: targetId,
                 is_active: true,
@@ -1472,7 +1472,7 @@ class OfficeDashboard extends Component {
             const targetType = this.state.shareTarget.type;
             const targetId = this.state.shareTarget.id;
             
-            this.state.shareLink = await rpc('/office/api/share/link/update', {
+            this.state.shareLink = await this.rpc('/office/api/share/link/update', {
                 target_type: targetType,
                 target_id: targetId,
                 is_active: true,
