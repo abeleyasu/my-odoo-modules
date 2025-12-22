@@ -6,7 +6,7 @@
     'version': '18.0.6.0.0',
     'category': 'Productivity/Documents',
     'summary': 'The ultimate Google Drive alternative inside Odoo. Share, Edit, and Manage files with enterprise security.',
-    'author': 'Abel Eyasu',
+    'author': 'Alkez ERP-By Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
     'price': 100.00,
