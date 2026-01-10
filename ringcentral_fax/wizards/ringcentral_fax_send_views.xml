@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ringcentral_fax_send_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.fax.send.form</field>
+        <field name="model">ringcentral.fax.send</field>
+        <field name="arch" type="xml">
+            <form string="Send Fax">
+                <group>
+                    <field name="fax_number" placeholder="+1234567890"/>
+                    <field name="partner_id"/>
+                </group>
+                <group string="Cover Page">
+                    <field name="cover_page_id"/>
+                    <field name="cover_page_text" placeholder="Optional cover page message..."/>
+                </group>
+                <group string="Documents">
+                    <field name="attachment_ids" nolabel="1" colspan="2">
+                        <list>
+                            <field name="name"/>
+                            <field name="mimetype"/>
+                        </list>
+                    </field>
+                </group>
+                <group string="Options">
+                    <field name="resolution"/>
+                </group>
+                <field name="res_model" invisible="1"/>
+                <field name="res_id" invisible="1"/>
+                <footer>
+                    <button name="action_send" type="object" string="Send Fax" class="btn-primary" icon="fa-fax"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_ringcentral_fax_send" model="ir.actions.act_window">
+        <field name="name">Send Fax</field>
+        <field name="res_model">ringcentral.fax.send</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

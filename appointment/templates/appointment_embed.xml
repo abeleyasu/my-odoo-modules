@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Embed Widget Templates -->
+<odoo>
+    <!-- Inline Embed Widget -->
+    <template id="embed_inline" name="Appointment Inline Embed">
+        <t t-call="appointment.appointment_embed_layout">
+            <div class="appointment-inline-embed">
+                <t t-call="appointment.appointment_booking_page"/>
+            </div>
+        </t>
+    </template>
+
+    <!-- Popup Embed Widget -->
+    <template id="embed_popup" name="Appointment Popup Embed">
+        <t t-call="appointment.appointment_embed_layout">
+            <div class="appointment-popup-embed">
+                <t t-call="appointment.appointment_booking_page"/>
+            </div>
+        </t>
+    </template>
+
+    <!-- Backend Embed Code Display Template -->
+    <template id="embed_code_preview" name="Embed Code Preview">
+        <div class="embed-code-section">
+            <h4>Inline Embed</h4>
+            <p class="text-muted">Embed your booking page directly on your website.</p>
+            <pre class="embed-code"><code t-out="appointment_type.embed_code_inline"/></pre>
+            <button class="btn btn-secondary btn-copy" data-target="inline">Copy Code</button>
+
+            <h4 class="mt-4">Popup Widget</h4>
+            <p class="text-muted">Add a floating button that opens your booking page in a popup.</p>
+            <pre class="embed-code"><code t-out="appointment_type.embed_code_popup"/></pre>
+            <button class="btn btn-secondary btn-copy" data-target="popup">Copy Code</button>
+
+            <h4 class="mt-4">Popup Text Link</h4>
+            <p class="text-muted">Add a text link that opens your booking page in a popup.</p>
+            <pre class="embed-code"><code t-out="appointment_type.embed_code_text"/></pre>
+            <button class="btn btn-secondary btn-copy" data-target="text">Copy Code</button>
+        </div>
+    </template>
+</odoo>

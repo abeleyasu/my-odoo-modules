@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Recording Menu under Communications -->
+    <menuitem id="menu_ringcentral_recordings"
+              name="Recordings"
+              parent="ringcentral_base.menu_ringcentral_communications"
+              action="action_ringcentral_recording"
+              sequence="15"/>
+    
+    <!-- Retention Policy Menu -->
+    <menuitem id="menu_ringcentral_retention_policy"
+              name="Retention Policies"
+              parent="ringcentral_base.menu_ringcentral_config"
+              action="action_ringcentral_recording_retention"
+              sequence="40"
+              groups="ringcentral_base.group_ringcentral_manager"/>
+</odoo>

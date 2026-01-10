@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_ringcentral_ai"
+              name="AI &amp; Insights"
+              parent="ringcentral_base.menu_ringcentral_advanced"
+              sequence="40"/>
+    
+    <menuitem id="menu_ai_transcripts"
+              name="AI Transcripts"
+              parent="menu_ringcentral_ai"
+              action="action_ai_transcript"
+              sequence="10"/>
+</odoo>

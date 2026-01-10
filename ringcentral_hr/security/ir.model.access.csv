@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_employee_ringcentral_user,hr.employee.ringcentral.user,hr.model_hr_employee,ringcentral_base.group_ringcentral_user,1,1,0,0

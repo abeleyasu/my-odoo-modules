@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- RingCentral Security Groups -->
+    
+    <record id="module_category_ringcentral" model="ir.module.category">
+        <field name="name">RingCentral</field>
+        <field name="description">RingCentral Integration</field>
+        <field name="sequence">100</field>
+    </record>
+    
+    <!-- User: Basic RingCentral access -->
+    <record id="group_ringcentral_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_category_ringcentral"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Can make calls, send SMS, view own call history</field>
+    </record>
+    
+    <!-- Manager: Full RingCentral access -->
+    <record id="group_ringcentral_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_category_ringcentral"/>
+        <field name="implied_ids" eval="[(4, ref('group_ringcentral_user'))]"/>
+        <field name="comment">Can view all call logs, access recordings, manage settings</field>
+    </record>
+    
+    <!-- Admin: RingCentral configuration -->
+    <record id="group_ringcentral_admin" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="category_id" ref="module_category_ringcentral"/>
+        <field name="implied_ids" eval="[(4, ref('group_ringcentral_manager'))]"/>
+        <field name="comment">Can configure RingCentral credentials and webhooks</field>
+    </record>
+    
+    <!-- Compliance Officer: Recording access -->
+    <record id="group_ringcentral_compliance" model="res.groups">
+        <field name="name">Compliance Officer</field>
+        <field name="category_id" ref="module_category_ringcentral"/>
+        <field name="implied_ids" eval="[(4, ref('group_ringcentral_manager'))]"/>
+        <field name="comment">Can access all recordings, manage retention, legal holds</field>
+    </record>
+    
+</odoo>

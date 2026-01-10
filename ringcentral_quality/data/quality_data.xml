@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Default Alert Rules -->
+    <record id="alert_rule_low_mos" model="ringcentral.call.quality.alert.rule">
+        <field name="name">Low MOS Score</field>
+        <field name="metric">mos</field>
+        <field name="operator">less_than</field>
+        <field name="threshold">3.0</field>
+        <field name="severity">high</field>
+    </record>
+    
+    <record id="alert_rule_high_jitter" model="ringcentral.call.quality.alert.rule">
+        <field name="name">High Jitter</field>
+        <field name="metric">jitter</field>
+        <field name="operator">greater_than</field>
+        <field name="threshold">50</field>
+        <field name="severity">medium</field>
+    </record>
+    
+    <record id="alert_rule_high_latency" model="ringcentral.call.quality.alert.rule">
+        <field name="name">High Latency</field>
+        <field name="metric">latency</field>
+        <field name="operator">greater_than</field>
+        <field name="threshold">200</field>
+        <field name="severity">high</field>
+    </record>
+    
+    <record id="alert_rule_packet_loss" model="ringcentral.call.quality.alert.rule">
+        <field name="name">Packet Loss Detected</field>
+        <field name="metric">packet_loss</field>
+        <field name="operator">greater_than</field>
+        <field name="threshold">2</field>
+        <field name="severity">critical</field>
+    </record>
+</odoo>

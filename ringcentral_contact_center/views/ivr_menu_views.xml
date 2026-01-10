@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- IVR Menu Tree View -->
+    <record id="ivr_menu_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.ivr.menu.tree</field>
+        <field name="model">ringcentral.ivr.menu</field>
+        <field name="arch" type="xml">
+            <list string="IVR Menus">
+                <field name="name"/>
+                <field name="parent_id"/>
+                <field name="prompt_type"/>
+                <field name="timeout"/>
+                <field name="active" widget="boolean"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- IVR Menu Form View -->
+    <record id="ivr_menu_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.ivr.menu.form</field>
+        <field name="model">ringcentral.ivr.menu</field>
+        <field name="arch" type="xml">
+            <form string="IVR Menu">
+                <header>
+                    <button name="action_sync_to_ringcentral" type="object" string="Sync to RingCentral" class="btn-primary"/>
+                    <button name="action_preview" type="object" string="Preview"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Menu Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Hierarchy">
+                            <field name="parent_id"/>
+                            <field name="ringcentral_ivr_id"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Settings">
+                            <field name="timeout"/>
+                            <field name="max_attempts"/>
+                        </group>
+                    </group>
+                    <group string="Prompt">
+                        <field name="prompt_type"/>
+                        <field name="prompt_text" invisible="prompt_type != 'tts'"/>
+                        <field name="prompt_audio" filename="prompt_audio_filename" invisible="prompt_type != 'audio'"/>
+                        <field name="prompt_audio_filename" invisible="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Menu Options" name="options">
+                            <field name="option_ids">
+                                <list editable="bottom">
+                                    <field name="key"/>
+                                    <field name="description"/>
+                                    <field name="action"/>
+                                    <field name="extension" invisible="action not in ('transfer_ext',)"/>
+                                    <field name="queue_id" invisible="action != 'transfer_queue'"/>
+                                    <field name="submenu_id" invisible="action != 'submenu'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Default Action" name="default">
+                            <group>
+                                <field name="default_action"/>
+                                <field name="default_extension" invisible="default_action != 'transfer'"/>
+                            </group>
+                        </page>
+                        <page string="Sub-Menus" name="submenus">
+                            <field name="child_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="prompt_type"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- IVR Menu Action -->
+    <record id="action_ivr_menu" model="ir.actions.act_window">
+        <field name="name">IVR Menus</field>
+        <field name="res_model">ringcentral.ivr.menu</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('parent_id', '=', False)]</field>
+    </record>
+</odoo>

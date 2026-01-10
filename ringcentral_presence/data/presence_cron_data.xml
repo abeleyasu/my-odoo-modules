@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ir_actions_server_sync_presence" model="ir.actions.server">
+        <field name="name">RingCentral: Sync User Presence</field>
+        <field name="model_id" ref="model_ringcentral_presence"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_sync_presence()</field>
+    </record>
+    
+    <record id="ir_cron_sync_presence" model="ir.cron">
+        <field name="name">RingCentral: Sync User Presence</field>
+        <field name="interval_number">2</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+        <field name="ir_actions_server_id" ref="ir_actions_server_sync_presence"/>
+    </record>
+</odoo>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Default Cover Pages -->
+    <record id="fax_cover_page_standard" model="ringcentral.fax.cover.page">
+        <field name="name">Standard</field>
+        <field name="header">FAX TRANSMISSION</field>
+        <field name="greeting">Please find the attached document(s) for your review.</field>
+        <field name="footer">This fax and any attachments are confidential. If you received this in error, please notify the sender immediately.</field>
+    </record>
+    
+    <record id="fax_cover_page_urgent" model="ringcentral.fax.cover.page">
+        <field name="name">Urgent</field>
+        <field name="header">URGENT FAX</field>
+        <field name="greeting">URGENT: Please review the attached document(s) immediately.</field>
+        <field name="footer">This is an urgent and confidential communication. Please handle with priority.</field>
+    </record>
+    
+    <record id="fax_cover_page_confidential" model="ringcentral.fax.cover.page">
+        <field name="name">Confidential</field>
+        <field name="header">CONFIDENTIAL FAX</field>
+        <field name="greeting">The following document(s) contain confidential information.</field>
+        <field name="footer">CONFIDENTIAL: This fax contains proprietary and confidential information. Unauthorized disclosure, copying or distribution is strictly prohibited.</field>
+    </record>
+</odoo>

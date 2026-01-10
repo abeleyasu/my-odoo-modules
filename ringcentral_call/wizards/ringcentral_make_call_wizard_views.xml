@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Make Call Wizard Form -->
+    <record id="ringcentral_make_call_wizard_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.make.call.wizard.form</field>
+        <field name="model">ringcentral.make.call.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Make Call">
+                <group>
+                    <field name="phone_number" placeholder="+1234567890"/>
+                    <field name="partner_id"/>
+                    <field name="from_number"/>
+                </group>
+                <group>
+                    <field name="play_prompt"/>
+                    <field name="auto_record"/>
+                </group>
+                <group>
+                    <field name="notes" placeholder="Pre-call notes..."/>
+                </group>
+                <field name="res_model" invisible="1"/>
+                <field name="res_id" invisible="1"/>
+                <footer>
+                    <button name="action_call" type="object" string="Call" class="btn-primary" icon="fa-phone"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Make Call Action -->
+    <record id="action_ringcentral_make_call_wizard" model="ir.actions.act_window">
+        <field name="name">Make Call</field>
+        <field name="res_model">ringcentral.make.call.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

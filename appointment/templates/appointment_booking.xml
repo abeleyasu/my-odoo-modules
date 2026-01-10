@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Calendly-Style Booking Page - Exact Clone -->
+<odoo>
+    <!-- Main Booking Page - Calendly Layout -->
+    <template id="appointment_booking_page" name="Appointment Booking Page">
+        <t t-call="appointment.appointment_layout">
+            <div class="calendly-booking-wrapper">
+                <!-- Main Card Container -->
+                <div class="calendly-card">
+                    <!-- Left Panel - Event Info (Always Visible) -->
+                    <div class="calendly-left-panel" id="event-info-panel">
+                        <!-- Back Button (shows on form step) -->
+                        <a href="#" class="calendly-back-btn" id="back-to-calendar" style="display: none;">
+                            <i class="fa fa-arrow-left"></i>
+                        </a>
+                        
+                        <!-- Host Name -->
+                        <div class="calendly-host-name" t-esc="user.name"/>
+                        
+                        <!-- Event Title -->
+                        <h1 class="calendly-event-title" t-esc="appointment_type.name"/>
+                        
+                        <!-- Event Meta -->
+                        <div class="calendly-event-meta">
+                            <div class="meta-row">
+                                <i class="fa fa-clock-o"></i>
+                                <span t-esc="appointment_type.duration_display"/>
+                            </div>
+                            <div class="meta-row" t-if="appointment_type.location_type == 'online'">
+                                <i class="fa fa-video-camera"></i>
+                                <span>Web conferencing details provided upon confirmation.</span>
+                            </div>
+                            <div class="meta-row" t-elif="appointment_type.location_type == 'in_person'">
+                                <i class="fa fa-map-marker"></i>
+                                <span t-esc="appointment_type.location"/>
+                            </div>
+                            <div class="meta-row" t-elif="appointment_type.location_type == 'phone_outgoing'">
+                                <i class="fa fa-phone"></i>
+                                <span>Phone call</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Selected Time (shows on form step) -->
+                        <div class="calendly-selected-time" id="selected-time-display" style="display: none;">
+                            <div class="meta-row">
+                                <i class="fa fa-calendar"></i>
+                                <span id="selected-datetime-text"></span>
+                            </div>
+                            <div class="meta-row">
+                                <i class="fa fa-globe"></i>
+                                <span id="selected-timezone-text"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Divider -->
+                    <div class="calendly-divider"></div>
+                    
+                    <!-- Center Panel - Calendar (Step 1) -->
+                    <div class="calendly-center-panel" id="calendar-panel">
+                        <h2 class="calendly-section-title">Select a Date &amp; Time</h2>
+                        
+                        <!-- Calendar Container -->
+                        <div class="calendly-calendar-container">
+                            <!-- Month Navigation -->
+                            <div class="calendly-calendar-nav">
+                                <button type="button" class="nav-arrow prev-month" id="prev-month">
+                                    <i class="fa fa-chevron-left"></i>
+                                </button>
+                                <span class="month-year-display" id="month-year-display">December 2025</span>
+                                <button type="button" class="nav-arrow next-month" id="next-month">
+                                    <i class="fa fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Weekday Headers -->
+                            <div class="calendly-weekdays">
+                                <span>MON</span>
+                                <span>TUE</span>
+                                <span>WED</span>
+                                <span>THU</span>
+                                <span>FRI</span>
+                                <span>SAT</span>
+                                <span>SUN</span>
+                            </div>
+                            
+                            <!-- Calendar Grid -->
+                            <div class="calendly-days" id="calendar-days">
+                                <!-- Days rendered by JS -->
+                            </div>
+                        </div>
+                        
+                        <!-- Timezone Selector -->
+                        <div class="calendly-timezone">
+                            <span class="tz-label">Time zone</span>
+                            <div class="tz-selector-wrapper" id="timezone-selector-trigger" style="cursor: pointer;">
+                                <i class="fa fa-globe tz-icon"></i>
+                                <span id="current-timezone" class="tz-display">Detecting...</span>
+                                <i class="fa fa-chevron-down" style="margin-left: 5px; font-size: 10px;"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Timezone Modal/Dropdown -->
+                        <div id="timezone-modal" class="timezone-modal" style="display: none;">
+                            <div class="timezone-modal-content">
+                                <div class="timezone-modal-header">
+                                    <h4>Select Time Zone</h4>
+                                    <button type="button" class="timezone-close-btn" id="timezone-close-btn">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                                <div class="timezone-search-wrapper">
+                                    <i class="fa fa-search timezone-search-icon"></i>
+                                    <input type="text" id="timezone-search" class="timezone-search-input" 
+                                           placeholder="Search time zones..." autocomplete="off"/>
+                                </div>
+                                <div class="timezone-list" id="timezone-list">
+                                    <!-- Timezone options populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Panel - Time Slots (Step 1) -->
+                    <div class="calendly-right-panel" id="timeslots-panel" style="display: none;">
+                        <div class="timeslots-header" id="timeslots-header">
+                            <!-- Date display -->
+                        </div>
+                        <div class="timeslots-list" id="timeslots-list">
+                            <!-- Time slots rendered by JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- Form Panel (Step 2) -->
+                    <div class="calendly-form-panel" id="form-panel" style="display: none;">
+                        <h2 class="calendly-section-title">Enter Details</h2>
+                        
+                        <form id="booking-form" method="POST" t-attf-action="/appointment/#{user.appointment_slug}/#{appointment_type.slug}/book">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" name="datetime" id="selected-datetime-input"/>
+                            <input type="hidden" name="timezone" id="selected-timezone-input"/>
+                            
+                            <!-- Host Selector (when 'Let Invitee Choose' is enabled) -->
+                            <t t-if="appointment_type.assign_method == 'chosen' and len(appointment_type.user_ids) > 1">
+                                <div class="form-group">
+                                    <label for="host_user_id">Select Host *</label>
+                                    <select class="form-control" id="host_user_id" name="host_user_id" required="required">
+                                        <option value="">Choose a host...</option>
+                                        <t t-foreach="appointment_type.user_ids" t-as="host_user">
+                                            <option t-att-value="host_user.id" t-esc="host_user.name"/>
+                                        </t>
+                                    </select>
+                                </div>
+                            </t>
+                            
+                            <!-- Name -->
+                            <div class="form-group">
+                                <label for="name">Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" required="required" placeholder="John Doe"/>
+                            </div>
+                            
+                            <!-- Email -->
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" class="form-control" id="email" name="email" required="required" placeholder="johndoe@example.com"/>
+                            </div>
+                            
+                            <!--Phone (conditional) -->
+                            <div class="form-group" t-if="appointment_type.require_phone">
+                                <label for="phone">Phone <t t-if="appointment_type.require_phone">*</t></label>
+                                <input type="tel" class="form-control" id="phone" name="phone" 
+                                       t-att-required="appointment_type.require_phone"
+                                       placeholder="+1 (555) 000-0000"/>
+                            </div>
+                            
+                            <!-- Phone for outgoing calls -->
+                            <div class="form-group" t-if="appointment_type.location_type == 'phone_outgoing'">
+                                <label for="phone">Phone Number *</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" required="required"
+                                       placeholder="+1 (555) 000-0000"/>
+                                <small class="form-text">Please enter your phone number (we'll call you)</small>
+                            </div>
+                            
+                            <!-- Add Guests -->
+                            <div class="form-group">
+                                <a href="#" id="add-guests-btn" class="add-guests-link">
+                                    <i class="fa fa-plus-circle"></i> Add Guests
+                                </a>
+                                <div id="guests-container" style="display: none;">
+                                    <input type="email" class="form-control mb-2" name="guests" placeholder="guest@example.com"/>
+                                </div>
+                            </div>
+                            
+                            <!-- Notes/Comments -->
+                            <div class="form-group">
+                                <label for="notes">Please share anything that will help prepare for our meeting.</label>
+                                <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Additional details..."></textarea>
+                            </div>
+                            
+                            <!-- Custom Questions -->
+                            <t t-foreach="appointment_type.question_ids" t-as="question">
+                                <div class="form-group">
+                                    <label t-att-for="'question_%s' % question.id">
+                                        <t t-esc="question.question"/>
+                                        <t t-if="question.required"> *</t>
+                                    </label>
+                                    
+                                    <t t-if="question.question_type == 'text'">
+                                        <input type="text" class="form-control" 
+                                            t-att-id="'question_%s' % question.id"
+                                            t-att-name="'question_%s' % question.id"
+                                            t-att-required="question.required"/>
+                                    </t>
+                                    <t t-elif="question.question_type == 'textarea'">
+                                        <textarea class="form-control" rows="3"
+                                            t-att-id="'question_%s' % question.id"
+                                            t-att-name="'question_%s' % question.id"
+                                            t-att-required="question.required"></textarea>
+                                    </t>
+                                    <t t-elif="question.question_type == 'radio'">
+                                        <t t-foreach="question.get_options_list()" t-as="option">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" 
+                                                    t-att-name="'question_%s' % question.id"
+                                                    t-att-id="'question_%s_opt_%s' % (question.id, option_index)"
+                                                    t-att-value="option"
+                                                    t-att-required="question.required"/>
+                                                <label class="form-check-label" 
+                                                    t-att-for="'question_%s_opt_%s' % (question.id, option_index)"
+                                                    t-esc="option"/>
+                                            </div>
+                                        </t>
+                                    </t>
+                                    <t t-elif="question.question_type == 'checkbox'">
+                                        <t t-foreach="question.get_options_list()" t-as="option">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" 
+                                                    t-att-name="'question_%s' % question.id"
+                                                    t-att-id="'question_%s_opt_%s' % (question.id, option_index)"
+                                                    t-att-value="option"/>
+                                                <label class="form-check-label" 
+                                                    t-att-for="'question_%s_opt_%s' % (question.id, option_index)"
+                                                    t-esc="option"/>
+                                            </div>
+                                        </t>
+                                    </t>
+                                    <t t-elif="question.question_type == 'select'">
+                                        <select class="form-control" 
+                                            t-att-id="'question_%s' % question.id"
+                                            t-att-name="'question_%s' % question.id"
+                                            t-att-required="question.required">
+                                            <option value="">Select an option</option>
+                                            <t t-foreach="question.get_options_list()" t-as="option">
+                                                <option t-att-value="option" t-esc="option"/>
+                                            </t>
+                                        </select>
+                                    </t>
+                                </div>
+                            </t>
+
+                            <!-- Terms -->
+                            <p class="calendly-terms">
+                                By proceeding, you confirm that you have read and agree to
+                                <a href="#" class="terms-link">Terms of Use</a> and 
+                                <a href="#" class="terms-link">Privacy Notice</a>.
+                            </p>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="calendly-submit-btn" id="submit-btn">
+                                Schedule Event
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="calendly-footer">
+                    <a href="#" class="footer-link">Cookie settings</a>
+                </div>
+            </div>
+            
+            <!-- Powered By Badge -->
+            <div class="calendly-powered-by">
+                <span>Powered by</span>
+                <strong>MDM team</strong>
+            </div>
+
+            <!-- JavaScript Data -->
+            <script type="text/javascript">
+                window.appointmentConfig = {
+                    appointmentTypeId: <t t-esc="appointment_type.id"/>,
+                    userId: <t t-esc="user.id"/>,
+                    userSlug: '<t t-esc="user.appointment_slug"/>',
+                    typeSlug: '<t t-esc="appointment_type.slug"/>',
+                    duration: '<t t-esc="appointment_type.duration_display"/>',
+                    durationMinutes: <t t-esc="int(appointment_type.duration * 60)"/>,
+                    minScheduleNotice: <t t-esc="appointment_type.min_schedule_notice"/>,
+                    maxScheduleDays: <t t-esc="appointment_type.max_schedule_days"/>,
+                    brandColor: '<t t-esc="appointment_type.color or '#0069ff'"/>'
+                };
+            </script>
+            
+            <!-- Load external calendar JS -->
+            <script type="text/javascript" src="/appointment/static/src/js/appointment_public.js"></script>
+        </t>
+    </template>
+</odoo>

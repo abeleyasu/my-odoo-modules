@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_ringcentral_analytics"
+              name="Analytics"
+              parent="ringcentral_base.menu_ringcentral_advanced"
+              action="action_ringcentral_analytics_dashboard"
+              sequence="10"/>
+    
+    <menuitem id="menu_ringcentral_reports"
+              name="Reports"
+              parent="ringcentral_base.menu_ringcentral_advanced"
+              sequence="20"/>
+    
+    <menuitem id="menu_ringcentral_call_report"
+              name="Call Analysis"
+              parent="menu_ringcentral_reports"
+              action="action_ringcentral_call_report"
+              sequence="10"/>
+</odoo>

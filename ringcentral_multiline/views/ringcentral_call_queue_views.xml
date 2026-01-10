@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ================================== -->
+        <!-- RingCentral Call Queue Views -->
+        <!-- ================================== -->
+        
+        <!-- Tree View -->
+        <record id="view_ringcentral_call_queue_tree" model="ir.ui.view">
+            <field name="name">ringcentral.call.queue.tree</field>
+            <field name="model">ringcentral.call.queue</field>
+            <field name="arch" type="xml">
+                <list string="RingCentral Call Queues">
+                    <field name="name"/>
+                    <field name="extension_number"/>
+                    <field name="routing_type"/>
+                    <field name="status" decoration-success="status == 'Enabled'" 
+                           decoration-danger="status == 'Disabled'"/>
+                    <field name="member_count"/>
+                    <field name="department_id"/>
+                    <field name="phone_number_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </list>
+            </field>
+        </record>
+        
+        <!-- Form View -->
+        <record id="view_ringcentral_call_queue_form" model="ir.ui.view">
+            <field name="name">ringcentral.call.queue.form</field>
+            <field name="model">ringcentral.call.queue</field>
+            <field name="arch" type="xml">
+                <form string="RingCentral Call Queue">
+                    <header>
+                        <button name="action_sync_members" string="Sync Members" 
+                                type="object" class="btn-primary" icon="fa-users"
+                                groups="ringcentral_multiline.group_ringcentral_manager"/>
+                        <button name="action_link_to_department" string="Link to Department" 
+                                type="object" icon="fa-building"
+                                invisible="department_id"
+                                groups="ringcentral_multiline.group_ringcentral_manager"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_members" type="object"
+                                    class="oe_stat_button" icon="fa-users">
+                                <field name="member_count" widget="statinfo" string="Members"/>
+                            </button>
+                            <button name="action_view_phone_numbers" type="object"
+                                    class="oe_stat_button" icon="fa-phone">
+                                <span>Phone Numbers</span>
+                            </button>
+                        </div>
+                        <widget name="web_ribbon" title="Disabled" bg_color="bg-danger" invisible="status != 'Disabled'"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Queue Name"/>
+                            </h1>
+                            <h3>
+                                <span>Ext. </span>
+                                <field name="extension_number" class="oe_inline"/>
+                            </h3>
+                        </div>
+                        <group>
+                            <group string="Queue Info">
+                                <field name="rc_queue_id" readonly="1"/>
+                                <field name="status"/>
+                                <field name="routing_type"/>
+                                <field name="active"/>
+                            </group>
+                            <group string="Odoo Integration">
+                                <field name="department_id"/>
+                                <field name="phone_number_id"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                        <group string="Queue Settings" groups="ringcentral_multiline.group_ringcentral_manager">
+                            <group>
+                                <field name="max_wait_time"/>
+                                <field name="wrap_up_time"/>
+                                <field name="ring_time"/>
+                            </group>
+                            <group>
+                                <field name="overflow_action"/>
+                                <field name="overflow_extension_id" invisible="overflow_action != 'Extension'"/>
+                                <field name="overflow_external_number" invisible="overflow_action != 'ExternalNumber'"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Members" name="members">
+                                <field name="member_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="extension_number"/>
+                                        <field name="extension_type"/>
+                                        <field name="status"/>
+                                        <field name="user_id"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Phone Numbers" name="phone_numbers">
+                                <field name="phone_number_ids">
+                                    <list>
+                                        <field name="phone_number"/>
+                                        <field name="formatted_number"/>
+                                        <field name="usage_type"/>
+                                        <field name="can_be_caller_id"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Sync Data" name="sync_data" groups="ringcentral_multiline.group_ringcentral_manager">
+                                <group>
+                                    <field name="last_sync_date"/>
+                                    <field name="rc_data_json" widget="json"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Search View -->
+        <record id="view_ringcentral_call_queue_search" model="ir.ui.view">
+            <field name="name">ringcentral.call.queue.search</field>
+            <field name="model">ringcentral.call.queue</field>
+            <field name="arch" type="xml">
+                <search string="Search Call Queues">
+                    <field name="name"/>
+                    <field name="extension_number"/>
+                    <field name="department_id"/>
+                    <separator/>
+                    <filter name="filter_enabled" string="Enabled" domain="[('status', '=', 'Enabled')]"/>
+                    <filter name="filter_has_department" string="Linked to Department" domain="[('department_id', '!=', False)]"/>
+                    <filter name="filter_no_department" string="Not Linked" domain="[('department_id', '=', False)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_routing" string="Routing Type" context="{'group_by': 'routing_type'}"/>
+                        <filter name="group_department" string="Department" context="{'group_by': 'department_id'}"/>
+                        <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Action -->
+        <record id="action_ringcentral_call_queue" model="ir.actions.act_window">
+            <field name="name">Call Queues</field>
+            <field name="res_model">ringcentral.call.queue</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_ringcentral_call_queue_search"/>
+            <field name="context">{'search_default_filter_enabled': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No call queues found
+                </p>
+                <p>
+                    Call queues will be synced from your RingCentral account.
+                    These allow department-based call routing.
+                </p>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

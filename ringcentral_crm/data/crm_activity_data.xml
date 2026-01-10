@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Phone Call Activity Type (ensure exists) -->
+    <record id="mail_activity_data_ringcentral_call" model="mail.activity.type" forcecreate="0">
+        <field name="name">RingCentral Call</field>
+        <field name="summary">Schedule a RingCentral call</field>
+        <field name="icon">fa-phone</field>
+        <field name="delay_count">0</field>
+        <field name="res_model">crm.lead</field>
+    </record>
+</odoo>

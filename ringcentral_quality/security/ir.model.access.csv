@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_call_quality_user,ringcentral.call.quality.user,model_ringcentral_call_quality,ringcentral_base.group_ringcentral_user,1,0,0,0
+access_call_quality_manager,ringcentral.call.quality.manager,model_ringcentral_call_quality,ringcentral_base.group_ringcentral_manager,1,1,1,0
+access_call_quality_admin,ringcentral.call.quality.admin,model_ringcentral_call_quality,ringcentral_base.group_ringcentral_admin,1,1,1,1
+access_call_quality_alert_rule_manager,ringcentral.call.quality.alert.rule.manager,model_ringcentral_call_quality_alert_rule,ringcentral_base.group_ringcentral_manager,1,1,1,1
+access_call_quality_alert_user,ringcentral.call.quality.alert.user,model_ringcentral_call_quality_alert,ringcentral_base.group_ringcentral_user,1,0,0,0
+access_call_quality_alert_manager,ringcentral.call.quality.alert.manager,model_ringcentral_call_quality_alert,ringcentral_base.group_ringcentral_manager,1,1,1,0

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal Record Rules -->
+    <record id="rule_call_portal_partner" model="ir.rule">
+        <field name="name">RingCentral Calls: Portal Partner Access</field>
+        <field name="model_id" ref="ringcentral_call.model_ringcentral_call"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id), ('partner_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_sms_portal_partner" model="ir.rule">
+        <field name="name">RingCentral SMS: Portal Partner Access</field>
+        <field name="model_id" ref="ringcentral_sms.model_ringcentral_sms"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id), ('partner_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_voicemail_portal_partner" model="ir.rule">
+        <field name="name">RingCentral Voicemail: Portal Partner Access</field>
+        <field name="model_id" ref="ringcentral_voicemail.model_ringcentral_voicemail"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id), ('partner_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_recording_portal_partner" model="ir.rule">
+        <field name="name">RingCentral Recording: Portal Partner Access</field>
+        <field name="model_id" ref="ringcentral_recording.model_ringcentral_recording"/>
+        <field name="domain_force">[('company_id', '=', user.company_id.id), ('partner_id', 'child_of', [user.partner_id.commercial_partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+</odoo>

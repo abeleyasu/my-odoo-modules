@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ai_transcript_user,ringcentral.ai.transcript.user,model_ringcentral_ai_transcript,ringcentral_base.group_ringcentral_user,1,0,0,0
+access_ai_transcript_manager,ringcentral.ai.transcript.manager,model_ringcentral_ai_transcript,ringcentral_base.group_ringcentral_manager,1,1,1,0
+access_ai_transcript_admin,ringcentral.ai.transcript.admin,model_ringcentral_ai_transcript,ringcentral_base.group_ringcentral_admin,1,1,1,1

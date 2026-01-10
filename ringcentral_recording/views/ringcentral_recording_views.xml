@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Recording Tree View -->
+    <record id="ringcentral_recording_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.recording.tree</field>
+        <field name="model">ringcentral.recording</field>
+        <field name="arch" type="xml">
+            <list string="Recordings" default_order="recording_date desc"
+                  decoration-success="state == 'available'"
+                  decoration-info="state == 'transcribing'"
+                  decoration-warning="state == 'pending'"
+                  decoration-danger="state == 'error'"
+                  decoration-muted="state in ('archived', 'deleted')">
+                <field name="recording_date"/>
+                <field name="partner_id"/>
+                <field name="phone_number"/>
+                <field name="duration_display" string="Duration"/>
+                <field name="recording_type"/>
+                <field name="state" widget="badge"/>
+                <field name="transcription_state" widget="badge" optional="show"/>
+                <field name="file_size_display" string="Size" optional="show"/>
+                <field name="legal_hold" widget="boolean" optional="show"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <button name="action_play_recording" type="object" icon="fa-play" title="Play" invisible="not ringcentral_content_uri"/>
+                <button name="action_download_on_demand" type="object" icon="fa-download" title="Download" invisible="not ringcentral_content_uri"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Recording Form View -->
+    <record id="ringcentral_recording_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.recording.form</field>
+        <field name="model">ringcentral.recording</field>
+        <field name="arch" type="xml">
+            <form string="Recording">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_play_recording" type="object" string="Play" class="btn-primary" icon="fa-play" invisible="not ringcentral_content_uri"/>
+                    <button name="action_download_on_demand" type="object" string="Download" icon="fa-download" invisible="not ringcentral_content_uri"/>
+                    <button name="action_request_transcription" type="object" string="Transcribe" icon="fa-file-text-o" invisible="transcription_state == 'completed'"/>
+                    <button name="action_set_legal_hold" type="object" string="Legal Hold" invisible="legal_hold" groups="ringcentral_base.group_ringcentral_compliance"/>
+                    <button name="action_release_legal_hold" type="object" string="Release Hold" invisible="not legal_hold" groups="ringcentral_base.group_ringcentral_compliance"/>
+                    <button name="action_archive" type="object" string="Archive" invisible="state != 'available'"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_download_on_demand" type="object" class="oe_stat_button" icon="fa-download" invisible="not ringcentral_content_uri">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Download</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="display_name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Recording Info">
+                            <field name="recording_date"/>
+                            <field name="duration_display"/>
+                            <field name="recording_type"/>
+                            <field name="file_size_display"/>
+                        </group>
+                        <group string="Call Info">
+                            <field name="call_id"/>
+                            <field name="partner_id"/>
+                            <field name="phone_number"/>
+                            <field name="caller_name"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="User/Company">
+                            <field name="user_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Access Info">
+                            <field name="access_count"/>
+                            <field name="last_accessed"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Audio Player (only for stored files; on-demand playback uses Play button) -->
+                    <group string="Player" invisible="not recording_content">
+                        <field name="recording_content" widget="audio" colspan="2" nolabel="1"/>
+                    </group>
+                    
+                    <!-- Transcription -->
+                    <group string="Transcription" invisible="transcription_state == 'none'">
+                        <field name="transcription_state" widget="badge"/>
+                        <field name="transcription_language"/>
+                        <field name="transcription" nolabel="1" colspan="2" invisible="not transcription"/>
+                    </group>
+                    
+                    <!-- Compliance -->
+                    <group string="Compliance">
+                        <group>
+                            <field name="consent_status"/>
+                            <field name="consent_date"/>
+                            <field name="consent_notes"/>
+                        </group>
+                        <group>
+                            <field name="retention_policy_id"/>
+                            <field name="retention_expiry"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Legal Hold -->
+                    <group string="Legal Hold" invisible="not legal_hold">
+                        <field name="legal_hold"/>
+                        <field name="legal_hold_date"/>
+                        <field name="legal_hold_reason"/>
+                    </group>
+                    
+                    <!-- Error -->
+                    <group string="Error" invisible="not error_message">
+                        <field name="error_message" nolabel="1" colspan="2"/>
+                    </group>
+                    
+                    <!-- Technical -->
+                    <group string="Technical Info" groups="ringcentral_base.group_ringcentral_admin">
+                        <field name="ringcentral_recording_id"/>
+                        <field name="ringcentral_content_uri"/>
+                        <field name="file_checksum"/>
+                        <field name="content_type"/>
+                        <field name="download_attempts"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Recording Search View -->
+    <record id="ringcentral_recording_view_search" model="ir.ui.view">
+        <field name="name">ringcentral.recording.search</field>
+        <field name="model">ringcentral.recording</field>
+        <field name="arch" type="xml">
+            <search string="Recordings">
+                <field name="partner_id"/>
+                <field name="phone_number"/>
+                <field name="transcription"/>
+                <filter name="filter_available" string="Available" domain="[('state', '=', 'available')]"/>
+                <filter name="filter_pending" string="Pending" domain="[('state', '=', 'pending')]"/>
+                <filter name="filter_transcribed" string="Transcribed" domain="[('transcription_state', '=', 'completed')]"/>
+                <separator/>
+                <filter name="filter_legal_hold" string="Legal Hold" domain="[('legal_hold', '=', True)]"/>
+                <separator/>
+                <filter name="filter_today" string="Today" domain="[('recording_date', '>=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_week" string="This Week" domain="[('recording_date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="group_partner" string="Contact" context="{'group_by': 'partner_id'}"/>
+                <filter name="group_date" string="Date" context="{'group_by': 'recording_date:day'}"/>
+                <filter name="group_user" string="User" context="{'group_by': 'user_id'}"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Retention Policy Views -->
+    <record id="ringcentral_recording_retention_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.recording.retention.tree</field>
+        <field name="model">ringcentral.recording.retention</field>
+        <field name="arch" type="xml">
+            <list string="Retention Policies">
+                <field name="name"/>
+                <field name="retention_days"/>
+                <field name="apply_to"/>
+                <field name="compliance_type" widget="badge"/>
+                <field name="auto_delete"/>
+                <field name="recording_count"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+    
+    <record id="ringcentral_recording_retention_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.recording.retention.form</field>
+        <field name="model">ringcentral.recording.retention</field>
+        <field name="arch" type="xml">
+            <form string="Retention Policy">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_recordings" type="object" class="oe_stat_button" icon="fa-file-audio-o">
+                            <field name="recording_count" widget="statinfo" string="Recordings"/>
+                        </button>
+                    </div>
+                    <group>
+                        <field name="name"/>
+                        <field name="active"/>
+                    </group>
+                    <group>
+                        <group string="Retention">
+                            <field name="retention_days"/>
+                            <field name="apply_to"/>
+                        </group>
+                        <group string="Actions">
+                            <field name="auto_archive"/>
+                            <field name="auto_delete"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="compliance_type"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Actions -->
+    <record id="action_ringcentral_recording" model="ir.actions.act_window">
+        <field name="name">Recordings</field>
+        <field name="res_model">ringcentral.recording</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="ringcentral_recording_view_search"/>
+        <field name="context">{'search_default_filter_available': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No recordings yet
+            </p>
+            <p>
+                Call recordings will appear here when calls are recorded.
+            </p>
+        </field>
+    </record>
+    
+    <record id="action_ringcentral_recording_retention" model="ir.actions.act_window">
+        <field name="name">Retention Policies</field>
+        <field name="res_model">ringcentral.recording.retention</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    
+</odoo>

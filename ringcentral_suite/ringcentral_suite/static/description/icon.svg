@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Orange background with rounded corners -->
+  <rect width="128" height="128" rx="20" ry="20" fill="#FF8C00"/>
+  
+  <!-- White rounded rectangle -->
+  <rect x="12" y="12" width="104" height="104" rx="16" ry="16" fill="#FFFFFF"/>
+  
+  <!-- Blue R logo -->
+  <path d="M39 95 L39 33 L39 33 C39 33 39 33 39 33 L74 33 C74 33 87 33 94 40 C101 47 101 57 101 57 C101 57 101 67 94 74 C87 81 74 81 74 81 L74 81 L89 95 L89 95 C89 95 81 95 77 95 C73 95 70 92 67 89 L56 78 L56 78 L56 95 L39 95 Z M56 65 L70 65 C70 65 80 65 80 55 C80 45 70 45 70 45 L56 45 L56 65 Z" fill="#0C86C6"/>
+</svg>

@@ -1,0 +1,172 @@
+/* RingCentral Click-to-Call Widget Styles */
+
+:root {
+    --rc-widget-color: #007bff;
+}
+
+#rc-click-to-call-widget {
+    position: fixed;
+    z-index: 9999;
+}
+
+#rc-click-to-call-widget.rc-widget-bottom-right {
+    bottom: 20px;
+    right: 20px;
+}
+
+#rc-click-to-call-widget.rc-widget-bottom-left {
+    bottom: 20px;
+    left: 20px;
+}
+
+#rc-click-to-call-widget.rc-widget-top-right {
+    top: 20px;
+    right: 20px;
+}
+
+#rc-click-to-call-widget.rc-widget-top-left {
+    top: 20px;
+    left: 20px;
+}
+
+.rc-widget-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: var(--rc-widget-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.rc-widget-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.rc-widget-button i {
+    font-size: 24px;
+}
+
+.rc-widget-popup {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    width: 280px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+.rc-widget-bottom-left .rc-widget-popup {
+    right: auto;
+    left: 0;
+}
+
+.rc-widget-top-right .rc-widget-popup,
+.rc-widget-top-left .rc-widget-popup {
+    bottom: auto;
+    top: 70px;
+}
+
+.rc-widget-popup.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.rc-widget-header {
+    padding: 16px;
+    background-color: var(--rc-widget-color);
+    color: white;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+
+.rc-widget-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.rc-widget-body {
+    padding: 16px;
+}
+
+.rc-widget-phone {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.rc-widget-phone i {
+    color: var(--rc-widget-color);
+    font-size: 20px;
+}
+
+.rc-widget-phone a {
+    color: #333;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.rc-widget-phone a:hover {
+    color: var(--rc-widget-color);
+}
+
+.rc-widget-callback-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    background-color: var(--rc-widget-color);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.rc-widget-callback-btn:hover {
+    background-color: color-mix(in srgb, var(--rc-widget-color), black 10%);
+    color: white;
+    text-decoration: none;
+}
+
+/* Pulse animation for widget button */
+@keyframes rc-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(var(--rc-widget-color), 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(var(--rc-widget-color), 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(var(--rc-widget-color), 0);
+    }
+}
+
+.rc-widget-button {
+    animation: rc-pulse 2s infinite;
+}

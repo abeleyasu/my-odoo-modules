@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_ringcentral_call_portal,access.ringcentral.call.portal,ringcentral_call.model_ringcentral_call,base.group_portal,1,0,0,0
+access_ringcentral_sms_portal,access.ringcentral.sms.portal,ringcentral_sms.model_ringcentral_sms,base.group_portal,1,0,0,0
+access_ringcentral_voicemail_portal,access.ringcentral.voicemail.portal,ringcentral_voicemail.model_ringcentral_voicemail,base.group_portal,1,0,0,0
+access_ringcentral_recording_portal,access.ringcentral.recording.portal,ringcentral_recording.model_ringcentral_recording,base.group_portal,1,0,0,0

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Portal Templates -->
+<odoo>
+    <!-- Portal Home Extension -->
+    <template id="portal_my_home_appointment" name="Show Appointments" 
+              inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_client_category_enable" t-value="True"/>
+        </xpath>
+        <div id="portal_client_category" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/appointment/static/description/icon.png'"/>
+                <t t-set="title">Appointments</t>
+                <t t-set="url" t-value="'/my/appointments'"/>
+                <t t-set="text">View your scheduled appointments</t>
+                <t t-set="placeholder_count" t-value="'appointment_count'"/>
+            </t>
+        </div>
+    </template>
+
+    <!-- Portal Breadcrumbs -->
+    <template id="portal_breadcrumbs_appointment" name="Portal Breadcrumbs: Appointments"
+              inherit_id="portal.portal_breadcrumbs" priority="30">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'appointments' or page_name == 'appointment_detail'" 
+                t-attf-class="breadcrumb-item #{'active' if page_name == 'appointments' else ''}">
+                <a t-if="page_name == 'appointment_detail'" href="/my/appointments">Appointments</a>
+                <t t-else="">Appointments</t>
+            </li>
+            <li t-if="page_name == 'appointment_detail'" class="breadcrumb-item active">
+                <t t-esc="booking.name"/>
+            </li>
+        </xpath>
+    </template>
+
+    <!-- My Appointments List -->
+    <template id="portal_my_appointments" name="My Appointments">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Appointments</t>
+            </t>
+
+            <div class="o_portal_my_appointments">
+                <t t-if="not appointments">
+                    <div class="alert alert-info" role="alert">
+                        <p class="mb-0">You don't have any appointments yet.</p>
+                    </div>
+                </t>
+
+                <t t-if="appointments">
+                    <t t-call="portal.portal_table">
+                        <thead>
+                            <tr>
+                                <th>Appointment</th>
+                                <th>Date &amp; Time</th>
+                                <th>Host</th>
+                                <th class="text-center">Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="appointments" t-as="apt">
+                                <tr>
+                                    <td>
+                                        <a t-attf-href="/my/appointments/#{apt.id}">
+                                            <t t-esc="apt.appointment_type_id.name"/>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <t t-if="apt.start">
+                                            <t t-esc="apt.start.strftime('%b %d, %Y')"/>
+                                            <br/>
+                                            <small class="text-muted">
+                                                <t t-esc="apt.start.strftime('%I:%M %p')"/>
+                                            </small>
+                                        </t>
+                                        <span t-else="" class="text-muted">Not scheduled</span>
+                                    </td>
+                                    <td>
+                                        <t t-esc="apt.user_id.name"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-attf-class="badge rounded-pill #{
+                                            'text-bg-success' if apt.state == 'confirmed' else
+                                            'text-bg-info' if apt.state == 'scheduled' else
+                                            'text-bg-warning' if apt.state == 'pending' else
+                                            'text-bg-secondary' if apt.state == 'completed' else
+                                            'text-bg-danger'
+                                        }">
+                                            <t t-esc="apt.state.title()"/>
+                                        </span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a t-if="apt.video_link and apt.state == 'confirmed' and apt.is_upcoming"
+                                           t-att-href="apt.video_link" target="_blank"
+                                           class="btn btn-sm btn-primary">
+                                            <i class="fa fa-video-camera"/> Join
+                                        </a>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </t>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Appointment Detail -->
+    <template id="portal_appointment_detail" name="Appointment Detail">
+        <t t-call="portal.portal_layout">
+            <div class="o_portal_appointment_detail">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <!-- Appointment Card -->
+                        <div class="card mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0" t-field="booking.appointment_type_id.name"/>
+                                <span t-attf-class="badge rounded-pill #{
+                                    'text-bg-success' if booking.state == 'confirmed' else
+                                    'text-bg-info' if booking.state == 'scheduled' else
+                                    'text-bg-warning' if booking.state == 'pending' else
+                                    'text-bg-secondary' if booking.state == 'completed' else
+                                    'text-bg-danger'
+                                }">
+                                    <t t-esc="booking.state.title()"/>
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <strong><i class="fa fa-calendar me-2"/>Date &amp; Time</strong>
+                                        <p t-if="booking.start">
+                                            <t t-esc="booking.start.strftime('%A, %B %d, %Y')"/>
+                                            <br/>
+                                            <t t-esc="booking.start.strftime('%I:%M %p')"/> - 
+                                            <t t-esc="booking.stop.strftime('%I:%M %p')"/>
+                                            <small class="text-muted">(<t t-esc="booking.timezone"/>)</small>
+                                        </p>
+                                        <p t-else="" class="text-muted">Not scheduled</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong><i class="fa fa-clock-o me-2"/>Duration</strong>
+                                        <p t-field="booking.appointment_type_id.duration_display"/>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <strong><i class="fa fa-user me-2"/>Host</strong>
+                                        <p t-field="booking.user_id.name"/>
+                                    </div>
+                                    <div class="col-md-6" t-if="booking.video_link">
+                                        <strong><i class="fa fa-video-camera me-2"/>Video Conference</strong>
+                                        <p>
+                                            <a t-att-href="booking.video_link" target="_blank" class="btn btn-primary btn-sm">
+                                                <i class="fa fa-video-camera"/> Join Meeting
+                                            </a>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6" t-elif="booking.location">
+                                        <strong><i class="fa fa-map-marker me-2"/>Location</strong>
+                                        <p t-field="booking.location"/>
+                                    </div>
+                                </div>
+
+                                <t t-if="booking.answer_ids">
+                                    <hr/>
+                                    <strong>Your Responses</strong>
+                                    <dl class="row mt-2">
+                                        <t t-foreach="booking.answer_ids" t-as="answer">
+                                            <dt class="col-sm-4" t-field="answer.question_id.name"/>
+                                            <dd class="col-sm-8" t-field="answer.value"/>
+                                        </t>
+                                    </dl>
+                                </t>
+
+                                <t t-if="booking.notes">
+                                    <hr/>
+                                    <strong>Additional Notes</strong>
+                                    <p t-field="booking.notes"/>
+                                </t>
+                            </div>
+                            <div class="card-footer" t-if="booking.can_reschedule or booking.can_cancel">
+                                <div class="d-flex gap-2">
+                                    <a t-if="booking.can_reschedule" t-att-href="booking.reschedule_url"
+                                       class="btn btn-outline-primary">
+                                        <i class="fa fa-calendar"/> Reschedule
+                                    </a>
+                                    <a t-if="booking.can_cancel" t-att-href="booking.cancel_url"
+                                       class="btn btn-outline-danger">
+                                        <i class="fa fa-times"/> Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <!-- Quick Info -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Quick Info</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <small class="text-muted">Booking Reference</small>
+                                    <br/>
+                                    <strong>#<t t-esc="booking.id"/></strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <small class="text-muted">Created</small>
+                                    <br/>
+                                    <t t-esc="booking.create_date.strftime('%b %d, %Y')"/>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

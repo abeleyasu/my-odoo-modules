@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ringcentral_analytics_dashboard_user,ringcentral.analytics.dashboard.user,model_ringcentral_analytics_dashboard,ringcentral_base.group_ringcentral_user,1,0,0,0
+access_ringcentral_analytics_dashboard_manager,ringcentral.analytics.dashboard.manager,model_ringcentral_analytics_dashboard,ringcentral_base.group_ringcentral_manager,1,1,1,1
+access_ringcentral_call_report_user,ringcentral.call.report.user,model_ringcentral_call_report,ringcentral_base.group_ringcentral_user,1,0,0,0

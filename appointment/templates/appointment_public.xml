@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- User Appointment Page - Lists all event types for a user -->
+    <template id="appointment_user_page" name="Appointment User Page">
+        <t t-call="appointment.appointment_layout">
+            <div class="appointment-user-wrapper">
+                <div class="appointment-user-header">
+                    <div class="user-avatar">
+                        <t t-if="user.image_1920">
+                            <img t-att-src="image_data_uri(user.image_1920)" alt="Avatar"/>
+                        </t>
+                        <t t-else="">
+                            <div class="avatar-placeholder">
+                                <t t-esc="user.name[:1].upper()"/>
+                            </div>
+                        </t>
+                    </div>
+                    <h1 class="user-name" t-esc="user.name"/>
+                    <p class="user-tagline">Welcome to my scheduling page. Please follow the instructions to add an event to my calendar.</p>
+                </div>
+
+                <div class="appointment-events-list">
+                    <t t-if="appointment_types">
+                        <t t-foreach="appointment_types" t-as="apt_type">
+                            <a t-attf-href="/appointment/#{user.appointment_slug}/#{apt_type.slug}" class="event-card">
+                                <div class="event-header">
+                                    <h3 class="event-title" t-esc="apt_type.name"/>
+                                    <i class="fa fa-arrow-right"/>
+                                </div>
+                                <div class="event-meta">
+                                    <span class="meta-item">
+                                        <i class="fa fa-clock-o"/>
+                                        <t t-esc="apt_type.duration_display"/>
+                                    </span>
+                                    <span t-if="apt_type.location_type == 'online'" class="meta-item">
+                                        <i class="fa fa-video-camera"/>
+                                        Web conferencing
+                                    </span>
+                                    <span t-elif="apt_type.location_type == 'in_person'" class="meta-item">
+                                        <i class="fa fa-map-marker"/>
+                                        In person
+                                    </span>
+                                </div>
+                                <t t-if="apt_type.description">
+                                    <p class="event-description" t-esc="apt_type.description"/>
+                                </t>
+                            </a>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <div class="no-events-message">
+                            <i class="fa fa-calendar-o"/>
+                            <p>No events available for scheduling.</p>
+                        </div>
+                    </t>
+                </div>
+
+                <!-- Powered By Footer -->
+                <div class="appointment-footer">
+                    <span class="powered-by">
+                        Powered by <strong>MDM team</strong>
+                    </span>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Appointment Layout Template -->
+    <template id="appointment_layout" name="Appointment Layout">
+        <t t-call="web.frontend_layout">
+            <t t-set="no_header" t-value="True"/>
+            <t t-set="no_footer" t-value="True"/>
+            
+            <div class="appointment-page-wrapper">
+                <t t-out="0"/>
+            </div>
+            
+            <style>
+                /* Remove default Odoo header/footer */
+                #wrapwrap > header,
+                #wrapwrap > footer {
+                    display: none !important;
+                }
+                
+                body {
+                    background: #f5f5f5;
+                }
+                
+                .appointment-page-wrapper {
+                    min-height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                }
+            </style>
+        </t>
+    </template>
+</odoo>

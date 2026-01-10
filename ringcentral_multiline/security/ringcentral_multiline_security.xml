@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ================================== -->
+        <!-- RingCentral Multi-line Access Groups -->
+        <!-- ================================== -->
+        
+        <!-- User Group: Basic access to use multi-line features -->
+        <record id="group_ringcentral_user" model="res.groups">
+            <field name="name">RingCentral User</field>
+            <field name="category_id" ref="base.module_category_sales_sales"/>
+            <field name="comment">
+                Basic RingCentral multi-line user. Can:
+                - View their assigned extension
+                - Select from available caller IDs
+                - Use context-aware phone selection
+            </field>
+        </record>
+        
+        <!-- Manager Group: Full access to configure multi-line -->
+        <record id="group_ringcentral_manager" model="res.groups">
+            <field name="name">RingCentral Manager</field>
+            <field name="category_id" ref="base.module_category_sales_sales"/>
+            <field name="implied_ids" eval="[(4, ref('group_ringcentral_user'))]"/>
+            <field name="comment">
+                RingCentral administrator. Can:
+                - All user permissions
+                - Configure app-specific phone numbers
+                - Link users to extensions
+                - Link departments to call queues
+                - Trigger data sync from RingCentral
+                - Manage all RingCentral multiline settings
+            </field>
+        </record>
+        
+        <!-- ================================== -->
+        <!-- Record Rules -->
+        <!-- ================================== -->
+        
+        <!-- Extension: Users can read their own, managers can read all -->
+        <record id="rule_extension_user_read" model="ir.rule">
+            <field name="name">Extension: User can read own extension</field>
+            <field name="model_id" ref="model_ringcentral_extension"/>
+            <field name="domain_force">[
+                '|',
+                ('user_id', '=', user.id),
+                ('company_id', 'in', company_ids)
+            ]</field>
+            <field name="groups" eval="[(4, ref('group_ringcentral_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+        
+        <record id="rule_extension_manager_full" model="ir.rule">
+            <field name="name">Extension: Manager full access</field>
+            <field name="model_id" ref="model_ringcentral_extension"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_ringcentral_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+        
+        <!-- Phone Number: Users can read their available numbers, managers can read/write all -->
+        <record id="rule_phone_number_user_read" model="ir.rule">
+            <field name="name">Phone Number: User can read available numbers</field>
+            <field name="model_id" ref="model_ringcentral_phone_number"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_ringcentral_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+        
+        <record id="rule_phone_number_manager_full" model="ir.rule">
+            <field name="name">Phone Number: Manager full access</field>
+            <field name="model_id" ref="model_ringcentral_phone_number"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_ringcentral_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+        
+        <!-- Call Queue: Users can read, managers can manage -->
+        <record id="rule_call_queue_user_read" model="ir.rule">
+            <field name="name">Call Queue: User can read</field>
+            <field name="model_id" ref="model_ringcentral_call_queue"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_ringcentral_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+        
+        <record id="rule_call_queue_manager_full" model="ir.rule">
+            <field name="name">Call Queue: Manager full access</field>
+            <field name="model_id" ref="model_ringcentral_call_queue"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_ringcentral_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+        
+        <!-- App Config: Only managers can access -->
+        <record id="rule_app_config_manager_full" model="ir.rule">
+            <field name="name">App Config: Manager full access</field>
+            <field name="model_id" ref="model_ringcentral_app_config"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_ringcentral_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+        
+    </data>
+</odoo>

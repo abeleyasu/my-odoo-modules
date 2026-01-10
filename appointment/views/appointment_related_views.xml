@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- APPOINTMENT AVAILABILITY VIEWS -->
+    <!-- ============================================ -->
+
+    <!-- Availability Tree View -->
+    <record id="appointment_type_availability_view_tree" model="ir.ui.view">
+        <field name="name">appointment.type.availability.tree</field>
+        <field name="model">appointment.type.availability</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="weekday"/>
+                <field name="start_hour" widget="float_time"/>
+                <field name="end_hour" widget="float_time"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Availability Form View -->
+    <record id="appointment_type_availability_view_form" model="ir.ui.view">
+        <field name="name">appointment.type.availability.form</field>
+        <field name="model">appointment.type.availability</field>
+        <field name="arch" type="xml">
+            <form string="Availability Rule">
+                <group>
+                    <field name="weekday"/>
+                    <field name="start_hour" widget="float_time"/>
+                    <field name="end_hour" widget="float_time"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- APPOINTMENT EXCEPTION VIEWS -->
+    <!-- ============================================ -->
+
+    <!-- Exception Tree View -->
+    <record id="appointment_type_exception_view_tree" model="ir.ui.view">
+        <field name="name">appointment.type.exception.tree</field>
+        <field name="model">appointment.type.exception</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="date"/>
+                <field name="exception_type"/>
+                <field name="start_hour" widget="float_time" 
+                       column_invisible="parent.exception_type == 'blocked'"/>
+                <field name="end_hour" widget="float_time" 
+                       column_invisible="parent.exception_type == 'blocked'"/>
+                <field name="reason"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Exception Form View -->
+    <record id="appointment_type_exception_view_form" model="ir.ui.view">
+        <field name="name">appointment.type.exception.form</field>
+        <field name="model">appointment.type.exception</field>
+        <field name="arch" type="xml">
+            <form string="Date Exception">
+                <group>
+                    <field name="date"/>
+                    <field name="exception_type"/>
+                    <field name="start_hour" widget="float_time" invisible="exception_type == 'blocked'"/>
+                    <field name="end_hour" widget="float_time" invisible="exception_type == 'blocked'"/>
+                    <field name="reason"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- APPOINTMENT QUESTION VIEWS -->
+    <!-- ============================================ -->
+
+    <!-- Question Tree View -->
+    <record id="appointment_question_view_tree" model="ir.ui.view">
+        <field name="name">appointment.question.tree</field>
+        <field name="model">appointment.question</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="question_type"/>
+                <field name="required"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Question Form View -->
+    <record id="appointment_question_view_form" model="ir.ui.view">
+        <field name="name">appointment.question.form</field>
+        <field name="model">appointment.question</field>
+        <field name="arch" type="xml">
+            <form string="Question">
+                <group>
+                    <field name="name"/>
+                    <field name="question_type"/>
+                    <field name="required"/>
+                    <field name="placeholder"/>
+                    <field name="options" invisible="question_type not in ('select', 'radio', 'checkbox')"
+                           placeholder="One option per line"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- APPOINTMENT ANSWER VIEWS -->
+    <!-- ============================================ -->
+
+    <!-- Answer Tree View -->
+    <record id="appointment_answer_view_tree" model="ir.ui.view">
+        <field name="name">appointment.answer.tree</field>
+        <field name="model">appointment.answer</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="question_id"/>
+                <field name="value_text"/>
+            </list>
+        </field>
+    </record>
+</odoo>

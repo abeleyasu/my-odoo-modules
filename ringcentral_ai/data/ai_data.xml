@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Server action for auto-transcription -->
+    <record id="ir_actions_server_auto_transcribe" model="ir.actions.server">
+        <field name="name">RingCentral: Auto Transcribe Recordings</field>
+        <field name="model_id" ref="model_ringcentral_ai_transcript"/>
+        <field name="state">code</field>
+        <field name="code">model.search([('state', '=', 'pending')], limit=5).action_process_transcript()</field>
+    </record>
+    
+    <!-- Cron for auto-transcription - initial submission -->
+    <record id="cron_auto_transcribe" model="ir.cron">
+        <field name="name">RingCentral: Submit Transcription Jobs</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+        <field name="ir_actions_server_id" ref="ir_actions_server_auto_transcribe"/>
+    </record>
+    
+    <!-- Server action + cron for polling pending transcription jobs -->
+    <record id="ir_actions_server_poll_transcription_jobs" model="ir.actions.server">
+        <field name="name">RingCentral: Poll Transcription Job Status</field>
+        <field name="model_id" ref="model_ringcentral_ai_transcript"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_process_pending_transcripts()</field>
+    </record>
+
+    <record id="cron_poll_transcription_jobs" model="ir.cron">
+        <field name="name">RingCentral: Poll Transcription Job Status</field>
+        <field name="interval_number">2</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+        <field name="ir_actions_server_id" ref="ir_actions_server_poll_transcription_jobs"/>
+    </record>
+</odoo>

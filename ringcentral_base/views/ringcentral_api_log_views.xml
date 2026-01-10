@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- RingCentral API Log Views -->
+    
+    <!-- Tree View -->
+    <record id="ringcentral_api_log_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.api.log.tree</field>
+        <field name="model">ringcentral.api.log</field>
+        <field name="arch" type="xml">
+            <list string="API Logs" default_order="create_date desc">
+                <field name="create_date" string="Time"/>
+                <field name="method" decoration-info="method == 'GET'" decoration-success="method == 'POST'" decoration-warning="method == 'PUT'" decoration-danger="method == 'DELETE'"/>
+                <field name="endpoint"/>
+                <field name="status" decoration-success="status == 'success'" decoration-danger="status == 'error'" widget="badge"/>
+                <field name="elapsed_time_ms" string="Latency (ms)"/>
+                <field name="user_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Form View -->
+    <record id="ringcentral_api_log_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.api.log.form</field>
+        <field name="model">ringcentral.api.log</field>
+        <field name="arch" type="xml">
+            <form string="API Log" create="false" edit="false">
+                <header>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="method"/>
+                            <field name="endpoint"/>
+                            <field name="elapsed_time_ms" string="Latency (ms)"/>
+                            <field name="create_date"/>
+                        </group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Request" name="request">
+                            <field name="request_data" widget="ace" options="{'mode': 'json'}"/>
+                        </page>
+                        <page string="Response" name="response">
+                            <field name="response_data" widget="ace" options="{'mode': 'json'}"/>
+                        </page>
+                        <page string="Error" name="error" invisible="not error">
+                            <field name="error"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Search View -->
+    <record id="ringcentral_api_log_view_search" model="ir.ui.view">
+        <field name="name">ringcentral.api.log.search</field>
+        <field name="model">ringcentral.api.log</field>
+        <field name="arch" type="xml">
+            <search string="API Logs">
+                <field name="endpoint"/>
+                <field name="method"/>
+                <field name="user_id"/>
+                <filter name="filter_success" string="Success" domain="[('status', '=', 'success')]"/>
+                <filter name="filter_error" string="Errors" domain="[('status', '=', 'error')]"/>
+                <separator/>
+                <filter name="filter_today" string="Today" domain="[('create_date', '>=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_last_hour" string="Last Hour" domain="[('create_date', '>=', (context_today() - datetime.timedelta(hours=1)).strftime('%Y-%m-%d %H:%M:%S'))]"/>
+                <separator/>
+                <filter name="group_method" string="Method" context="{'group_by': 'method'}"/>
+                <filter name="group_endpoint" string="Endpoint" context="{'group_by': 'endpoint'}"/>
+                <filter name="group_status" string="Status" context="{'group_by': 'status'}"/>
+                <filter name="group_user" string="User" context="{'group_by': 'user_id'}"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Graph View -->
+    <record id="ringcentral_api_log_view_graph" model="ir.ui.view">
+        <field name="name">ringcentral.api.log.graph</field>
+        <field name="model">ringcentral.api.log</field>
+        <field name="arch" type="xml">
+            <graph string="API Calls" type="line">
+                <field name="create_date" type="row" interval="hour"/>
+                <field name="id" type="measure" string="Count"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Pivot View -->
+    <record id="ringcentral_api_log_view_pivot" model="ir.ui.view">
+        <field name="name">ringcentral.api.log.pivot</field>
+        <field name="model">ringcentral.api.log</field>
+        <field name="arch" type="xml">
+            <pivot string="API Statistics">
+                <field name="method" type="row"/>
+                <field name="status" type="col"/>
+                <field name="elapsed_time" type="measure" string="Total Time"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- Action -->
+    <record id="action_ringcentral_api_log" model="ir.actions.act_window">
+        <field name="name">API Logs</field>
+        <field name="res_model">ringcentral.api.log</field>
+        <field name="view_mode">list,form,graph,pivot</field>
+        <field name="search_view_id" ref="ringcentral_api_log_view_search"/>
+        <field name="context">{'search_default_filter_today': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No API logs yet
+            </p>
+            <p>
+                API logs will appear here as RingCentral API calls are made.
+            </p>
+        </field>
+    </record>
+    
+</odoo>

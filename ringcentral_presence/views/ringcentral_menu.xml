@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_ringcentral_presence"
+              name="Presence"
+              parent="ringcentral_base.menu_ringcentral_communications"
+              action="action_ringcentral_presence"
+              sequence="35"/>
+</odoo>

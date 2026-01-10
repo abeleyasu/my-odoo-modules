@@ -1,0 +1,84 @@
+/* RingCentral Embeddable Toggle Styles */
+
+.rc-embeddable-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.rc-phone-btn {
+    background: transparent;
+    border: none;
+    padding: 8px 12px;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.rc-phone-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+.rc-phone-btn i {
+    font-size: 16px;
+}
+
+.rc-phone-btn.rc-in-call {
+    color: #28a745 !important;
+}
+
+.rc-phone-btn.rc-in-call i {
+    animation: phone-ring 0.5s ease-in-out infinite;
+}
+
+@keyframes phone-ring {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+}
+
+.rc-call-pulse {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 10px;
+    height: 10px;
+    background-color: #28a745;
+    border-radius: 50%;
+    animation: pulse-animation 1.5s ease-out infinite;
+}
+
+@keyframes pulse-animation {
+    0% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(40, 167, 69, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+    }
+}
+
+/* Click-to-call button styles for CRM and Partner forms */
+.rc-click-to-call {
+    cursor: pointer;
+    color: #007bff;
+    transition: color 0.2s;
+}
+
+.rc-click-to-call:hover {
+    color: #0056b3;
+}
+
+.rc-click-to-call i {
+    margin-right: 4px;
+}
+
+/* RingCentral Embeddable widget position adjustment for Odoo */
+#rc-widget {
+    z-index: 10000 !important;
+}
+
+#rc-widget-adapter-frame {
+    z-index: 10000 !important;
+}
