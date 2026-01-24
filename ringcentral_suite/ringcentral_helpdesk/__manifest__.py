@@ -20,6 +20,8 @@ This module integrates RingCentral with Helpdesk:
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'LGPL-3',
+    'price': 50,
+    'currency': 'USD',
     'depends': [
         'ringcentral_base',
         'ringcentral_call',

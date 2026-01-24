@@ -26,6 +26,8 @@ Integrates with contacts, CRM, and other Odoo apps.
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
+    'price': 50,
+    'currency': 'USD',
     'depends': [
         'ringcentral_base',
         'mail',
