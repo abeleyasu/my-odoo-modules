@@ -7,10 +7,6 @@
     'description': """
 RingCentral CRM Integration
 ===========================
-
-⚠️ IMPORTANT: Requires RingCentral Base module ($100) to be installed first.
-This module cannot function without the base module.
-
 This module provides deep CRM integration:
 
 * Click-to-call from leads/opportunities
@@ -26,7 +22,7 @@ This module provides deep CRM integration:
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
-    'price': 30.00,
+    'price': 50,
     'currency': 'USD',
     'depends': [
         'ringcentral_base',

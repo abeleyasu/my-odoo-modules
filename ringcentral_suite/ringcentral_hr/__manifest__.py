@@ -7,10 +7,6 @@
     'description': """
 RingCentral HR Integration
 ==========================
-
-⚠️ IMPORTANT: Requires RingCentral Base module ($100) to be installed first.
-This module cannot function without the base module.
-
 This module integrates RingCentral with the HR module:
 
 * Click-to-call from employee records
@@ -24,7 +20,7 @@ This module integrates RingCentral with the HR module:
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
-    'price': 30.00,
+    'price': 50,
     'currency': 'USD',
     'depends': [
         'hr',

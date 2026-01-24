@@ -7,10 +7,6 @@
     'description': """
 RingCentral Compliance Module
 =============================
-
-⚠️ IMPORTANT: Requires RingCentral Base module ($100) to be installed first.
-This module cannot function without the base module.
-
 This module provides compliance features:
 
 * GDPR data subject requests (access, deletion)
@@ -26,7 +22,7 @@ This module provides compliance features:
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
-    'price': 30.00,
+    'price': 50,
     'currency': 'USD',
     'depends': [
         'ringcentral_base',

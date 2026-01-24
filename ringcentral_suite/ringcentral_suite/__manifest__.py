@@ -9,6 +9,8 @@
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
+    'price': 50,
+    'currency': 'USD',
     'price': 200.00,
     'currency': 'USD',
     'images': ['static/description/banner.png'],
@@ -16,11 +18,6 @@
     'description': """
 RingCentral Suite - Complete Business Communications for Odoo 18
 ================================================================
-
-⚠️ IMPORTANT: This is the COMPLETE BUNDLE package ($200) including ALL 22 modules.
-Alternatively, you can purchase modules individually:
-- RingCentral Base ($100) - Required foundation module
-- Individual feature modules ($30 each) - Add only what you need
 
 **Transform Odoo into a Full-Featured Cloud Phone System**
 

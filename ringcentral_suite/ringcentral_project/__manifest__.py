@@ -7,10 +7,6 @@
     'description': """
 RingCentral Project Integration
 ===============================
-
-⚠️ IMPORTANT: Requires RingCentral Base module ($100) to be installed first.
-This module cannot function without the base module.
-
 This module provides project/timesheet features:
 
 * Auto-create timesheet from calls
@@ -23,7 +19,7 @@ This module provides project/timesheet features:
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
-    'price': 30.00,
+    'price': 50,
     'currency': 'USD',
     'depends': [
         'ringcentral_base',
