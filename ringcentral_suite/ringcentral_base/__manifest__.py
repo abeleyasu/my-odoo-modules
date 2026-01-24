@@ -8,6 +8,9 @@
 RingCentral Base Integration for Odoo 18
 ========================================
 
+⚠️ IMPORTANT: This is the REQUIRED base module for all RingCentral integrations.
+Install this module FIRST before installing any other RingCentral modules.
+
 Core module providing:
 - RingCentral API SDK wrapper with token caching
 - JWT and OAuth 2.0 authentication
@@ -26,6 +29,8 @@ This is the foundation module for all RingCentral integrations.
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
+    'price': 100.00,
+    'currency': 'USD',
     'depends': [
         'base',
         'mail',

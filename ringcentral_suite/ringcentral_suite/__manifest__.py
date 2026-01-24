@@ -17,6 +17,11 @@
 RingCentral Suite - Complete Business Communications for Odoo 18
 ================================================================
 
+⚠️ IMPORTANT: This is the COMPLETE BUNDLE package ($200) including ALL 22 modules.
+Alternatively, you can purchase modules individually:
+- RingCentral Base ($100) - Required foundation module
+- Individual feature modules ($30 each) - Add only what you need
+
 **Transform Odoo into a Full-Featured Cloud Phone System**
 
 RingCentral Suite brings enterprise-grade unified communications directly into your Odoo environment. 

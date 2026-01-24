@@ -7,6 +7,10 @@
     'description': """
 RingCentral Call Recording
 ==========================
+
+⚠️ IMPORTANT: Requires RingCentral Base module ($100) to be installed first.
+This module cannot function without the base module.
+
 This module provides call recording integration:
 
 * Automatic and on-demand call recording
@@ -22,6 +26,8 @@ This module provides call recording integration:
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
+    'price': 30.00,
+    'currency': 'USD',
     'depends': [
         'ringcentral_base',
         'ringcentral_call',

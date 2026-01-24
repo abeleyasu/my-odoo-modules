@@ -7,6 +7,10 @@
     'description': """
 RingCentral WebRTC Softphone
 ============================
+
+⚠️ IMPORTANT: Requires RingCentral Base module ($100) to be installed first.
+This module cannot function without the base module.
+
 This module provides a browser-based softphone:
 
 * Embedded softphone in Odoo
@@ -21,6 +25,8 @@ This module provides a browser-based softphone:
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
+    'price': 30.00,
+    'currency': 'USD',
     'depends': [
         'ringcentral_base',
         'ringcentral_call',

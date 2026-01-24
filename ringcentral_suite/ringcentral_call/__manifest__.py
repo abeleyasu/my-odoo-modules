@@ -8,6 +8,9 @@
 RingCentral Call Integration for Odoo 18
 ========================================
 
+⚠️ IMPORTANT: Requires RingCentral Base module ($100) to be installed first.
+This module cannot function without the base module.
+
 Voice calling features:
 - Click-to-dial from any phone field
 - RingOut two-legged calling
@@ -24,6 +27,8 @@ Extends base_phone module for native click-to-dial functionality.
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
+    'price': 30.00,
+    'currency': 'USD',
     'depends': [
         'ringcentral_base',
         'mail',
