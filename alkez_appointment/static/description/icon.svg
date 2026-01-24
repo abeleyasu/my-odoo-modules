@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="blue_grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#7B9EFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#5B7FFF;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="hook_grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD85A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFBE3D;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Shadow -->
+  <ellipse cx="64" cy="115" rx="45" ry="8" fill="#000000" opacity="0.15"/>
+  
+  <!-- Calendar base - bottom part -->
+  <rect x="18" y="42" width="92" height="68" rx="8" fill="#5FB8FF"/>
+  
+  <!-- Calendar header - top purple part -->
+  <rect x="18" y="35" width="92" height="20" rx="8" fill="url(#blue_grad)"/>
+  <rect x="18" y="45" width="92" height="10" fill="url(#blue_grad)"/>
+  
+  <!-- Hook left -->
+  <path d="M 35,28 Q 35,22 40,22 L 44,22 Q 49,22 49,28 L 49,42 L 35,42 Z" fill="url(#hook_grad)"/>
+  <ellipse cx="42" cy="28" rx="7" ry="4" fill="#FFE896"/>
+  
+  <!-- Hook right -->
+  <path d="M 79,28 Q 79,22 84,22 L 88,22 Q 93,22 93,28 L 93,42 L 79,42 Z" fill="url(#hook_grad)"/>
+  <ellipse cx="86" cy="28" rx="7" ry="4" fill="#FFE896"/>
+  
+  <!-- Calendar grid - 3x3 white squares -->
+  <rect x="30" y="60" width="18" height="15" rx="3" fill="#B8D8FF"/>
+  <rect x="55" y="60" width="18" height="15" rx="3" fill="#B8D8FF"/>
+  <rect x="80" y="60" width="18" height="15" rx="3" fill="#B8D8FF"/>
+  
+  <rect x="30" y="78" width="18" height="15" rx="3" fill="#B8D8FF"/>
+  <rect x="55" y="78" width="18" height="15" rx="3" fill="#FF8F9C"/>
+  <rect x="80" y="78" width="18" height="15" rx="3" fill="#B8D8FF"/>
+  
+  <rect x="30" y="96" width="18" height="15" rx="3" fill="#B8D8FF"/>
+  <rect x="55" y="96" width="18" height="15" rx="3" fill="#B8D8FF"/>
+  <rect x="80" y="96" width="18" height="15" rx="3" fill="#B8D8FF"/>
+  
+  <!-- Checkmark overlay -->
+  <circle cx="90" cy="90" r="20" fill="#FFB347"/>
+  <path d="M 80,90 L 87,97 L 100,82" stroke="white" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Checkmark shadow -->
+  <ellipse cx="90" cy="108" rx="16" ry="3" fill="#000000" opacity="0.2"/>
+</svg>

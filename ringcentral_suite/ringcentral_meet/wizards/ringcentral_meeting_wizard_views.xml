@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Meeting Wizard Form -->
+    <record id="ringcentral_meeting_wizard_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.meeting.wizard.form</field>
+        <field name="model">ringcentral.meeting.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Meeting">
+                <group>
+                    <field name="name"/>
+                    <field name="meeting_type"/>
+                </group>
+                <group invisible="meeting_type == 'instant'">
+                    <group>
+                        <field name="scheduled_start"/>
+                        <field name="duration"/>
+                    </group>
+                </group>
+                <group string="Settings">
+                    <group>
+                        <field name="password"/>
+                        <field name="enable_waiting_room"/>
+                    </group>
+                    <group>
+                        <field name="mute_participants_on_entry"/>
+                        <field name="enable_recording"/>
+                    </group>
+                </group>
+                <group string="Attendees">
+                    <field name="attendee_ids" nolabel="1" colspan="2">
+                        <list>
+                            <field name="name"/>
+                            <field name="email"/>
+                        </list>
+                    </field>
+                </group>
+                <field name="res_model" invisible="1"/>
+                <field name="res_id" invisible="1"/>
+                <footer>
+                    <button name="action_create_meeting" type="object" string="Schedule Meeting" class="btn-primary" invisible="meeting_type == 'instant'"/>
+                    <button name="action_create_instant" type="object" string="Start Now" class="btn-success" invisible="meeting_type != 'instant'"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Action -->
+    <record id="action_ringcentral_meeting_wizard" model="ir.actions.act_window">
+        <field name="name">Create Meeting</field>
+        <field name="res_model">ringcentral.meeting.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

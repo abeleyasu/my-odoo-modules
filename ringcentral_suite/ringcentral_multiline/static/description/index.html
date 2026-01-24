@@ -1,0 +1,106 @@
+# RingCentral Multi-Line & Department Configuration
+
+## Overview
+
+This module extends the RingCentral integration to support advanced multi-line phone configuration, enabling different phone numbers for different Odoo applications and departments.
+
+## Features
+
+### Multi-Line Support
+- Configure multiple phone numbers per company
+- Assign phone numbers to specific extensions
+- Track phone number capabilities (Voice, SMS, Fax)
+
+### Department Call Queues
+- Sync call queues from RingCentral
+- Link Odoo HR departments to RingCentral call queues
+- View queue members and routing configuration
+- Support for Rotating, Simultaneous, and Sequential routing
+
+### Per-App Phone Configuration
+- Assign different caller IDs to different Odoo apps:
+  - CRM / Leads
+  - Sales / Quotations
+  - HR / Recruitment
+  - Helpdesk / Support
+  - Project
+  - Accounting
+- Fallback configuration when no app-specific number is set
+
+### User Extension Mapping
+- Link Odoo users to RingCentral extensions
+- Auto-link by email matching
+- Personal caller ID preferences
+- Available phone number management
+
+### Context-Aware Widget
+- Automatically detect current Odoo app
+- Update widget caller ID based on context
+- User can manually select from available numbers
+- Seamless integration with existing RingCentral widget
+
+### Automatic Sync
+- Scheduled cron jobs for data synchronization
+- Sync extensions from RingCentral API
+- Sync phone numbers from RingCentral API
+- Sync call queues and their members
+- Manual sync trigger available
+
+## Installation
+
+1. Install the module from Odoo Apps
+2. Go to Settings > RingCentral
+3. Click "Sync from RingCentral" to import your data
+4. Configure app-specific phone numbers
+
+## Configuration
+
+### Quick Setup
+1. Navigate to RingCentral > Configuration > Quick Setup Wizard
+2. Select phone numbers for each app type
+3. Click Apply Configuration
+
+### Manual Configuration
+1. Go to RingCentral > Configuration > App Phone Config
+2. Create a new configuration for each app type
+3. Select the phone number to use for outbound calls
+
+### User Mapping
+1. Go to Settings > Users
+2. Open a user record
+3. Navigate to the RingCentral tab
+4. Link to an extension or use auto-link
+
+### Department Mapping
+1. Go to Employees > Departments
+2. Open a department record
+3. Navigate to the RingCentral tab
+4. Link to a call queue
+
+## Technical Details
+
+### Models
+- `ringcentral.extension`: RingCentral extensions synced from API
+- `ringcentral.phone.number`: Phone numbers (DIDs) with features
+- `ringcentral.call.queue`: Call queues for department routing
+- `ringcentral.app.config`: Per-app phone number configuration
+
+### API Endpoints
+- `/ringcentral/widget/contextual-config`: Get context-aware caller ID
+- `/ringcentral/widget/update-caller-id`: Update user's preferred caller ID
+- `/ringcentral/extensions`: List all extensions
+- `/ringcentral/phone-numbers`: List all phone numbers
+- `/ringcentral/call-queues`: List all call queues
+- `/ringcentral/sync`: Trigger manual sync (admin only)
+
+### Security Groups
+- **RingCentral User**: Basic access to view and use multi-line features
+- **RingCentral Manager**: Full access to configure and manage settings
+
+## Dependencies
+- ringcentral_base
+- ringcentral_webrtc
+- hr (Human Resources)
+
+## Support
+For questions or issues, please contact support@mysource.com

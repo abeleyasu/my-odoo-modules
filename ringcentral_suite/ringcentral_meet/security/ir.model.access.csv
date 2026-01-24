@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ringcentral_meeting_user,ringcentral.meeting.user,model_ringcentral_meeting,ringcentral_base.group_ringcentral_user,1,1,1,0
+access_ringcentral_meeting_manager,ringcentral.meeting.manager,model_ringcentral_meeting,ringcentral_base.group_ringcentral_manager,1,1,1,1
+access_ringcentral_meeting_wizard,ringcentral.meeting.wizard,model_ringcentral_meeting_wizard,ringcentral_base.group_ringcentral_user,1,1,1,1

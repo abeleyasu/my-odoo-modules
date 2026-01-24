@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ringcentral_api_log_user,ringcentral.api.log.user,model_ringcentral_api_log,group_ringcentral_user,1,0,0,0
+access_ringcentral_api_log_manager,ringcentral.api.log.manager,model_ringcentral_api_log,group_ringcentral_manager,1,1,1,0
+access_ringcentral_api_log_admin,ringcentral.api.log.admin,model_ringcentral_api_log,group_ringcentral_admin,1,1,1,1
+access_ringcentral_test_connection_admin,ringcentral.test.connection.admin,model_ringcentral_test_connection,group_ringcentral_admin,1,1,1,1
+access_ringcentral_webhook_log_user,ringcentral.webhook.log.user,model_ringcentral_webhook_log,group_ringcentral_user,1,0,0,0
+access_ringcentral_webhook_log_manager,ringcentral.webhook.log.manager,model_ringcentral_webhook_log,group_ringcentral_manager,1,1,0,0
+access_ringcentral_webhook_log_admin,ringcentral.webhook.log.admin,model_ringcentral_webhook_log,group_ringcentral_admin,1,1,1,1

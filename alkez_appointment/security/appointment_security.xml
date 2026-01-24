@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- SECURITY GROUPS -->
+    <!-- ============================================ -->
+
+    <!-- Category for Appointment -->
+    <record id="module_category_appointment" model="ir.module.category">
+        <field name="name">Appointment</field>
+        <field name="description">Appointment scheduling and booking management</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <!-- User Group -->
+    <record id="group_appointment_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_category_appointment"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Can view and manage own appointments and event types</field>
+    </record>
+
+    <!-- Manager Group -->
+    <record id="group_appointment_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_category_appointment"/>
+        <field name="implied_ids" eval="[(4, ref('group_appointment_user'))]"/>
+        <field name="comment">Full access to all appointment features and settings</field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- RECORD RULES -->
+    <!-- ============================================ -->
+
+    <!-- Appointment Type Rules -->
+    <record id="appointment_type_rule_user" model="ir.rule">
+        <field name="name">Appointment Type: User can see own</field>
+        <field name="model_id" ref="model_appointment_type"/>
+        <field name="domain_force">[('user_ids', 'in', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_appointment_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="appointment_type_rule_manager" model="ir.rule">
+        <field name="name">Appointment Type: Manager sees all</field>
+        <field name="model_id" ref="model_appointment_type"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_appointment_manager'))]"/>
+    </record>
+
+    <!-- Appointment Booking Rules -->
+    <record id="appointment_booking_rule_user" model="ir.rule">
+        <field name="name">Appointment Booking: User can see own</field>
+        <field name="model_id" ref="model_appointment_booking"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_appointment_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="appointment_booking_rule_manager" model="ir.rule">
+        <field name="name">Appointment Booking: Manager sees all</field>
+        <field name="model_id" ref="model_appointment_booking"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_appointment_manager'))]"/>
+    </record>
+
+    <!-- Invite Rules -->
+    <record id="appointment_invite_rule_user" model="ir.rule">
+        <field name="name">Appointment Invite: User can see own</field>
+        <field name="model_id" ref="model_appointment_invite"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_appointment_user'))]"/>
+    </record>
+
+    <record id="appointment_invite_rule_manager" model="ir.rule">
+        <field name="name">Appointment Invite: Manager sees all</field>
+        <field name="model_id" ref="model_appointment_invite"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_appointment_manager'))]"/>
+    </record>
+
+    <!-- Question Rules - follow appointment type -->
+    <record id="appointment_question_rule_user" model="ir.rule">
+        <field name="name">Appointment Question: User via type</field>
+        <field name="model_id" ref="model_appointment_question"/>
+        <field name="domain_force">[('appointment_type_id.user_ids', 'in', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_appointment_user'))]"/>
+    </record>
+
+    <record id="appointment_question_rule_manager" model="ir.rule">
+        <field name="name">Appointment Question: Manager sees all</field>
+        <field name="model_id" ref="model_appointment_question"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_appointment_manager'))]"/>
+    </record>
+</odoo>

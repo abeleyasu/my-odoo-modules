@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Partner Form Extension -->
+    <record id="view_partner_form_ringcentral" model="ir.ui.view">
+        <field name="name">res.partner.form.ringcentral</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_calls" type="object" 
+                        class="oe_stat_button" icon="fa-phone"
+                        invisible="ringcentral_call_count == 0">
+                    <field name="ringcentral_call_count" string="Calls" widget="statinfo"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='phone']" position="after">
+                <button name="action_ringcentral_call" type="object" 
+                        class="btn-link p-0" icon="fa-phone"
+                        title="Call" invisible="not phone"
+                        groups="ringcentral_base.group_ringcentral_user"/>
+            </xpath>
+            <xpath expr="//field[@name='mobile']" position="after">
+                <button name="action_ringcentral_call" type="object" 
+                        class="btn-link p-0" icon="fa-phone"
+                        title="Call" invisible="not mobile"
+                        groups="ringcentral_base.group_ringcentral_user"/>
+                <button name="action_send_sms" type="object" 
+                        class="btn-link p-0" icon="fa-comment"
+                        title="Send SMS" invisible="not mobile"
+                        groups="ringcentral_base.group_ringcentral_user"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

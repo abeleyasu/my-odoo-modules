@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Click-to-Call Widget Template -->
+    <template id="click_to_call_widget" inherit_id="website.layout" name="RingCentral Click-to-Call Widget">
+        <xpath expr="//div[@id='wrapwrap']" position="inside">
+            <div id="rc_click_to_call_widget" class="d-none"/>
+            <script type="text/javascript" src="/ringcentral_website/static/src/js/click_to_call_widget.js"/>
+            <link rel="stylesheet" href="/ringcentral_website/static/src/css/click_to_call.css"/>
+        </xpath>
+    </template>
+    
+    <!-- Callback Request Page -->
+    <template id="callback_request_page" name="Request a Callback">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container py-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6">
+                            <div class="card shadow">
+                                <div class="card-header bg-primary text-white">
+                                    <h3 class="mb-0">
+                                        <i class="fa fa-phone me-2"/>Request a Callback
+                                    </h3>
+                                </div>
+                                <div class="card-body">
+                                    <form id="rc_callback_form" class="needs-validation" novalidate="novalidate">
+                                        <div class="mb-3">
+                                            <label for="callback_name" class="form-label">Your Name *</label>
+                                            <input type="text" class="form-control" id="callback_name" name="name" required="required"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="callback_phone" class="form-label">Phone Number *</label>
+                                            <input type="tel" class="form-control" id="callback_phone" name="phone" required="required"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="callback_email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="callback_email" name="email"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="callback_time" class="form-label">Preferred Time</label>
+                                            <select class="form-select" id="callback_time" name="preferred_time">
+                                                <option value="asap">As Soon As Possible</option>
+                                                <option value="morning">Morning (9am-12pm)</option>
+                                                <option value="afternoon">Afternoon (12pm-5pm)</option>
+                                                <option value="evening">Evening (5pm-8pm)</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="callback_subject" class="form-label">Subject</label>
+                                            <input type="text" class="form-control" id="callback_subject" name="subject"/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="callback_message" class="form-label">Message</label>
+                                            <textarea class="form-control" id="callback_message" name="message" rows="3"/>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="fa fa-phone me-2"/>Request Callback
+                                        </button>
+                                    </form>
+                                    <div id="callback_success" class="alert alert-success mt-3 d-none">
+                                        <i class="fa fa-check-circle me-2"/>
+                                        Thank you! We will call you back shortly.
+                                    </div>
+                                    <div id="callback_error" class="alert alert-danger mt-3 d-none">
+                                        <i class="fa fa-exclamation-circle me-2"/>
+                                        <span id="callback_error_message">An error occurred. Please try again.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

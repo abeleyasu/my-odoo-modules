@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- SMS Tree View -->
+    <record id="ringcentral_sms_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.sms.tree</field>
+        <field name="model">ringcentral.sms</field>
+        <field name="arch" type="xml">
+            <list string="SMS Messages" default_order="create_date desc" decoration-success="state == 'delivered'" decoration-warning="state == 'sent'" decoration-danger="state == 'failed'" decoration-info="direction == 'inbound'">
+                <field name="create_date" string="Date"/>
+                <field name="direction" widget="badge"/>
+                <field name="phone_number"/>
+                <field name="partner_id"/>
+                <field name="body_preview"/>
+                <field name="state" widget="badge"/>
+                <field name="message_type"/>
+                <field name="has_attachments" widget="boolean" optional="hide"/>
+                <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- SMS Form View -->
+    <record id="ringcentral_sms_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.sms.form</field>
+        <field name="model">ringcentral.sms</field>
+        <field name="arch" type="xml">
+            <form string="SMS">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_reply" type="object" string="Reply" class="btn-primary" icon="fa-reply"/>
+                    <button name="action_retry_send" type="object" string="Retry" class="btn-warning" invisible="state != 'failed'"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_conversation" type="object" class="oe_stat_button" icon="fa-comments">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Conversation</span>
+                            </div>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="direction"/>
+                            <field name="phone_number"/>
+                            <field name="partner_id"/>
+                            <field name="message_type"/>
+                        </group>
+                        <group>
+                            <field name="from_number"/>
+                            <field name="to_number"/>
+                            <field name="user_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Message">
+                        <field name="body" nolabel="1" colspan="2"/>
+                    </group>
+                    <group string="Attachments" invisible="not has_attachments">
+                        <field name="attachment_ids" nolabel="1" colspan="2"/>
+                    </group>
+                    <group string="Timestamps">
+                        <field name="create_date"/>
+                        <field name="sent_time"/>
+                        <field name="delivered_time"/>
+                    </group>
+                    <group string="Error" invisible="not error_message">
+                        <field name="error_message" nolabel="1" colspan="2"/>
+                        <field name="retry_count"/>
+                    </group>
+                    <group string="RingCentral Info" groups="ringcentral_base.group_ringcentral_admin">
+                        <field name="ringcentral_message_id"/>
+                        <field name="conversation_id"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <!-- SMS Search View -->
+    <record id="ringcentral_sms_view_search" model="ir.ui.view">
+        <field name="name">ringcentral.sms.search</field>
+        <field name="model">ringcentral.sms</field>
+        <field name="arch" type="xml">
+            <search string="SMS">
+                <field name="phone_number"/>
+                <field name="partner_id"/>
+                <field name="body"/>
+                <filter name="filter_inbound" string="Received" domain="[('direction', '=', 'inbound')]"/>
+                <filter name="filter_outbound" string="Sent" domain="[('direction', '=', 'outbound')]"/>
+                <separator/>
+                <filter name="filter_delivered" string="Delivered" domain="[('state', '=', 'delivered')]"/>
+                <filter name="filter_failed" string="Failed" domain="[('state', '=', 'failed')]"/>
+                <separator/>
+                <filter name="filter_today" string="Today" domain="[('create_date', '>=', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="group_partner" string="Contact" context="{'group_by': 'partner_id'}"/>
+                <filter name="group_conversation" string="Conversation" context="{'group_by': 'conversation_id'}"/>
+                <filter name="group_direction" string="Direction" context="{'group_by': 'direction'}"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- SMS Template Tree View -->
+    <record id="ringcentral_sms_template_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.sms.template.tree</field>
+        <field name="model">ringcentral.sms.template</field>
+        <field name="arch" type="xml">
+            <list string="SMS Templates">
+                <field name="name"/>
+                <field name="body"/>
+                <field name="model_id"/>
+                <field name="use_count"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- SMS Template Form View -->
+    <record id="ringcentral_sms_template_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.sms.template.form</field>
+        <field name="model">ringcentral.sms.template</field>
+        <field name="arch" type="xml">
+            <form string="SMS Template">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="model_id"/>
+                        <field name="active"/>
+                    </group>
+                    <group string="Message Body">
+                        <field name="body" nolabel="1" colspan="2" placeholder="Hello {{partner_name}}, ..."/>
+                    </group>
+                    <group string="Available Placeholders" colspan="2">
+                        <div class="alert alert-info">
+                            <p><strong>Available placeholders:</strong></p>
+                            <ul>
+                                <li><code>{{partner_name}}</code> - Contact name</li>
+                                <li><code>{{company_name}}</code> - Your company name</li>
+                                <li><code>{{user_name}}</code> - Sender's name</li>
+                                <li><code>{{date}}</code> - Current date</li>
+                                <li><code>{{name}}</code> - Record name</li>
+                                <li><code>{{phone}}</code> - Phone number</li>
+                                <li><code>{{email}}</code> - Email address</li>
+                            </ul>
+                        </div>
+                    </group>
+                    <group string="Statistics">
+                        <field name="use_count" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- SMS Action -->
+    <record id="action_ringcentral_sms" model="ir.actions.act_window">
+        <field name="name">SMS Messages</field>
+        <field name="res_model">ringcentral.sms</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="ringcentral_sms_view_search"/>
+        <field name="context">{'search_default_filter_today': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No SMS messages yet
+            </p>
+            <p>
+                Send your first SMS from a contact's phone field!
+            </p>
+        </field>
+    </record>
+    
+    <!-- SMS Template Action -->
+    <record id="action_ringcentral_sms_template" model="ir.actions.act_window">
+        <field name="name">SMS Templates</field>
+        <field name="res_model">ringcentral.sms.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first SMS template
+            </p>
+        </field>
+    </record>
+    
+</odoo>

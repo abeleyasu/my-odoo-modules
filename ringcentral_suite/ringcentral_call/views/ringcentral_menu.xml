@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Calls Menu under Communications -->
+    <menuitem id="menu_ringcentral_calls"
+              name="Calls"
+              parent="ringcentral_base.menu_ringcentral_communications"
+              action="action_ringcentral_call"
+              sequence="10"/>
+    
+    <!-- My Calls Menu -->
+    <menuitem id="menu_ringcentral_my_calls"
+              name="My Calls"
+              parent="ringcentral_base.menu_ringcentral_communications"
+              action="action_ringcentral_call"
+              sequence="11"
+              groups="ringcentral_base.group_ringcentral_user"/>
+</odoo>

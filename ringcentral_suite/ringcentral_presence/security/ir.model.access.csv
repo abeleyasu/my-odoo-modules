@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ringcentral_presence_user,ringcentral.presence.user,model_ringcentral_presence,ringcentral_base.group_ringcentral_user,1,1,0,0
+access_ringcentral_presence_manager,ringcentral.presence.manager,model_ringcentral_presence,ringcentral_base.group_ringcentral_manager,1,1,1,1

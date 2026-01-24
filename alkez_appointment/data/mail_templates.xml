@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- EMAIL TEMPLATES - Enterprise Grade -->
+    <!-- Fixed: QWeb syntax, duration display, location_type values -->
+    <!-- ============================================ -->
+
+    <!-- Booking Confirmation Email -->
+    <record id="mail_template_booking_confirmation" model="mail.template">
+        <field name="name">Appointment: Booking Confirmation</field>
+        <field name="model_id" ref="model_appointment_booking"/>
+        <field name="subject">Confirmed: {{ object.appointment_type_id.name }} with {{ object.user_id.name }}</field>
+        <field name="email_from">{{ (object.user_id.company_id.email_formatted or 'apps@mysourcedigitalmarketing.net') }}</field>
+        <field name="reply_to">{{ object.user_id.email }}</field>
+        <field name="email_to">{{ object.invitee_email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #f5f5f5; width: 100%;">
+        <tr>
+            <td align="center">
+                <table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color: white; border-radius: 8px; overflow: hidden; margin: 20px 0;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #0069ff 0%, #0050c8 100%); padding: 40px 32px; text-align: center;">
+                            <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%; margin: 0 auto 16px; display: inline-flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 30px; color: white;">✓</span>
+                            </div>
+                            <h1 style="color: white; margin: 0 0 8px; font-size: 24px; font-weight: 600;">You're Scheduled!</h1>
+                            <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 15px;">A calendar invitation has been sent to your email.</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Event Details -->
+                    <tr>
+                        <td style="padding: 32px;">
+                            <h2 style="margin: 0 0 24px; font-size: 20px; color: #1a1a1a; font-weight: 600;">
+                                <t t-out="object.appointment_type_id.name"/>
+                            </h2>
+                            
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <!-- Host -->
+                                <tr>
+                                    <td style="padding: 12px 0; border-bottom: 1px solid #e5e5e5;">
+                                        <table border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="width: 40px; vertical-align: top;">
+                                                    <div style="width: 32px; height: 32px; background: #e8f4ff; border-radius: 50%; text-align: center; line-height: 32px; color: #0069ff;">👤</div>
+                                                </td>
+                                                <td>
+                                                    <div style="font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px;">Host</div>
+                                                    <div style="font-size: 15px; color: #1a1a1a; font-weight: 500;"><t t-out="object.user_id.name"/></div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Date & Time -->
+                                <tr>
+                                    <td style="padding: 12px 0; border-bottom: 1px solid #e5e5e5;">
+                                        <table border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="width: 40px; vertical-align: top;">
+                                                    <div style="width: 32px; height: 32px; background: #e8f4ff; border-radius: 50%; text-align: center; line-height: 32px; color: #0069ff;">📅</div>
+                                                </td>
+                                                <td>
+                                                    <div style="font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px;">Date &amp; Time</div>
+                                                    <div style="font-size: 15px; color: #1a1a1a; font-weight: 500;">
+                                                        <t t-out="format_datetime(object.start, dt_format='EEEE, MMMM d, y', tz=object.timezone)"/><br/>
+                                                        <t t-out="format_time(object.start, time_format='short', tz=object.timezone)"/> - <t t-out="format_time(object.stop, time_format='short', tz=object.timezone)"/>
+                                                    </div>
+                                                    <div style="font-size: 13px; color: #666;"><t t-out="object.timezone"/></div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Duration -->
+                                <tr>
+                                    <td style="padding: 12px 0; border-bottom: 1px solid #e5e5e5;">
+                                        <table border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="width: 40px; vertical-align: top;">
+                                                    <div style="width: 32px; height: 32px; background: #e8f4ff; border-radius: 50%; text-align: center; line-height: 32px; color: #0069ff;">⏱</div>
+                                                </td>
+                                                <td>
+                                                    <div style="font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px;">Duration</div>
+                                                    <div style="font-size: 15px; color: #1a1a1a; font-weight: 500;"><t t-out="object.appointment_type_id.duration_display"/></div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Location / Video -->
+                                <tr>
+                                    <td style="padding: 12px 0;">
+                                        <table border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="width: 40px; vertical-align: top;">
+                                                    <div style="width: 32px; height: 32px; background: #e8f4ff; border-radius: 50%; text-align: center; line-height: 32px; color: #0069ff;">
+                                                        <t t-if="object.location_type == 'online'">📹</t>
+                                                        <t t-else="">📍</t>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px;">Location</div>
+                                                    <div style="font-size: 15px; color: #1a1a1a; font-weight: 500;">
+                                                        <t t-if="object.location_type == 'online' and object.video_link">
+                                                            <a t-att-href="object.video_link" style="color: #0069ff; text-decoration: none;">Join Video Call</a>
+                                                        </t>
+                                                        <t t-elif="object.location">
+                                                            <t t-out="object.location"/>
+                                                        </t>
+                                                        <t t-elif="object.location_type == 'phone_outgoing'">
+                                                            Phone call - We will call you
+                                                        </t>
+                                                        <t t-elif="object.location_type == 'phone_incoming'">
+                                                            Phone call - Please call the host
+                                                        </t>
+                                                        <t t-else="">
+                                                            Details provided upon confirmation
+                                                        </t>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- Video Join Button -->
+                            <t t-if="object.location_type == 'online' and object.video_link">
+                                <div style="text-align: center; margin-top: 24px;">
+                                    <a t-att-href="object.video_link" style="display: inline-block; background: #0069ff; color: white; padding: 14px 32px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 15px;">
+                                        Join Video Call
+                                    </a>
+                                </div>
+                            </t>
+                        </td>
+                    </tr>
+                    
+                    <!-- Actions -->
+                    <tr>
+                        <td style="padding: 0 32px 32px;">
+                            <div style="background: #f9f9f9; border-radius: 8px; padding: 20px; text-align: center;">
+                                <p style="margin: 0 0 12px; font-size: 14px; color: #666;">Need to make changes?</p>
+                                <a t-att-href="object.reschedule_url" style="color: #0069ff; text-decoration: none; font-size: 14px; margin-right: 16px;">Reschedule</a>
+                                <a t-att-href="object.cancel_url" style="color: #666; text-decoration: none; font-size: 14px;">Cancel</a>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 20px 32px; background: #f9f9f9; border-top: 1px solid #e5e5e5;">
+                            <p style="margin: 0; font-size: 12px; color: #999; text-align: center;">
+                                This email was sent by <t t-out="object.user_id.company_id.name or 'Appointment System'"/>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+
+    <!-- Booking Reminder Email -->
+    <record id="mail_template_booking_reminder" model="mail.template">
+        <field name="name">Appointment: Reminder</field>
+        <field name="model_id" ref="model_appointment_booking"/>
+        <field name="subject">Reminder: {{ object.appointment_type_id.name }} starts soon</field>
+        <field name="email_from">{{ (object.user_id.company_id.email_formatted or 'apps@mysourcedigitalmarketing.net') }}</field>
+        <field name="reply_to">{{ object.user_id.email }}</field>
+        <field name="email_to">{{ object.invitee_email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #f5f5f5; width: 100%;">
+        <tr>
+            <td align="center">
+                <table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color: white; border-radius: 8px; overflow: hidden; margin: 20px 0;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 32px; text-align: center;">
+                            <h1 style="color: white; margin: 0; font-size: 22px; font-weight: 600;">⏰ Appointment Reminder</h1>
+                            <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0; font-size: 15px;">Your appointment is coming up soon!</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 32px;">
+                            <p style="font-size: 16px; color: #1a1a1a; margin: 0 0 24px;">
+                                Hi <t t-out="object.invitee_name or 'there'"/>,
+                            </p>
+                            <p style="font-size: 16px; color: #1a1a1a; margin: 0 0 24px;">
+                                This is a friendly reminder about your upcoming appointment:
+                            </p>
+                            
+                            <div style="background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+                                <h3 style="margin: 0 0 12px; font-size: 18px; color: #1a1a1a;"><t t-out="object.appointment_type_id.name"/></h3>
+                                <p style="margin: 0 0 8px; font-size: 15px; color: #666;">
+                                    📅 <t t-out="format_datetime(object.start, dt_format='EEEE, MMMM d, y', tz=object.timezone)"/>
+                                </p>
+                                <p style="margin: 0 0 8px; font-size: 15px; color: #666;">
+                                    ⏰ <t t-out="format_time(object.start, time_format='short', tz=object.timezone)"/> - <t t-out="format_time(object.stop, time_format='short', tz=object.timezone)"/> (<t t-out="object.timezone"/>)
+                                </p>
+                                <p style="margin: 0; font-size: 15px; color: #666;">
+                                    👤 With <t t-out="object.user_id.name"/>
+                                </p>
+                            </div>
+                            
+                            <t t-if="object.location_type == 'online' and object.video_link">
+                                <div style="text-align: center;">
+                                    <a t-att-href="object.video_link" style="display: inline-block; background: #0069ff; color: white; padding: 14px 32px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 15px;">
+                                        Join Video Call
+                                    </a>
+                                </div>
+                            </t>
+                            <t t-elif="object.location">
+                                <div style="background: #f3f4f6; border-radius: 8px; padding: 16px; text-align: center;">
+                                    <p style="margin: 0; font-size: 14px; color: #666;">
+                                        📍 Location: <strong><t t-out="object.location"/></strong>
+                                    </p>
+                                </div>
+                            </t>
+                        </td>
+                    </tr>
+                    
+                    <!-- Actions -->
+                    <tr>
+                        <td style="padding: 0 32px 32px;">
+                            <div style="background: #f9f9f9; border-radius: 8px; padding: 16px; text-align: center;">
+                                <p style="margin: 0 0 8px; font-size: 13px; color: #666;">Need to make changes?</p>
+                                <a t-att-href="object.reschedule_url" style="color: #0069ff; text-decoration: none; font-size: 13px; margin-right: 12px;">Reschedule</a>
+                                <a t-att-href="object.cancel_url" style="color: #666; text-decoration: none; font-size: 13px;">Cancel</a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+
+    <!-- Booking Cancellation Email -->
+    <record id="mail_template_booking_cancellation" model="mail.template">
+        <field name="name">Appointment: Cancellation</field>
+        <field name="model_id" ref="model_appointment_booking"/>
+        <field name="subject">Cancelled: {{ object.appointment_type_id.name }}</field>
+        <field name="email_from">{{ (object.user_id.company_id.email_formatted or 'apps@mysourcedigitalmarketing.net') }}</field>
+        <field name="reply_to">{{ object.user_id.email }}</field>
+        <field name="email_to">{{ object.invitee_email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #f5f5f5; width: 100%;">
+        <tr>
+            <td align="center">
+                <table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color: white; border-radius: 8px; overflow: hidden; margin: 20px 0;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); padding: 32px; text-align: center;">
+                            <h1 style="color: white; margin: 0; font-size: 22px; font-weight: 600;">Appointment Cancelled</h1>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 32px;">
+                            <p style="font-size: 16px; color: #1a1a1a; margin: 0 0 24px;">
+                                Hi <t t-out="object.invitee_name or 'there'"/>,
+                            </p>
+                            <p style="font-size: 16px; color: #1a1a1a; margin: 0 0 24px;">
+                                The following appointment has been cancelled:
+                            </p>
+                            
+                            <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+                                <h3 style="margin: 0 0 12px; font-size: 18px; color: #991b1b; text-decoration: line-through;"><t t-out="object.appointment_type_id.name"/></h3>
+                                <p style="margin: 0 0 8px; font-size: 15px; color: #666;">
+                                    📅 <t t-out="format_datetime(object.start, dt_format='EEEE, MMMM d, y', tz=object.timezone)"/>
+                                </p>
+                                <p style="margin: 0; font-size: 15px; color: #666;">
+                                    ⏰ <t t-out="format_time(object.start, time_format='short', tz=object.timezone)"/> (<t t-out="object.timezone"/>)
+                                </p>
+                            </div>
+                            
+                            <t t-if="object.cancel_reason">
+                                <div style="background: #f9f9f9; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+                                    <p style="margin: 0; font-size: 14px; color: #666;">
+                                        <strong>Reason:</strong> <t t-out="object.cancel_reason"/>
+                                    </p>
+                                </div>
+                            </t>
+                            
+                            <div style="text-align: center;">
+                                <a t-att-href="object.appointment_type_id.public_url" style="display: inline-block; background: #0069ff; color: white; padding: 14px 32px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 15px;">
+                                    Schedule a New Time
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+
+    <!-- Booking Reschedule Email -->
+    <record id="mail_template_booking_reschedule" model="mail.template">
+        <field name="name">Appointment: Rescheduled</field>
+        <field name="model_id" ref="model_appointment_booking"/>
+        <field name="subject">Rescheduled: {{ object.appointment_type_id.name }}</field>
+        <field name="email_from">{{ (object.user_id.company_id.email_formatted or 'apps@mysourcedigitalmarketing.net') }}</field>
+        <field name="reply_to">{{ object.user_id.email }}</field>
+        <field name="email_to">{{ object.invitee_email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #f5f5f5; width: 100%;">
+        <tr>
+            <td align="center">
+                <table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color: white; border-radius: 8px; overflow: hidden; margin: 20px 0;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #0069ff 0%, #0050c8 100%); padding: 40px 32px; text-align: center;">
+                            <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%; margin: 0 auto 16px; display: inline-flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 30px; color: white;">🔄</span>
+                            </div>
+                            <h1 style="color: white; margin: 0 0 8px; font-size: 24px; font-weight: 600;">Appointment Rescheduled</h1>
+                            <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 15px;">Your appointment has been moved to a new time.</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- New Time -->
+                    <tr>
+                        <td style="padding: 32px;">
+                            <h2 style="margin: 0 0 20px; font-size: 18px; color: #1a1a1a;">New Appointment Time</h2>
+                            
+                            <div style="background: #e8f4ff; border: 1px solid #93c5fd; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+                                <h3 style="margin: 0 0 12px; font-size: 18px; color: #1a1a1a;"><t t-out="object.appointment_type_id.name"/></h3>
+                                <p style="margin: 0 0 8px; font-size: 15px; color: #0069ff; font-weight: 500;">
+                                    📅 <t t-out="format_datetime(object.start, dt_format='EEEE, MMMM d, y', tz=object.timezone)"/>
+                                </p>
+                                <p style="margin: 0 0 8px; font-size: 15px; color: #0069ff; font-weight: 500;">
+                                    ⏰ <t t-out="format_time(object.start, time_format='short', tz=object.timezone)"/> - <t t-out="format_time(object.stop, time_format='short', tz=object.timezone)"/> (<t t-out="object.timezone"/>)
+                                </p>
+                                <p style="margin: 0; font-size: 15px; color: #666;">
+                                    👤 With <t t-out="object.user_id.name"/>
+                                </p>
+                                <p style="margin: 8px 0 0; font-size: 14px; color: #666;">
+                                    ⏱ <t t-out="object.appointment_type_id.duration_display"/>
+                                </p>
+                            </div>
+                            
+                            <t t-if="object.location_type == 'online' and object.video_link">
+                                <div style="text-align: center;">
+                                    <a t-att-href="object.video_link" style="display: inline-block; background: #0069ff; color: white; padding: 14px 32px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 15px;">
+                                        Join Video Call
+                                    </a>
+                                </div>
+                            </t>
+                            
+                            <!-- Actions -->
+                            <div style="background: #f9f9f9; border-radius: 8px; padding: 16px; text-align: center; margin-top: 24px;">
+                                <p style="margin: 0 0 8px; font-size: 13px; color: #666;">Need to make more changes?</p>
+                                <a t-att-href="object.reschedule_url" style="color: #0069ff; text-decoration: none; font-size: 13px; margin-right: 12px;">Reschedule Again</a>
+                                <a t-att-href="object.cancel_url" style="color: #666; text-decoration: none; font-size: 13px;">Cancel</a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+
+    <!-- Invite Email -->
+    <record id="mail_template_invite" model="mail.template">
+        <field name="name">Appointment: Invitation</field>
+        <field name="model_id" ref="model_appointment_invite"/>
+        <field name="subject">{{ object.user_id.name }} has invited you to schedule an appointment</field>
+        <field name="email_from">{{ (object.user_id.company_id.email_formatted or 'apps@mysourcedigitalmarketing.net') }}</field>
+        <field name="reply_to">{{ object.user_id.email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #f5f5f5; width: 100%;">
+        <tr>
+            <td align="center">
+                <table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color: white; border-radius: 8px; overflow: hidden; margin: 20px 0;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #0069ff 0%, #0050c8 100%); padding: 40px 32px; text-align: center;">
+                            <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%; margin: 0 auto 16px; display: inline-flex; align-items: center; justify-content: center;">
+                                <span style="font-size: 30px; color: white;">📨</span>
+                            </div>
+                            <h1 style="color: white; margin: 0 0 8px; font-size: 24px; font-weight: 600;">You're Invited!</h1>
+                            <p style="color: rgba(255,255,255,0.9); margin: 0; font-size: 15px;"><t t-out="object.user_id.name"/> would like to schedule time with you.</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 32px; text-align: center;">
+                            <p style="font-size: 16px; color: #666; margin: 0 0 24px;">
+                                Click the button below to select a time that works for you.
+                            </p>
+                            
+                            <a t-att-href="object.invite_url" style="display: inline-block; background: #0069ff; color: white; padding: 16px 40px; border-radius: 40px; text-decoration: none; font-weight: 600; font-size: 16px;">
+                                Schedule Now
+                            </a>
+                            
+                            <t t-if="object.expires_at">
+                                <p style="font-size: 13px; color: #999; margin: 24px 0 0;">
+                                    This invitation expires on <t t-out="format_date(object.expires_at, date_format='MMMM d, y')"/>.
+                                </p>
+                            </t>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+
+    <!-- Host Notification Email -->
+    <record id="mail_template_host_notification" model="mail.template">
+        <field name="name">Appointment: New Booking (Host Notification)</field>
+        <field name="model_id" ref="model_appointment_booking"/>
+        <field name="subject">New Booking: {{ object.appointment_type_id.name }} with {{ object.invitee_name }}</field>
+        <field name="email_from">{{ (object.user_id.company_id.email_formatted or 'apps@mysourcedigitalmarketing.net') }}</field>
+        <field name="email_to">{{ object.user_id.email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #f5f5f5; width: 100%;">
+        <tr>
+            <td align="center">
+                <table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color: white; border-radius: 8px; overflow: hidden; margin: 20px 0;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 24px 32px; text-align: center;">
+                            <h1 style="color: white; margin: 0; font-size: 20px; font-weight: 600;">📅 New Appointment Booked</h1>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 32px;">
+                            <p style="font-size: 16px; color: #1a1a1a; margin: 0 0 20px;">
+                                <strong><t t-out="object.invitee_name"/></strong> has booked an appointment with you.
+                            </p>
+                            
+                            <div style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                                <h3 style="margin: 0 0 12px; font-size: 17px; color: #1a1a1a;"><t t-out="object.appointment_type_id.name"/></h3>
+                                <p style="margin: 0 0 6px; font-size: 14px; color: #666;">
+                                    📅 <t t-out="format_datetime(object.start, dt_format='EEEE, MMMM d, y \'at\' h:mm a', tz=object.user_id.tz or 'UTC')"/>
+                                </p>
+                                <p style="margin: 0 0 6px; font-size: 14px; color: #666;">
+                                    ⏱ <t t-out="object.appointment_type_id.duration_display"/>
+                                </p>
+                                <p style="margin: 0 0 6px; font-size: 14px; color: #666;">
+                                    📧 <t t-out="object.invitee_email"/>
+                                </p>
+                                <t t-if="object.invitee_phone">
+                                    <p style="margin: 0; font-size: 14px; color: #666;">
+                                        📞 <t t-out="object.invitee_phone"/>
+                                    </p>
+                                </t>
+                            </div>
+                            
+                            <t t-if="object.notes">
+                                <div style="background: #f9f9f9; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                                    <p style="margin: 0; font-size: 14px; color: #666;">
+                                        <strong>Notes from invitee:</strong><br/>
+                                        <t t-out="object.notes"/>
+                                    </p>
+                                </div>
+                            </t>
+                            
+                            <div style="text-align: center;">
+                                <a t-attf-href="{{ object.get_base_url() }}/web#id={{ object.id }}&amp;model=appointment.booking&amp;view_type=form" style="display: inline-block; background: #0069ff; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 14px;">
+                                    View Booking Details
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+
+    <!-- Follow-up Email -->
+    <record id="mail_template_booking_followup" model="mail.template">
+        <field name="name">Appointment: Follow-up</field>
+        <field name="model_id" ref="model_appointment_booking"/>
+        <field name="subject">Thank you for meeting with {{ object.user_id.name }}</field>
+        <field name="email_from">{{ (object.user_id.company_id.email_formatted or 'apps@mysourcedigitalmarketing.net') }}</field>
+        <field name="reply_to">{{ object.user_id.email }}</field>
+        <field name="email_to">{{ object.invitee_email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #f5f5f5; width: 100%;">
+        <tr>
+            <td align="center">
+                <table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color: white; border-radius: 8px; overflow: hidden; margin: 20px 0;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); padding: 32px; text-align: center;">
+                            <h1 style="color: white; margin: 0; font-size: 22px; font-weight: 600;">Thank You! 🙏</h1>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 32px;">
+                            <p style="font-size: 16px; color: #1a1a1a; margin: 0 0 24px;">
+                                Hi <t t-out="object.invitee_name or 'there'"/>,
+                            </p>
+                            <p style="font-size: 16px; color: #1a1a1a; margin: 0 0 24px;">
+                                Thank you for taking the time to meet with <t t-out="object.user_id.name"/>. We hope the meeting was valuable!
+                            </p>
+                            
+                            <div style="background: #f3f4f6; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+                                <h3 style="margin: 0 0 8px; font-size: 16px; color: #1a1a1a;">Meeting Summary</h3>
+                                <p style="margin: 0 0 4px; font-size: 14px; color: #666;">
+                                    <strong><t t-out="object.appointment_type_id.name"/></strong>
+                                </p>
+                                <p style="margin: 0; font-size: 14px; color: #666;">
+                                    <t t-out="format_datetime(object.start, dt_format='EEEE, MMMM d, y', tz=object.timezone)"/>
+                                </p>
+                            </div>
+                            
+                            <div style="text-align: center;">
+                                <p style="font-size: 14px; color: #666; margin: 0 0 16px;">Need to schedule another meeting?</p>
+                                <a t-att-href="object.appointment_type_id.public_url" style="display: inline-block; background: #0069ff; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 500; font-size: 14px;">
+                                    Book Another Appointment
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+
+    <!-- Host Cancellation Notification -->
+    <record id="mail_template_host_cancellation" model="mail.template">
+        <field name="name">Appointment: Cancellation (Host Notification)</field>
+        <field name="model_id" ref="model_appointment_booking"/>
+        <field name="subject">Cancelled: {{ object.appointment_type_id.name }} with {{ object.invitee_name }}</field>
+        <field name="email_from">{{ (object.user_id.company_id.email_formatted or 'apps@mysourcedigitalmarketing.net') }}</field>
+        <field name="email_to">{{ object.user_id.email }}</field>
+        <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+    <table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #f5f5f5; width: 100%;">
+        <tr>
+            <td align="center">
+                <table border="0" cellpadding="0" cellspacing="0" width="590" style="background-color: white; border-radius: 8px; overflow: hidden; margin: 20px 0;">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: #6b7280; padding: 24px 32px; text-align: center;">
+                            <h1 style="color: white; margin: 0; font-size: 20px; font-weight: 600;">Appointment Cancelled</h1>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 32px;">
+                            <p style="font-size: 16px; color: #1a1a1a; margin: 0 0 20px;">
+                                <strong><t t-out="object.invitee_name"/></strong> has cancelled their appointment with you.
+                            </p>
+                            
+                            <div style="background: #f9f9f9; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                                <h3 style="margin: 0 0 12px; font-size: 17px; color: #666; text-decoration: line-through;"><t t-out="object.appointment_type_id.name"/></h3>
+                                <p style="margin: 0 0 6px; font-size: 14px; color: #666;">
+                                    📅 <t t-out="format_datetime(object.start, dt_format='EEEE, MMMM d, y \'at\' h:mm a', tz=object.user_id.tz or 'UTC')"/>
+                                </p>
+                            </div>
+                            
+                            <t t-if="object.cancel_reason">
+                                <div style="background: #fef2f2; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                                    <p style="margin: 0; font-size: 14px; color: #666;">
+                                        <strong>Reason:</strong> <t t-out="object.cancel_reason"/>
+                                    </p>
+                                </div>
+                            </t>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</field>
+        <field name="auto_delete" eval="False"/>
+    </record>
+</odoo>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="ringcentral_webrtc.SoftphoneWidget">
+        <div class="rc-softphone" t-att-class="{ 'expanded': state.expanded, 'in-call': callState.inCall }">
+            <!-- Collapsed View -->
+            <div class="rc-softphone-toggle" t-on-click="toggleExpand">
+                <i class="fa fa-phone"></i>
+                <span t-if="callState.inCall" class="rc-call-indicator pulse"></span>
+            </div>
+            
+            <!-- Expanded View -->
+            <div class="rc-softphone-panel" t-if="state.expanded">
+                <div class="rc-softphone-header">
+                    <span>Softphone</span>
+                    <button class="btn btn-sm" t-on-click="toggleExpand">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                
+                <!-- Not in Call -->
+                <div t-if="!callState.inCall" class="rc-softphone-body">
+                    <div class="rc-phone-display">
+                        <input type="text" 
+                               class="form-control"
+                               t-model="state.phoneNumber"
+                               placeholder="Enter number"/>
+                    </div>
+                    
+                    <!-- Dialpad -->
+                    <div class="rc-dialpad" t-if="state.dialpadVisible">
+                        <t t-foreach="['1','2','3','4','5','6','7','8','9','*','0','#']" t-as="key" t-key="key">
+                            <button class="rc-dialpad-key" t-on-click="() => this.onDialpadKey(key)">
+                                <t t-esc="key"/>
+                            </button>
+                        </t>
+                    </div>
+                    
+                    <div class="rc-softphone-actions">
+                        <button class="btn btn-sm btn-secondary" t-on-click="toggleDialpad">
+                            <i class="fa fa-th"></i>
+                        </button>
+                        <button class="btn btn-success rc-call-btn" t-on-click="onCall" t-att-disabled="!state.phoneNumber">
+                            <i class="fa fa-phone"></i>
+                        </button>
+                        <button class="btn btn-sm btn-secondary" t-on-click="onBackspace">
+                            <i class="fa fa-backspace"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- In Call -->
+                <div t-if="callState.inCall" class="rc-softphone-body rc-in-call">
+                    <div class="rc-call-info">
+                        <div class="rc-caller-name" t-esc="callState.callerName || state.phoneNumber"/>
+                        <div class="rc-call-status">
+                            <span t-if="callState.callState === 'ringing'" class="badge bg-warning">Ringing...</span>
+                            <span t-if="callState.callState === 'answered'" class="rc-duration" t-esc="formattedDuration"/>
+                            <span t-if="callState.held" class="badge bg-info ms-1">On Hold</span>
+                        </div>
+                    </div>
+                    
+                    <div class="rc-call-controls">
+                        <button class="btn btn-sm" 
+                                t-att-class="{ 'btn-warning': callState.muted, 'btn-secondary': !callState.muted }"
+                                t-on-click="onMute">
+                            <i t-att-class="callState.muted ? 'fa fa-microphone-slash' : 'fa fa-microphone'"></i>
+                        </button>
+                        <button class="btn btn-sm"
+                                t-att-class="{ 'btn-info': callState.held, 'btn-secondary': !callState.held }"
+                                t-on-click="onHold">
+                            <i class="fa fa-pause"></i>
+                        </button>
+                        <button class="btn btn-sm btn-secondary" t-on-click="toggleDialpad">
+                            <i class="fa fa-th"></i>
+                        </button>
+                        <button class="btn btn-danger rc-hangup-btn" t-on-click="onHangUp">
+                            <i class="fa fa-phone" style="transform: rotate(135deg);"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- In-call Dialpad -->
+                    <div class="rc-dialpad" t-if="state.dialpadVisible">
+                        <t t-foreach="['1','2','3','4','5','6','7','8','9','*','0','#']" t-as="key" t-key="key">
+                            <button class="rc-dialpad-key" t-on-click="() => this.onDialpadKey(key)">
+                                <t t-esc="key"/>
+                            </button>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

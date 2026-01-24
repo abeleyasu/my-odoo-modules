@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Error Page: No Users Assigned -->
+    <template id="appointment_no_users" name="Appointment - No Users Assigned">
+        <t t-call="alkez_appointment.appointment_layout">
+            <div class="calendly-booking-wrapper">
+                <div class="calendly-card" style="max-width: 600px; text-align: center; padding: 60px 40px;">
+                    <!-- Error Icon -->
+                    <div style="margin-bottom: 24px;">
+                        <i class="fa fa-exclamation-triangle" style="font-size: 64px; color: #f59e0b;"></i>
+                    </div>
+
+                    <!-- Header -->
+                    <h1 style="color: #1a1a1a; font-size: 28px; font-weight: 600; margin-bottom: 16px;">
+                        Configuration Required
+                    </h1>
+                    
+                    <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 32px;">
+                        This appointment type is not yet available for booking. 
+                        <span t-if="error" t-esc="error"/>
+                        <span t-else="">No team members have been assigned to handle appointments.</span>
+                    </p>
+
+                    <!-- Admin Note (only shown to logged-in users) -->
+                    <t t-if="request.env.user.id != request.env.ref('base.public_user').id">
+                        <div style="background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: 20px; margin-bottom: 24px; text-align: left;">
+                            <h4 style="color: #92400e; font-size: 14px; font-weight: 600; margin: 0 0 8px 0;">
+                                <i class="fa fa-info-circle"></i> For Administrators:
+                            </h4>
+                            <p style="color: #92400e; font-size: 14px; margin: 0;">
+                                To activate this appointment type, please:
+                                <br/>1. Go to the appointment type settings
+                                <br/>2. Assign at least one team member
+                                <br/>3. Ensure the team member has an appointment slug configured
+                            </p>
+                        </div>
+                        
+                        <a t-attf-href="/odoo/action-#{request.env.ref('alkez_appointment.appointment_type_action').id}?active_id=#{appointment_type.id}" 
+                           class="btn btn-primary">
+                            <i class="fa fa-cog"></i> Configure Appointment Type
+                        </a>
+                    </t>
+                </div>
+                
+                <!-- Footer -->
+                <div class="calendly-footer">
+                    <a href="/" class="footer-link">Return to homepage</a>
+                </div>
+            </div>
+            
+            <!-- Powered By Badge -->
+            <div class="calendly-powered-by">
+                <span>Powered by</span>
+                <strong>MDM team</strong>
+            </div>
+        </t>
+    </template>
+
+    <!-- Error Page: Cannot Reschedule -->
+    <template id="appointment_cannot_reschedule" name="Appointment - Cannot Reschedule">
+        <t t-call="alkez_appointment.appointment_layout">
+            <div class="calendly-booking-wrapper">
+                <div class="calendly-card" style="max-width: 600px; text-align: center; padding: 60px 40px;">
+                    <div style="margin-bottom: 24px;">
+                        <i class="fa fa-calendar-times-o" style="font-size: 64px; color: #ef4444;"></i>
+                    </div>
+
+                    <h1 style="color: #1a1a1a; font-size: 28px; font-weight: 600; margin-bottom: 16px;">
+                        Cannot Reschedule
+                    </h1>
+                    
+                    <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 32px;">
+                        This appointment cannot be rescheduled. This may be because:
+                    </p>
+                    
+                    <ul style="text-align: left; color: #666; font-size: 15px; margin-bottom: 32px;">
+                        <li>The appointment has already passed</li>
+                        <li>It's too close to the appointment time</li>
+                        <li>The appointment has already been cancelled</li>
+                    </ul>
+                    
+                    <t t-if="booking">
+                        <div style="background: #f3f4f6; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+                            <h3 style="margin: 0 0 12px; font-size: 18px; color: #1a1a1a;">
+                                <t t-esc="booking.appointment_type_id.name"/>
+                            </h3>
+                            <p style="margin: 0; font-size: 15px; color: #666;">
+                                Status: <strong t-esc="booking.state.title()"/>
+                            </p>
+                        </div>
+                    </t>
+                    
+                    <a href="/" class="btn btn-primary">
+                        Return to Homepage
+                    </a>
+                </div>
+            </div>
+            
+            <div class="calendly-powered-by">
+                <span>Powered by</span>
+                <strong>MDM team</strong>
+            </div>
+        </t>
+    </template>
+
+    <!-- Error Page: Cannot Cancel -->
+    <template id="appointment_cannot_cancel" name="Appointment - Cannot Cancel">
+        <t t-call="alkez_appointment.appointment_layout">
+            <div class="calendly-booking-wrapper">
+                <div class="calendly-card" style="max-width: 600px; text-align: center; padding: 60px 40px;">
+                    <div style="margin-bottom: 24px;">
+                        <i class="fa fa-ban" style="font-size: 64px; color: #ef4444;"></i>
+                    </div>
+
+                    <h1 style="color: #1a1a1a; font-size: 28px; font-weight: 600; margin-bottom: 16px;">
+                        Cannot Cancel
+                    </h1>
+                    
+                    <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 32px;">
+                        This appointment cannot be cancelled. This may be because:
+                    </p>
+                    
+                    <ul style="text-align: left; color: #666; font-size: 15px; margin-bottom: 32px;">
+                        <li>The appointment has already passed</li>
+                        <li>The appointment is already cancelled</li>
+                        <li>The appointment has already been completed</li>
+                    </ul>
+                    
+                    <t t-if="booking">
+                        <div style="background: #f3f4f6; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+                            <h3 style="margin: 0 0 12px; font-size: 18px; color: #1a1a1a;">
+                                <t t-esc="booking.appointment_type_id.name"/>
+                            </h3>
+                            <p style="margin: 0; font-size: 15px; color: #666;">
+                                Status: <strong t-esc="booking.state.title()"/>
+                            </p>
+                        </div>
+                    </t>
+                    
+                    <a href="/" class="btn btn-primary">
+                        Return to Homepage
+                    </a>
+                </div>
+            </div>
+            
+            <div class="calendly-powered-by">
+                <span>Powered by</span>
+                <strong>MDM team</strong>
+            </div>
+        </t>
+    </template>
+
+    <!-- Error Page: Cancelled Successfully -->
+    <template id="appointment_cancelled" name="Appointment - Cancelled Successfully">
+        <t t-call="alkez_appointment.appointment_layout">
+            <div class="calendly-booking-wrapper">
+                <div class="calendly-card" style="max-width: 600px; text-align: center; padding: 60px 40px;">
+                    <div style="margin-bottom: 24px;">
+                        <i class="fa fa-check-circle" style="font-size: 64px; color: #10b981;"></i>
+                    </div>
+
+                    <h1 style="color: #1a1a1a; font-size: 28px; font-weight: 600; margin-bottom: 16px;">
+                        Appointment Cancelled
+                    </h1>
+                    
+                    <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 32px;">
+                        Your appointment has been successfully cancelled. A confirmation email has been sent.
+                    </p>
+                    
+                    <t t-if="booking">
+                        <div style="background: #fef2f2; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+                            <h3 style="margin: 0 0 8px; font-size: 18px; color: #991b1b; text-decoration: line-through;">
+                                <t t-esc="booking.appointment_type_id.name"/>
+                            </h3>
+                            <p style="margin: 0; font-size: 14px; color: #666;">
+                                <t t-if="booking.start">
+                                    Was scheduled for <t t-esc="booking.start.strftime('%B %d, %Y at %I:%M %p')"/>
+                                </t>
+                            </p>
+                        </div>
+                        
+                        <a t-attf-href="/appointment/#{booking.user_id.appointment_slug}" class="btn btn-primary">
+                            <i class="fa fa-calendar-plus-o"></i> Schedule a New Appointment
+                        </a>
+                    </t>
+                    <t t-else="">
+                        <a href="/" class="btn btn-primary">
+                            Return to Homepage
+                        </a>
+                    </t>
+                </div>
+            </div>
+            
+            <div class="calendly-powered-by">
+                <span>Powered by</span>
+                <strong>MDM team</strong>
+            </div>
+        </t>
+    </template>
+
+    <!-- Error Page: Invite Expired -->
+    <template id="appointment_invite_expired" name="Appointment - Invite Expired">
+        <t t-call="alkez_appointment.appointment_layout">
+            <div class="calendly-booking-wrapper">
+                <div class="calendly-card" style="max-width: 600px; text-align: center; padding: 60px 40px;">
+                    <div style="margin-bottom: 24px;">
+                        <i class="fa fa-clock-o" style="font-size: 64px; color: #f59e0b;"></i>
+                    </div>
+
+                    <h1 style="color: #1a1a1a; font-size: 28px; font-weight: 600; margin-bottom: 16px;">
+                        Invitation Expired
+                    </h1>
+                    
+                    <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 32px;">
+                        This invitation link has expired or is no longer valid. Please contact the sender for a new invitation.
+                    </p>
+                    
+                    <a href="/" class="btn btn-primary">
+                        Return to Homepage
+                    </a>
+                </div>
+            </div>
+            
+            <div class="calendly-powered-by">
+                <span>Powered by</span>
+                <strong>MDM team</strong>
+            </div>
+        </t>
+    </template>
+
+    <!-- Error Page: OAuth Error -->
+    <template id="oauth_error" name="Appointment - OAuth Error">
+        <t t-call="alkez_appointment.appointment_layout">
+            <div class="calendly-booking-wrapper">
+                <div class="calendly-card" style="max-width: 600px; text-align: center; padding: 60px 40px;">
+                    <div style="margin-bottom: 24px;">
+                        <i class="fa fa-exclamation-circle" style="font-size: 64px; color: #ef4444;"></i>
+                    </div>
+
+                    <h1 style="color: #1a1a1a; font-size: 28px; font-weight: 600; margin-bottom: 16px;">
+                        Connection Failed
+                    </h1>
+                    
+                    <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 16px;">
+                        Failed to connect to <strong t-esc="provider or 'external calendar'"/>.
+                    </p>
+                    
+                    <t t-if="error">
+                        <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 16px; margin-bottom: 24px; text-align: left;">
+                            <p style="margin: 0; font-size: 14px; color: #991b1b;">
+                                <strong>Error:</strong> <t t-esc="error"/>
+                            </p>
+                        </div>
+                    </t>
+                    
+                    <a href="/my/appointments" class="btn btn-primary">
+                        Return to Appointments
+                    </a>
+                </div>
+            </div>
+            
+            <div class="calendly-powered-by">
+                <span>Powered by</span>
+                <strong>MDM team</strong>
+            </div>
+        </t>
+    </template>
+
+    <!-- Cancel Confirmation Page -->
+    <template id="appointment_cancel_page" name="Appointment - Cancel Confirmation">
+        <t t-call="alkez_appointment.appointment_layout">
+            <div class="calendly-booking-wrapper">
+                <div class="calendly-card" style="max-width: 600px; text-align: center; padding: 60px 40px;">
+                    <div style="margin-bottom: 24px;">
+                        <i class="fa fa-question-circle" style="font-size: 64px; color: #f59e0b;"></i>
+                    </div>
+
+                    <h1 style="color: #1a1a1a; font-size: 28px; font-weight: 600; margin-bottom: 16px;">
+                        Cancel Appointment?
+                    </h1>
+                    
+                    <p style="color: #666; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">
+                        Are you sure you want to cancel this appointment?
+                    </p>
+                    
+                    <t t-if="booking">
+                        <div style="background: #f3f4f6; border-radius: 8px; padding: 20px; margin-bottom: 24px; text-align: left;">
+                            <h3 style="margin: 0 0 12px; font-size: 18px; color: #1a1a1a;">
+                                <t t-esc="booking.appointment_type_id.name"/>
+                            </h3>
+                            <p style="margin: 0 0 8px; font-size: 15px; color: #666;">
+                                <i class="fa fa-calendar"></i> 
+                                <t t-if="booking.start" t-esc="booking.start.strftime('%A, %B %d, %Y')"/>
+                            </p>
+                            <p style="margin: 0 0 8px; font-size: 15px; color: #666;">
+                                <i class="fa fa-clock-o"></i> 
+                                <t t-if="booking.start" t-esc="booking.start.strftime('%I:%M %p')"/>
+                            </p>
+                            <p style="margin: 0; font-size: 15px; color: #666;">
+                                <i class="fa fa-user"></i> 
+                                With <t t-esc="booking.user_id.name"/>
+                            </p>
+                        </div>
+                        
+                        <form t-attf-action="/appointment/booking/#{booking.id}/cancel/confirm" method="post" style="display: inline;">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" name="token" t-att-value="booking.access_token"/>
+                            
+                            <div style="display: flex; gap: 16px; justify-content: center;">
+                                <a t-attf-href="/appointment/confirmation/#{booking.access_token}" 
+                                   class="btn btn-secondary" style="padding: 12px 24px;">
+                                    Keep Appointment
+                                </a>
+                                <button type="submit" class="btn btn-danger" style="padding: 12px 24px;">
+                                    <i class="fa fa-times"></i> Cancel Appointment
+                                </button>
+                            </div>
+                        </form>
+                    </t>
+                </div>
+            </div>
+            
+            <div class="calendly-powered-by">
+                <span>Powered by</span>
+                <strong>MDM team</strong>
+            </div>
+        </t>
+    </template>
+
+    <!-- Reschedule Page -->
+    <template id="appointment_reschedule_page" name="Appointment - Reschedule">
+        <t t-call="alkez_appointment.appointment_layout">
+            <div class="calendly-booking-wrapper">
+                <!-- Main Card Container -->
+                <div class="calendly-card">
+                    <!-- Left Panel - Event Info -->
+                    <div class="calendly-left-panel">
+                        <a t-attf-href="/appointment/confirmation/#{booking.access_token}" class="calendly-back-btn">
+                            <i class="fa fa-arrow-left"></i> Back
+                        </a>
+                        
+                        <div class="calendly-host-name" t-esc="user.name"/>
+                        <h1 class="calendly-event-title">Reschedule: <t t-esc="appointment_type.name"/></h1>
+                        
+                        <div class="calendly-event-meta">
+                            <div class="meta-row">
+                                <i class="fa fa-clock-o"></i>
+                                <span t-esc="appointment_type.duration_display"/>
+                            </div>
+                        </div>
+                        
+                        <div class="calendly-selected-time" style="margin-top: 24px;">
+                            <p style="font-size: 14px; color: #666; margin: 0;">Currently scheduled:</p>
+                            <p style="font-size: 15px; color: #1a1a1a; font-weight: 500; margin: 4px 0;">
+                                <t t-if="booking.start" t-esc="booking.start.strftime('%A, %B %d, %Y at %I:%M %p')"/>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="calendly-divider"></div>
+                    
+                    <!-- Center Panel - Calendar -->
+                    <div class="calendly-center-panel" id="calendar-panel">
+                        <h2 class="calendly-section-title">Select a New Date &amp; Time</h2>
+                        
+                        <div class="calendly-calendar-container">
+                            <div class="calendly-calendar-nav">
+                                <button type="button" class="nav-arrow prev-month" id="prev-month">
+                                    <i class="fa fa-chevron-left"></i>
+                                </button>
+                                <span class="month-year-display" id="month-year-display">December 2025</span>
+                                <button type="button" class="nav-arrow next-month" id="next-month">
+                                    <i class="fa fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="calendly-weekdays">
+                                <span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span>
+                            </div>
+                            
+                            <div class="calendly-days" id="calendar-days"></div>
+                        </div>
+                        
+                        <div class="calendly-timezone">
+                            <span class="tz-label">Time zone</span>
+                            <div class="tz-selector-wrapper">
+                                <i class="fa fa-globe tz-icon"></i>
+                                <span id="current-timezone" class="tz-display" t-esc="timezone"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Panel - Time Slots -->
+                    <div class="calendly-right-panel" id="timeslots-panel" style="display: none;">
+                        <div class="timeslots-header" id="timeslots-header"></div>
+                        <div class="timeslots-list" id="timeslots-list"></div>
+                    </div>
+                    
+                    <!-- Confirm Panel -->
+                    <div class="calendly-form-panel" id="form-panel" style="display: none;">
+                        <h2 class="calendly-section-title">Confirm New Time</h2>
+                        
+                        <form id="booking-form" method="POST" t-attf-action="/appointment/booking/#{booking.id}/reschedule/confirm">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" name="token" t-att-value="booking.access_token"/>
+                            <input type="hidden" name="datetime" id="selected-datetime-input"/>
+                            <input type="hidden" name="timezone" id="selected-timezone-input"/>
+                            
+                            <div style="background: #e8f4ff; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+                                <p style="margin: 0 0 8px; font-size: 14px; color: #666;">New appointment time:</p>
+                                <p id="new-time-display" style="margin: 0; font-size: 16px; color: #0069ff; font-weight: 600;"></p>
+                            </div>
+                            
+                            <button type="submit" class="calendly-submit-btn">
+                                Confirm Reschedule
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="calendly-powered-by">
+                <span>Powered by</span>
+                <strong>MDM team</strong>
+            </div>
+            
+            <!-- JavaScript Configuration -->
+            <script type="text/javascript">
+                window.appointmentConfig = {
+                    appointmentTypeId: <t t-esc="appointment_type.id"/>,
+                    userId: <t t-esc="user.id"/>,
+                    userSlug: '<t t-esc="user.appointment_slug"/>',
+                    typeSlug: '<t t-esc="appointment_type.slug"/>',
+                    duration: '<t t-esc="appointment_type.duration_display"/>',
+                    durationMinutes: <t t-esc="int(appointment_type.duration * 60)"/>,
+                    minScheduleNotice: <t t-esc="appointment_type.min_schedule_notice"/>,
+                    maxScheduleDays: <t t-esc="appointment_type.max_schedule_days"/>,
+                    isReschedule: true,
+                    bookingId: <t t-esc="booking.id"/>
+                };
+            </script>
+            <script type="text/javascript" src="/alkez_appointment/static/src/js/appointment_public.js"></script>
+        </t>
+    </template>
+</odoo>

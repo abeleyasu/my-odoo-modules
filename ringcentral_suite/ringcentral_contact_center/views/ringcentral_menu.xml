@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_ringcentral_contact_center"
+              name="Contact Center"
+              parent="ringcentral_base.menu_ringcentral_advanced"
+              sequence="30"/>
+    
+    <menuitem id="menu_call_queues"
+              name="Call Queues"
+              parent="menu_ringcentral_contact_center"
+              action="action_call_queue"
+              sequence="10"/>
+    
+    <menuitem id="menu_ivr_menus"
+              name="IVR Menus"
+              parent="menu_ringcentral_contact_center"
+              action="action_ivr_menu"
+              sequence="20"/>
+</odoo>

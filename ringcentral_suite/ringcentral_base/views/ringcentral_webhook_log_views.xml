@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Webhook Log List View -->
+    <record id="view_ringcentral_webhook_log_tree" model="ir.ui.view">
+        <field name="name">ringcentral.webhook.log.tree</field>
+        <field name="model">ringcentral.webhook.log</field>
+        <field name="arch" type="xml">
+            <list string="Webhook Logs" default_order="received_at desc" decoration-danger="status == 'error'" decoration-warning="status == 'pending_retry'" decoration-success="status == 'processed'">
+                <field name="received_at" string="Received"/>
+                <field name="event_type"/>
+                <field name="status"/>
+                <field name="retry_count"/>
+                <field name="next_retry"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Webhook Log Form View -->
+    <record id="view_ringcentral_webhook_log_form" model="ir.ui.view">
+        <field name="name">ringcentral.webhook.log.form</field>
+        <field name="model">ringcentral.webhook.log</field>
+        <field name="arch" type="xml">
+            <form string="Webhook Log" create="0">
+                <header>
+                    <button name="action_retry" string="Retry Now" type="object" class="btn-primary" invisible="status not in ('error', 'failed', 'pending_retry')"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    </div>
+                    <group>
+                        <group string="Event Information">
+                            <field name="event_type"/>
+                            <field name="received_at"/>
+                            <field name="status"/>
+                        </group>
+                        <group string="Processing">
+                            <field name="retry_count"/>
+                            <field name="max_retries"/>
+                            <field name="next_retry"/>
+                            <field name="processed_at"/>
+                            <field name="processing_time"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Event Data">
+                            <field name="event_data" widget="ace" options="{'mode': 'json'}"/>
+                        </page>
+                        <page string="Error Details" invisible="not error_message">
+                            <field name="error_message"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Webhook Log Search View -->
+    <record id="view_ringcentral_webhook_log_search" model="ir.ui.view">
+        <field name="name">ringcentral.webhook.log.search</field>
+        <field name="model">ringcentral.webhook.log</field>
+        <field name="arch" type="xml">
+            <search string="Webhook Logs">
+                <field name="event_type"/>
+                <field name="status"/>
+                <separator/>
+                <filter string="Received" name="received" domain="[('status', '=', 'received')]"/>
+                <filter string="Processed" name="processed" domain="[('status', '=', 'processed')]"/>
+                <filter string="Pending Retry" name="retry" domain="[('status', '=', 'pending_retry')]"/>
+                <filter string="Failed" name="failed" domain="[('status', '=', 'failed')]"/>
+                <filter string="Errors" name="error" domain="[('status', '=', 'error')]"/>
+                <separator/>
+                <filter string="Today" name="today" domain="[('received_at', '&gt;=', (context_today()).strftime('%Y-%m-%d'))]"/>
+                <filter string="Last 7 Days" name="week" domain="[('received_at', '&gt;=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Event Type" name="group_event_type" context="{'group_by': 'event_type'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'create_date:day'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Webhook Log Action -->
+    <record id="action_ringcentral_webhook_log" model="ir.actions.act_window">
+        <field name="name">Webhook Logs</field>
+        <field name="res_model">ringcentral.webhook.log</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_ringcentral_webhook_log_search"/>
+        <field name="context">{'search_default_today': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No webhook events yet
+            </p>
+            <p>
+                Webhook events from RingCentral will appear here when they are received.
+            </p>
+        </field>
+    </record>
+
+    <!-- Add to menu (under Configuration menu) -->
+    <menuitem id="menu_ringcentral_webhook_logs"
+        name="Webhook Logs"
+        parent="ringcentral_base.menu_ringcentral_config"
+        action="action_ringcentral_webhook_log"
+        sequence="20"/>
+
+</odoo>

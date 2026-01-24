@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Fax Tree View -->
+    <record id="ringcentral_fax_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.fax.tree</field>
+        <field name="model">ringcentral.fax</field>
+        <field name="arch" type="xml">
+            <list string="Faxes" default_order="create_date desc"
+                  decoration-success="state in ('sent', 'delivered')"
+                  decoration-warning="state in ('queued', 'sending')"
+                  decoration-danger="state == 'failed'"
+                  decoration-info="direction == 'inbound'">
+                <field name="create_date" string="Date"/>
+                <field name="direction" widget="badge"/>
+                <field name="fax_number"/>
+                <field name="partner_id"/>
+                <field name="page_count"/>
+                <field name="state" widget="badge"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <button name="action_view_fax" type="object" icon="fa-file-pdf-o" title="View" invisible="not fax_content and not content_uri"/>
+                <button name="action_retry_send" type="object" icon="fa-refresh" title="Retry" invisible="state != 'failed'"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Fax Form View -->
+    <record id="ringcentral_fax_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.fax.form</field>
+        <field name="model">ringcentral.fax</field>
+        <field name="arch" type="xml">
+            <form string="Fax">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_send_fax" type="object" string="Send" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_retry_send" type="object" string="Retry" class="btn-warning" invisible="state != 'failed'"/>
+                    <button name="action_view_fax" type="object" string="View Document" invisible="not fax_content and not content_uri"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_fax" type="object" class="oe_stat_button" icon="fa-file-pdf-o" invisible="not fax_content">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">View Fax</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Fax Details">
+                            <field name="direction"/>
+                            <field name="fax_number"/>
+                            <field name="partner_id"/>
+                            <field name="page_count"/>
+                        </group>
+                        <group string="Routing">
+                            <field name="from_number"/>
+                            <field name="to_number"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Outbound Fax Settings -->
+                    <group string="Documents" invisible="direction == 'inbound'">
+                        <field name="attachment_ids" nolabel="1" colspan="2">
+                            <list>
+                                <field name="name"/>
+                                <field name="mimetype"/>
+                            </list>
+                        </field>
+                    </group>
+                    
+                    <group string="Cover Page" invisible="direction == 'inbound'">
+                        <field name="cover_page_id"/>
+                        <field name="cover_page_text" invisible="not cover_page_id"/>
+                    </group>
+                    
+                    <group string="Options" invisible="direction == 'inbound'">
+                        <field name="resolution"/>
+                    </group>
+                    
+                    <!-- Timestamps -->
+                    <group string="Timestamps">
+                        <field name="sent_time" invisible="direction == 'inbound'"/>
+                        <field name="received_time" invisible="direction == 'outbound'"/>
+                    </group>
+                    
+                    <!-- Error -->
+                    <group string="Error" invisible="state != 'failed'">
+                        <field name="error_message" nolabel="1" colspan="2"/>
+                        <field name="retry_count"/>
+                    </group>
+                    
+                    <!-- Technical -->
+                    <group string="Technical" groups="ringcentral_base.group_ringcentral_admin">
+                        <field name="ringcentral_message_id"/>
+                        <field name="content_uri"/>
+                        <field name="res_model"/>
+                        <field name="res_id"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Fax Search View -->
+    <record id="ringcentral_fax_view_search" model="ir.ui.view">
+        <field name="name">ringcentral.fax.search</field>
+        <field name="model">ringcentral.fax</field>
+        <field name="arch" type="xml">
+            <search string="Faxes">
+                <field name="fax_number"/>
+                <field name="partner_id"/>
+                <filter name="filter_outbound" string="Sent" domain="[('direction', '=', 'outbound')]"/>
+                <filter name="filter_inbound" string="Received" domain="[('direction', '=', 'inbound')]"/>
+                <separator/>
+                <filter name="filter_delivered" string="Delivered" domain="[('state', '=', 'delivered')]"/>
+                <filter name="filter_failed" string="Failed" domain="[('state', '=', 'failed')]"/>
+                <separator/>
+                <filter name="filter_today" string="Today" domain="[('create_date', '>=', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="group_direction" string="Direction" context="{'group_by': 'direction'}"/>
+                <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                <filter name="group_partner" string="Contact" context="{'group_by': 'partner_id'}"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Cover Page Views -->
+    <record id="ringcentral_fax_cover_page_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.fax.cover.page.tree</field>
+        <field name="model">ringcentral.fax.cover.page</field>
+        <field name="arch" type="xml">
+            <list string="Cover Pages">
+                <field name="name"/>
+                <field name="header"/>
+                <field name="use_count"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+    
+    <record id="ringcentral_fax_cover_page_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.fax.cover.page.form</field>
+        <field name="model">ringcentral.fax.cover.page</field>
+        <field name="arch" type="xml">
+            <form string="Cover Page Template">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="active"/>
+                    </group>
+                    <group>
+                        <field name="header"/>
+                    </group>
+                    <group string="Content">
+                        <field name="greeting" nolabel="1" colspan="2"/>
+                    </group>
+                    <group string="Footer">
+                        <field name="footer" nolabel="1" colspan="2"/>
+                    </group>
+                    <group string="Options">
+                        <field name="include_date"/>
+                        <field name="include_page_count"/>
+                        <field name="include_from_info"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Actions -->
+    <record id="action_ringcentral_fax" model="ir.actions.act_window">
+        <field name="name">Faxes</field>
+        <field name="res_model">ringcentral.fax</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="ringcentral_fax_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Send your first fax
+            </p>
+        </field>
+    </record>
+    
+    <record id="action_ringcentral_fax_cover_page" model="ir.actions.act_window">
+        <field name="name">Cover Page Templates</field>
+        <field name="res_model">ringcentral.fax.cover.page</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

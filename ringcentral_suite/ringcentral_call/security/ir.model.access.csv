@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ringcentral_call_user,ringcentral.call.user,model_ringcentral_call,ringcentral_base.group_ringcentral_user,1,1,1,0
+access_ringcentral_call_manager,ringcentral.call.manager,model_ringcentral_call,ringcentral_base.group_ringcentral_manager,1,1,1,1
+access_ringcentral_make_call_wizard,ringcentral.make.call.wizard,model_ringcentral_make_call_wizard,ringcentral_base.group_ringcentral_user,1,1,1,1

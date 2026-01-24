@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Meeting Tree View -->
+    <record id="ringcentral_meeting_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.meeting.tree</field>
+        <field name="model">ringcentral.meeting</field>
+        <field name="arch" type="xml">
+            <list string="Meetings" default_order="scheduled_start desc"
+                  decoration-success="state == 'scheduled'"
+                  decoration-info="state == 'started'"
+                  decoration-muted="state in ('ended', 'cancelled')">
+                <field name="name"/>
+                <field name="scheduled_start"/>
+                <field name="duration" string="Duration (min)"/>
+                <field name="host_id" widget="many2one_avatar_user"/>
+                <field name="attendee_count"/>
+                <field name="state" widget="badge"/>
+                <button name="action_join_meeting" type="object" icon="fa-video-camera" title="Join" invisible="not join_url"/>
+                <button name="action_start_meeting" type="object" icon="fa-play" title="Start" invisible="state != 'scheduled'"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Meeting Form View -->
+    <record id="ringcentral_meeting_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.meeting.form</field>
+        <field name="model">ringcentral.meeting</field>
+        <field name="arch" type="xml">
+            <form string="Meeting">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_schedule_meeting" type="object" string="Schedule" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_start_meeting" type="object" string="Start Meeting" class="btn-success" icon="fa-play" invisible="state not in ('draft', 'scheduled')"/>
+                    <button name="action_join_meeting" type="object" string="Join" class="btn-primary" icon="fa-video-camera" invisible="not join_url"/>
+                    <button name="action_end_meeting" type="object" string="End" icon="fa-stop" invisible="state != 'started'"/>
+                    <button name="action_cancel_meeting" type="object" string="Cancel" invisible="state in ('ended', 'cancelled')"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_recordings" type="object" class="oe_stat_button" icon="fa-file-video-o" invisible="recording_count == 0">
+                            <field name="recording_count" widget="statinfo" string="Recordings"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Meeting Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Schedule">
+                            <field name="meeting_type"/>
+                            <field name="scheduled_start"/>
+                            <field name="scheduled_end"/>
+                            <field name="duration"/>
+                        </group>
+                        <group string="Host">
+                            <field name="host_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Join Info -->
+                    <group string="Meeting Details" invisible="not join_url">
+                        <group>
+                            <field name="join_url" widget="url"/>
+                            <field name="dial_in_number"/>
+                        </group>
+                        <group>
+                            <field name="password"/>
+                            <field name="ringcentral_meeting_id"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Settings -->
+                    <group string="Settings">
+                        <group>
+                            <field name="enable_waiting_room"/>
+                            <field name="allow_join_before_host"/>
+                        </group>
+                        <group>
+                            <field name="mute_participants_on_entry"/>
+                            <field name="enable_recording"/>
+                            <field name="auto_record" invisible="not enable_recording"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Attendees -->
+                    <notebook>
+                        <page string="Attendees" name="attendees">
+                            <field name="attendee_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="email"/>
+                                    <field name="phone"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description" nolabel="1"/>
+                        </page>
+                        <page string="Agenda" name="agenda">
+                            <field name="agenda" nolabel="1" placeholder="Meeting agenda..."/>
+                        </page>
+                        <page string="Analytics" name="analytics" invisible="state != 'ended'">
+                            <group>
+                                <field name="actual_start"/>
+                                <field name="actual_end"/>
+                                <field name="participant_count"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Meeting Calendar View -->
+    <record id="ringcentral_meeting_view_calendar" model="ir.ui.view">
+        <field name="name">ringcentral.meeting.calendar</field>
+        <field name="model">ringcentral.meeting</field>
+        <field name="arch" type="xml">
+            <calendar string="Meetings" date_start="scheduled_start" date_stop="scheduled_end" color="host_id" mode="week">
+                <field name="name"/>
+                <field name="host_id" widget="many2one_avatar_user"/>
+            </calendar>
+        </field>
+    </record>
+    
+    <!-- Meeting Search View -->
+    <record id="ringcentral_meeting_view_search" model="ir.ui.view">
+        <field name="name">ringcentral.meeting.search</field>
+        <field name="model">ringcentral.meeting</field>
+        <field name="arch" type="xml">
+            <search string="Meetings">
+                <field name="name"/>
+                <field name="host_id"/>
+                <field name="attendee_ids"/>
+                <filter name="filter_scheduled" string="Scheduled" domain="[('state', '=', 'scheduled')]"/>
+                <filter name="filter_today" string="Today" domain="[('scheduled_start', '>=', context_today().strftime('%Y-%m-%d')), ('scheduled_start', '&lt;', (context_today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_upcoming" string="Upcoming" domain="[('scheduled_start', '>=', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="filter_my" string="My Meetings" domain="[('host_id', '=', uid)]"/>
+                <separator/>
+                <filter name="group_host" string="Host" context="{'group_by': 'host_id'}"/>
+                <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                <filter name="group_date" string="Date" context="{'group_by': 'scheduled_start:day'}"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Action -->
+    <record id="action_ringcentral_meeting" model="ir.actions.act_window">
+        <field name="name">Meetings</field>
+        <field name="res_model">ringcentral.meeting</field>
+        <field name="view_mode">list,calendar,form</field>
+        <field name="search_view_id" ref="ringcentral_meeting_view_search"/>
+        <field name="context">{'search_default_filter_upcoming': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Schedule your first RingCentral meeting
+            </p>
+        </field>
+    </record>
+    
+</odoo>

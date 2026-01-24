@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Booking Confirmation Page -->
+<odoo>
+    <template id="appointment_confirmation_page" name="Appointment Confirmation">
+        <t t-call="alkez_appointment.appointment_layout">
+            <div class="calendly-confirmation-wrapper">
+                <!-- Success Card -->
+                <div class="calendly-confirmation-card">
+                    <!-- Checkmark Icon -->
+                    <div class="calendly-checkmark">
+                        <i class="fa fa-check-circle"></i>
+                    </div>
+                    
+                    <!-- Confirmation Message -->
+                    <h1 class="confirmation-title">Confirmed</h1>
+                    <p class="confirmation-subtitle">You are scheduled with <strong t-esc="user.name"/>.</p>
+                    
+                    <!-- Booking Details -->
+                    <div class="booking-details">
+                        <!-- Event Title -->
+                        <h2 class="event-title" t-esc="appointment_type.name"/>
+                        
+                        <!-- Event Meta -->
+                        <div class="event-meta">
+                            <div class="meta-row">
+                                <i class="fa fa-clock-o"></i>
+                                <span t-esc="appointment_datetime"/>
+                            </div>
+                            <div class="meta-row">
+                                <i class="fa fa-globe"></i>
+                                <span t-esc="timezone"/>
+                            </div>
+                            <div class="meta-row" t-if="appointment_type.location_type == 'online'">
+                                <i class="fa fa-video-camera"></i>
+                                <span>Web conferencing details provided via email</span>
+                            </div>
+                            <div class="meta-row" t-elif="appointment_type.location_type == 'in_person'">
+                                <i class="fa fa-map-marker"></i>
+                                <span t-esc="appointment_type.location"/>
+                            </div>
+                            <div class="meta-row" t-elif="appointment_type.location_type in ['phone_outgoing', 'phone_incoming']">
+                                <i class="fa fa-phone"></i>
+                                <span>Phone call</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Confirmation Email Notice -->
+                    <p class="email-notice">
+                        A calendar invitation has been sent to your email address.
+                    </p>
+                    
+                    <!-- Action Button -->
+                    <a t-attf-href="/appointment/#{user.appointment_slug}" class="calendly-btn-secondary">
+                        Schedule another event
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Powered By Badge -->
+            <div class="calendly-powered-by">
+                <span>Powered by</span>
+                <strong>MDM team</strong>
+            </div>
+        </t>
+    </template>
+</odoo>

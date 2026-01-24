@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_ringcentral_callback_requests"
+              name="Callback Requests"
+              parent="ringcentral_base.menu_ringcentral_communications"
+              action="action_website_callback_request"
+              sequence="40"/>
+</odoo>

@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal Home Counters -->
+    <template id="portal_my_home_ringcentral" name="Portal My Home : RingCentral" inherit_id="portal.portal_my_home" priority="40">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-if="request.env.user.partner_id.ringcentral_portal_access">
+                <t t-call="portal.portal_docs_entry">
+                    <t t-set="icon" t-value="'fa fa-phone'"/>
+                    <t t-set="title">Communications</t>
+                    <t t-set="text">View your call and SMS history</t>
+                    <t t-set="url" t-value="'/my/calls'"/>
+                    <t t-set="placeholder_count" t-value="'call_count'"/>
+                </t>
+
+                <t t-if="request.env.user.partner_id.ringcentral_can_view_recordings">
+                    <t t-call="portal.portal_docs_entry">
+                        <t t-set="icon" t-value="'fa fa-play-circle'"/>
+                        <t t-set="title">Recordings</t>
+                        <t t-set="text">Play or download your recordings</t>
+                        <t t-set="url" t-value="'/my/recordings'"/>
+                        <t t-set="placeholder_count" t-value="'recording_count'"/>
+                    </t>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Portal Recording List -->
+    <template id="portal_my_recordings" name="My Recordings">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Recordings</t>
+            </t>
+
+            <t t-if="not recordings">
+                <div class="alert alert-warning" role="alert">
+                    <p>You don't have any recordings yet.</p>
+                </div>
+            </t>
+
+            <t t-if="recordings">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Duration</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="recordings" t-as="rec">
+                                <tr>
+                                    <td>
+                                        <span t-field="rec.recording_date"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="rec.duration_display"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="rec.state" t-attf-class="badge #{rec.state == 'available' and 'bg-success' or 'bg-secondary'}"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <t t-if="rec.state == 'available' and rec.ringcentral_content_uri">
+                                            <a class="btn btn-sm btn-outline-primary" t-attf-href="/ringcentral/recording/#{rec.id}/stream" target="_blank">Play</a>
+                                            <a class="btn btn-sm btn-outline-secondary" t-attf-href="/ringcentral/recording/#{rec.id}/download" target="_blank">Download</a>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+
+            <t t-call="portal.portal_record_pager"/>
+        </t>
+    </template>
+    
+    <!-- Portal Call List -->
+    <template id="portal_my_calls" name="My Calls">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Call History</t>
+            </t>
+            
+            <t t-if="not calls">
+                <div class="alert alert-warning" role="alert">
+                    <p>You don't have any call records yet.</p>
+                </div>
+            </t>
+            
+            <t t-if="calls">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Direction</th>
+                                <th>Duration</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="calls" t-as="call">
+                                <tr>
+                                    <td>
+                                        <span t-field="call.start_time"/>
+                                    </td>
+                                    <td>
+                                        <span t-if="call.direction == 'inbound'" class="badge bg-info">Inbound</span>
+                                        <span t-if="call.direction == 'outbound'" class="badge bg-success">Outbound</span>
+                                    </td>
+                                    <td>
+                                        <t t-esc="int(call.duration // 60)"/>m <t t-esc="int(call.duration % 60)"/>s
+                                    </td>
+                                    <td>
+                                        <span t-field="call.state" t-attf-class="badge #{call.state == 'ended' and 'bg-success' or 'bg-secondary'}"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+            
+            <t t-call="portal.portal_record_pager"/>
+        </t>
+    </template>
+    
+    <!-- Portal SMS List -->
+    <template id="portal_my_sms" name="My SMS">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">SMS History</t>
+            </t>
+            
+            <t t-if="not messages">
+                <div class="alert alert-warning" role="alert">
+                    <p>You don't have any SMS records yet.</p>
+                </div>
+            </t>
+            
+            <t t-if="messages">
+                <div class="list-group">
+                    <t t-foreach="messages" t-as="sms">
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">
+                                    <span t-if="sms.direction == 'inbound'" class="badge bg-info me-2">Received</span>
+                                    <span t-if="sms.direction == 'outbound'" class="badge bg-success me-2">Sent</span>
+                                </h6>
+                                <small t-field="sms.message_date"/>
+                            </div>
+                            <p class="mb-1" t-field="sms.body"/>
+                        </div>
+                    </t>
+                </div>
+            </t>
+            
+            <t t-call="portal.portal_record_pager"/>
+        </t>
+    </template>
+    
+    <!-- Portal Voicemail List -->
+    <template id="portal_my_voicemails" name="My Voicemails">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Voicemail History</t>
+            </t>
+            
+            <t t-if="not voicemails">
+                <div class="alert alert-warning" role="alert">
+                    <p>You don't have any voicemail records yet.</p>
+                </div>
+            </t>
+            
+            <t t-if="voicemails">
+                <div class="list-group">
+                    <t t-foreach="voicemails" t-as="vm">
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">
+                                    Voicemail - <span t-field="vm.duration"/>s
+                                </h6>
+                                <small t-field="vm.received_date"/>
+                            </div>
+                            <p t-if="vm.transcription" class="mb-1 text-muted">
+                                <i class="fa fa-quote-left"></i>
+                                <span t-field="vm.transcription"/>
+                                <i class="fa fa-quote-right"></i>
+                            </p>
+                        </div>
+                    </t>
+                </div>
+            </t>
+            
+            <t t-call="portal.portal_record_pager"/>
+        </t>
+    </template>
+    
+    <!-- Communication Preferences -->
+    <template id="portal_communication_preferences" name="Communication Preferences">
+        <t t-call="portal.portal_layout">
+            <div class="row">
+                <div class="col-12">
+                    <h3>Communication Preferences</h3>
+                    
+                    <t t-if="request.params.get('saved')">
+                        <div class="alert alert-success" role="alert">
+                            Your preferences have been saved successfully.
+                        </div>
+                    </t>
+                    
+                    <form action="/my/communication-preferences/save" method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h5>Contact Preferences</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Preferred Contact Method</label>
+                                    <select name="preferred_contact" class="form-control">
+                                        <option value="any" t-att-selected="partner.ringcentral_preferred_contact == 'any'">Any Method</option>
+                                        <option value="phone" t-att-selected="partner.ringcentral_preferred_contact == 'phone'">Phone Call</option>
+                                        <option value="sms" t-att-selected="partner.ringcentral_preferred_contact == 'sms'">SMS/Text</option>
+                                        <option value="email" t-att-selected="partner.ringcentral_preferred_contact == 'email'">Email</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Preferred Call Time</label>
+                                    <select name="preferred_time" class="form-control">
+                                        <option value="any" t-att-selected="partner.ringcentral_preferred_time == 'any'">Any Time</option>
+                                        <option value="morning" t-att-selected="partner.ringcentral_preferred_time == 'morning'">Morning (9am - 12pm)</option>
+                                        <option value="afternoon" t-att-selected="partner.ringcentral_preferred_time == 'afternoon'">Afternoon (12pm - 5pm)</option>
+                                        <option value="evening" t-att-selected="partner.ringcentral_preferred_time == 'evening'">Evening (5pm - 8pm)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h5>Opt-Out Preferences</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-check mb-2">
+                                    <input type="checkbox" class="form-check-input" name="do_not_call" id="do_not_call"
+                                           t-att-checked="partner.ringcentral_do_not_call"/>
+                                    <label class="form-check-label" for="do_not_call">Do Not Call</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" name="do_not_sms" id="do_not_sms"
+                                           t-att-checked="partner.ringcentral_do_not_sms"/>
+                                    <label class="form-check-label" for="do_not_sms">Do Not Send SMS</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Save Preferences</button>
+                    </form>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

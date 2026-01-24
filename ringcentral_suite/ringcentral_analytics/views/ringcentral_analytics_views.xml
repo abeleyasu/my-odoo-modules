@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Analytics Dashboard Pivot View -->
+    <record id="ringcentral_analytics_dashboard_view_pivot" model="ir.ui.view">
+        <field name="name">ringcentral.analytics.dashboard.pivot</field>
+        <field name="model">ringcentral.analytics.dashboard</field>
+        <field name="arch" type="xml">
+            <pivot string="Communication Analytics">
+                <field name="date" type="row" interval="day"/>
+                <field name="user_id" type="row"/>
+                <field name="total_calls" type="measure"/>
+                <field name="inbound_calls" type="measure"/>
+                <field name="outbound_calls" type="measure"/>
+                <field name="answered_calls" type="measure"/>
+                <field name="missed_calls" type="measure"/>
+                <field name="avg_duration" type="measure"/>
+                <field name="answer_rate" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- Analytics Dashboard Graph View -->
+    <record id="ringcentral_analytics_dashboard_view_graph" model="ir.ui.view">
+        <field name="name">ringcentral.analytics.dashboard.graph</field>
+        <field name="model">ringcentral.analytics.dashboard</field>
+        <field name="arch" type="xml">
+            <graph string="Communication Analytics" type="bar">
+                <field name="date" type="row" interval="day"/>
+                <field name="total_calls" type="measure"/>
+                <field name="answered_calls" type="measure"/>
+                <field name="missed_calls" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Analytics Dashboard Search View -->
+    <record id="ringcentral_analytics_dashboard_view_search" model="ir.ui.view">
+        <field name="name">ringcentral.analytics.dashboard.search</field>
+        <field name="model">ringcentral.analytics.dashboard</field>
+        <field name="arch" type="xml">
+            <search string="Analytics">
+                <field name="user_id"/>
+                <field name="partner_id"/>
+                <filter name="filter_today" string="Today" domain="[('date', '=', context_today())]"/>
+                <filter name="filter_week" string="This Week" domain="[('date', '&gt;=', (context_today() - datetime.timedelta(days=7)))]"/>
+                <filter name="filter_month" string="This Month" domain="[('date', '&gt;=', time.strftime('%Y-%m-01'))]"/>
+                <separator/>
+                <filter name="group_user" string="User" context="{'group_by': 'user_id'}"/>
+                <filter name="group_date_day" string="Day" context="{'group_by': 'date:day'}"/>
+                <filter name="group_date_week" string="Week" context="{'group_by': 'date:week'}"/>
+                <filter name="group_date_month" string="Month" context="{'group_by': 'date:month'}"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Action -->
+    <record id="action_ringcentral_analytics_dashboard" model="ir.actions.act_window">
+        <field name="name">Analytics Dashboard</field>
+        <field name="res_model">ringcentral.analytics.dashboard</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="search_view_id" ref="ringcentral_analytics_dashboard_view_search"/>
+        <field name="context">{'search_default_filter_month': 1}</field>
+    </record>
+</odoo>

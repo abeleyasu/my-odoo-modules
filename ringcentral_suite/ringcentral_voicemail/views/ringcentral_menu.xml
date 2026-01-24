@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_ringcentral_voicemail"
+              name="Voicemail"
+              parent="ringcentral_base.menu_ringcentral_communications"
+              action="action_ringcentral_voicemail"
+              sequence="12"/>
+</odoo>
