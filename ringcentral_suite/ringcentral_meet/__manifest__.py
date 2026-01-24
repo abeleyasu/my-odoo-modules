@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral Video Meetings',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.0.1',
     'category': 'Phone',
     'summary': 'Video meetings integration with RingCentral',
     'description': """

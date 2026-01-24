@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral Presence',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.0.1',
     'category': 'Phone',
     'summary': 'Real-time user availability and presence management',
     'description': """

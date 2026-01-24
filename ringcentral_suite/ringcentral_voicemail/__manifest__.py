@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral Voicemail',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.0.1',
     'category': 'Phone',
     'summary': 'Visual voicemail with transcription',
     'description': """
