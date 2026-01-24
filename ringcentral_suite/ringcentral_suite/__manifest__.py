@@ -3,7 +3,7 @@
 # License OPL-1 (Odoo Proprietary License v1.0)
 {
     'name': 'RingCentral Suite - Complete Business Communications',
-    'version': '18.0.1.0.2',
+    'version': '17.0.1.0.2',
     'category': 'Phone/Telephony',
     'summary': 'Complete RingCentral integration: Voice Calls, SMS, WebRTC Softphone, Call Recording, AI Transcription, CRM, Voicemail, Fax & more',
     'author': 'Abel Eyasu',
