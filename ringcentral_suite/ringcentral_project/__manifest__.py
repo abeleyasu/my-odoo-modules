@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral Project',
-    'version': '18.0.1.0.2',
+    'version': '16.0.1.0.2',
     'category': 'Phone',
     'summary': 'Project and timesheet integration',
     'description': """

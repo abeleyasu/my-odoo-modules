@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral HR Integration',
-    'version': '18.0.1.0.2',
+    'version': '16.0.1.0.2',
     'category': 'Human Resources/Phone',
     'summary': 'RingCentral integration for HR module',
     'description': """

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral Contact Center',
-    'version': '18.0.1.0.2',
+    'version': '16.0.1.0.2',
     'category': 'Phone',
     'summary': 'Contact center features - ACD, IVR, queues',
     'description': """

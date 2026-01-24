@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="600" viewBox="0 0 1600 600" role="img" aria-label="RingCentral Call">
+  <defs>
+    <linearGradient id="rcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF6A00" />
+      <stop offset="50%" stop-color="#EE0000" />
+      <stop offset="100%" stop-color="#FF6A00" />
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="600" fill="url(#rcGrad)" />
+  <circle cx="1250" cy="-50" r="400" fill="rgba(255,255,255,0.08)" />
+  <circle cx="1400" cy="150" r="250" fill="rgba(255,255,255,0.06)" />
+  <text x="120" y="220" font-family="Segoe UI, Arial, sans-serif" font-size="64" font-weight="700" fill="#ffffff">RingCentral Call</text>
+  <text x="120" y="300" font-family="Segoe UI, Arial, sans-serif" font-size="30" fill="rgba(255,255,255,0.9)">Click-to-dial, call control, logging, and CRM-ready calling</text>
+  <rect x="120" y="360" rx="28" ry="28" width="420" height="56" fill="rgba(255,255,255,0.18)" />
+  <text x="150" y="398" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="600" fill="#ffffff">Odoo 18 • RingCentral Suite</text>
+</svg>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral Base',
-    'version': '18.0.1.1.2',
+    'version': '16.0.1.1.2',
     'category': 'Phone',
     'summary': 'RingCentral Integration Base Module - Core SDK and Authentication',
     'description': '''

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral AI',
-    'version': '18.0.1.0.2',
+    'version': '16.0.1.0.2',
     'category': 'Phone',
     'summary': 'AI transcription and sentiment analysis',
     'description': """
