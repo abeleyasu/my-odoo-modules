@@ -82,7 +82,7 @@ class AppointmentPortal(portal.CustomerPortal):
             'filterby': filterby,
         }
         
-        return request.render('appointment.portal_my_appointments', values)
+        return request.render('alkez_appointment.portal_my_appointments', values)
 
     @http.route([
         '/my/appointments/<int:booking_id>'
@@ -103,4 +103,4 @@ class AppointmentPortal(portal.CustomerPortal):
             'page_name': 'appointment_detail',
         }
         
-        return request.render('appointment.portal_appointment_detail', values)
+        return request.render('alkez_appointment.portal_appointment_detail', values)

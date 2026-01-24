@@ -51,7 +51,7 @@ Transform Odoo into a full-featured cloud phone system with RingCentral integrat
 | `ringcentral_recording` | Call recording management |
 | `ringcentral_ai` | AI transcription, sentiment analysis |
 | `ringcentral_voicemail` | Visual voicemail with transcription |
-| `ringcentral_fax` | Digital fax send/receive |
+| `alkez_ringcentral_fax` | Digital fax send/receive |
 | `ringcentral_presence` | User availability and presence |
 | `ringcentral_meet` | Video meetings integration |
 | `ringcentral_portal` | Customer portal |
@@ -109,7 +109,7 @@ pip install ringcentral requests cryptography requests_toolbelt
 
 ## 💰 Pricing
 
-**$250 USD** - One-time purchase
+**$200 USD** - One-time purchase
 - ✅ All 22 modules included
 - ✅ Unlimited users - no per-seat fees
 - ✅ Free updates for Odoo 18

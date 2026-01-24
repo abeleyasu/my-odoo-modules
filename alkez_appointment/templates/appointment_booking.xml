@@ -3,7 +3,7 @@
 <odoo>
     <!-- Main Booking Page - Calendly Layout -->
     <template id="appointment_booking_page" name="Appointment Booking Page">
-        <t t-call="appointment.appointment_layout">
+        <t t-call="alkez_appointment.appointment_layout">
             <div class="calendly-booking-wrapper">
                 <!-- Main Card Container -->
                 <div class="calendly-card">
@@ -301,7 +301,7 @@
             </script>
             
             <!-- Load external calendar JS -->
-            <script type="text/javascript" src="/appointment/static/src/js/appointment_public.js"></script>
+            <script type="text/javascript" src="/alkez_appointment/static/src/js/appointment_public.js"></script>
         </t>
     </template>
 </odoo>

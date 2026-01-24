@@ -2,7 +2,7 @@
 <odoo>
     <!-- User Appointment Page - Lists all event types for a user -->
     <template id="appointment_user_page" name="Appointment User Page">
-        <t t-call="appointment.appointment_layout">
+        <t t-call="alkez_appointment.appointment_layout">
             <div class="appointment-user-wrapper">
                 <div class="appointment-user-header">
                     <div class="user-avatar">

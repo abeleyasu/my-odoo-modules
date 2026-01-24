@@ -44,7 +44,7 @@ class AppointmentController(http.Controller):
             'is_embed': kwargs.get('embed_type'),
         }
         
-        return request.render('appointment.appointment_user_page', values)
+        return request.render('alkez_appointment.appointment_user_page', values)
 
     @http.route([
         '/appointment/<string:user_slug>/<string:type_slug>',
@@ -106,7 +106,7 @@ class AppointmentController(http.Controller):
             'selected_time': kwargs.get('time'),
         }
         
-        return request.render('appointment.appointment_booking_page', values)
+        return request.render('alkez_appointment.appointment_booking_page', values)
 
     @http.route([
         '/appointment/<string:user_slug>/<string:type_slug>/book',
@@ -223,7 +223,7 @@ class AppointmentController(http.Controller):
             'rescheduled': kwargs.get('rescheduled'),
         }
         
-        return request.render('appointment.appointment_confirmation_page', values)
+        return request.render('alkez_appointment.appointment_confirmation_page', values)
 
     # =====================
     # JSON API FOR CALENDAR
@@ -267,7 +267,7 @@ class AppointmentController(http.Controller):
         
         # Check if users are assigned
         if not appointment_type.user_ids:
-            return request.render('appointment.appointment_no_users', {
+            return request.render('alkez_appointment.appointment_no_users', {
                 'appointment_type': appointment_type,
             })
         
@@ -276,7 +276,7 @@ class AppointmentController(http.Controller):
         
         # Ensure user has appointment slug
         if not user.appointment_slug:
-            return request.render('appointment.appointment_no_users', {
+            return request.render('alkez_appointment.appointment_no_users', {
                 'appointment_type': appointment_type,
                 'error': 'User does not have an appointment slug configured.',
             })
@@ -298,12 +298,12 @@ class AppointmentController(http.Controller):
         ], limit=1)
         
         if not invite:
-            return request.render('appointment.appointment_invite_expired')
+            return request.render('alkez_appointment.appointment_invite_expired')
         
         # Check expiration
         if invite.expires_at and invite.expires_at < fields.Datetime.now():
             invite.state = 'expired'
-            return request.render('appointment.appointment_invite_expired')
+            return request.render('alkez_appointment.appointment_invite_expired')
         
         # Redirect to booking page with prefilled data
         user = invite.user_id
@@ -332,7 +332,7 @@ class AppointmentController(http.Controller):
             return request.redirect('/404')
         
         if not booking.can_reschedule:
-            return request.render('appointment.appointment_cannot_reschedule', {'booking': booking})
+            return request.render('alkez_appointment.appointment_cannot_reschedule', {'booking': booking})
         
         user = booking.user_id
         apt_type = booking.appointment_type_id
@@ -365,7 +365,7 @@ class AppointmentController(http.Controller):
             'is_reschedule': True,
         }
         
-        return request.render('appointment.appointment_reschedule_page', values)
+        return request.render('alkez_appointment.appointment_reschedule_page', values)
 
     @http.route([
         '/appointment/booking/<int:booking_id>/reschedule/confirm',
@@ -410,13 +410,13 @@ class AppointmentController(http.Controller):
             return request.redirect('/404')
         
         if not booking.can_cancel:
-            return request.render('appointment.appointment_cannot_cancel', {'booking': booking})
+            return request.render('alkez_appointment.appointment_cannot_cancel', {'booking': booking})
         
         values = {
             'booking': booking,
         }
         
-        return request.render('appointment.appointment_cancel_page', values)
+        return request.render('alkez_appointment.appointment_cancel_page', values)
 
     @http.route([
         '/appointment/booking/<int:booking_id>/cancel/confirm',
@@ -430,7 +430,7 @@ class AppointmentController(http.Controller):
         
         booking.action_cancel()
         
-        return request.render('appointment.appointment_cancelled', {'booking': booking})
+        return request.render('alkez_appointment.appointment_cancelled', {'booking': booking})
 
     # =====================
     # JSON API ENDPOINTS
@@ -580,7 +580,7 @@ class AppointmentController(http.Controller):
     def google_oauth_callback(self, code=None, state=None, error=None, **kwargs):
         """Handle Google Calendar OAuth callback."""
         if error:
-            return request.render('appointment.oauth_error', {
+            return request.render('alkez_appointment.oauth_error', {
                 'error': error,
                 'provider': 'Google Calendar'
             })
@@ -632,7 +632,7 @@ class AppointmentController(http.Controller):
             return request.redirect('/my/appointments?calendar_connected=google')
             
         except Exception as e:
-            return request.render('appointment.oauth_error', {
+            return request.render('alkez_appointment.oauth_error', {
                 'error': str(e),
                 'provider': 'Google Calendar'
             })
@@ -643,7 +643,7 @@ class AppointmentController(http.Controller):
     def outlook_oauth_callback(self, code=None, state=None, error=None, **kwargs):
         """Handle Microsoft Outlook OAuth callback."""
         if error:
-            return request.render('appointment.oauth_error', {
+            return request.render('alkez_appointment.oauth_error', {
                 'error': error,
                 'provider': 'Microsoft Outlook'
             })
@@ -697,7 +697,7 @@ class AppointmentController(http.Controller):
             return request.redirect('/my/appointments?calendar_connected=outlook')
             
         except Exception as e:
-            return request.render('appointment.oauth_error', {
+            return request.render('alkez_appointment.oauth_error', {
                 'error': str(e),
                 'provider': 'Microsoft Outlook'
             })

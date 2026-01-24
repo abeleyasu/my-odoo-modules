@@ -19,7 +19,7 @@ This module integrates RingCentral with Helpdesk:
     """,
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
-    'license': 'OPL-1',
+    'license': 'LGPL-3',
     'depends': [
         'ringcentral_base',
         'ringcentral_call',

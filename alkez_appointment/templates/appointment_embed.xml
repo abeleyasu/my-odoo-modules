@@ -3,18 +3,18 @@
 <odoo>
     <!-- Inline Embed Widget -->
     <template id="embed_inline" name="Appointment Inline Embed">
-        <t t-call="appointment.appointment_embed_layout">
+        <t t-call="alkez_appointment.appointment_embed_layout">
             <div class="appointment-inline-embed">
-                <t t-call="appointment.appointment_booking_page"/>
+                <t t-call="alkez_appointment.appointment_booking_page"/>
             </div>
         </t>
     </template>
 
     <!-- Popup Embed Widget -->
     <template id="embed_popup" name="Appointment Popup Embed">
-        <t t-call="appointment.appointment_embed_layout">
+        <t t-call="alkez_appointment.appointment_embed_layout">
             <div class="appointment-popup-embed">
-                <t t-call="appointment.appointment_booking_page"/>
+                <t t-call="alkez_appointment.appointment_booking_page"/>
             </div>
         </t>
     </template>

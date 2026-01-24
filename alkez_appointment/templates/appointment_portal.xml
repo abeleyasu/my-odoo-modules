@@ -9,7 +9,7 @@
         </xpath>
         <div id="portal_client_category" position="inside">
             <t t-call="portal.portal_docs_entry">
-                <t t-set="icon" t-value="'/appointment/static/description/icon.png'"/>
+                <t t-set="icon" t-value="'/alkez_appointment/static/description/icon.png'"/>
                 <t t-set="title">Appointments</t>
                 <t t-set="url" t-value="'/my/appointments'"/>
                 <t t-set="text">View your scheduled appointments</t>

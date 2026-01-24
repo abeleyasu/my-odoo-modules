@@ -27,18 +27,18 @@ class AppointmentEmbed(http.Controller):
         }
         
         if embed_type == 'inline':
-            return request.render('appointment.embed_inline', values)
+            return request.render('alkez_appointment.embed_inline', values)
         elif embed_type == 'popup':
-            return request.render('appointment.embed_popup', values)
+            return request.render('alkez_appointment.embed_popup', values)
         else:
-            return request.render('appointment.embed_inline', values)
+            return request.render('alkez_appointment.embed_inline', values)
 
     @http.route([
         '/appointment/embed/script.js',
     ], type='http', auth='public', sitemap=False)
     def embed_script(self, **kwargs):
         """Serve the embed JavaScript file."""
-        content = request.env['ir.qweb']._render('appointment.embed_script_js', {})
+        content = request.env['ir.qweb']._render('alkez_appointment.embed_script_js', {})
         
         return request.make_response(
             content,
@@ -53,7 +53,7 @@ class AppointmentEmbed(http.Controller):
     ], type='http', auth='public', sitemap=False)
     def embed_style(self, **kwargs):
         """Serve the embed CSS file."""
-        content = request.env['ir.qweb']._render('appointment.embed_style_css', {})
+        content = request.env['ir.qweb']._render('alkez_appointment.embed_style_css', {})
         
         return request.make_response(
             content,

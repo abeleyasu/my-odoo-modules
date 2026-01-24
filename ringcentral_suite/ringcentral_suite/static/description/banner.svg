@@ -79,7 +79,7 @@
   <!-- Price tag -->
   <g transform="translate(580, 245)">
     <rect x="0" y="0" width="160" height="60" rx="10" fill="white"/>
-    <text x="80" y="30" font-family="Segoe UI, Arial" font-size="28" fill="#FF6A00" text-anchor="middle" font-weight="700">$250</text>
+    <text x="80" y="30" font-family="Segoe UI, Arial" font-size="28" fill="#FF6A00" text-anchor="middle" font-weight="700">$200</text>
     <text x="80" y="48" font-family="Arial" font-size="11" fill="#666" text-anchor="middle">One-Time Purchase</text>
   </g>
   

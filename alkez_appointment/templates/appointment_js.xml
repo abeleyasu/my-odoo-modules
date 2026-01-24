@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Extend appointment layout to include inline JS -->
-    <template id="appointment_layout_js" inherit_id="appointment.appointment_layout" name="Appointment Layout JS">
+    <template id="appointment_layout_js" inherit_id="alkez_appointment.appointment_layout" name="Appointment Layout JS">
         <xpath expr="//div[contains(@t-attf-class, 'appointment-container')]" position="inside">
             <script>
                 (function() {

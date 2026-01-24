@@ -2,7 +2,7 @@
 <!-- Booking Confirmation Page -->
 <odoo>
     <template id="appointment_confirmation_page" name="Appointment Confirmation">
-        <t t-call="appointment.appointment_layout">
+        <t t-call="alkez_appointment.appointment_layout">
             <div class="calendly-confirmation-wrapper">
                 <!-- Success Card -->
                 <div class="calendly-confirmation-card">

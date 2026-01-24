@@ -9,7 +9,7 @@ The following modules are part of the RingCentral Suite:
 - ringcentral_recording
 - ringcentral_ai
 - ringcentral_voicemail
-- ringcentral_fax
+- alkez_ringcentral_fax
 - ringcentral_presence
 - ringcentral_meet
 - ringcentral_portal
