@@ -8,6 +8,9 @@
 RingCentral SMS Integration for Odoo 18
 =======================================
 
+⚠️ IMPORTANT: Requires RingCentral Base module ($100) to be installed first.
+This module cannot function without the base module.
+
 SMS/MMS messaging features:
 - Send SMS from any phone field
 - Send SMS from Chatter
@@ -26,6 +29,8 @@ Integrates with contacts, CRM, and other Odoo apps.
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
+    'price': 30.00,
+    'currency': 'USD',
     'depends': [
         'ringcentral_base',
         'mail',
