@@ -47,6 +47,10 @@ Extends base_phone module for native click-to-dial functionality.
             'ringcentral_call/static/src/actions/**/*.js',
         ],
     },
+    'images': [
+        'static/description/banner.svg',
+        'static/description/icon.png',
+    ],
     'installable': True,
     'auto_install': False,
 }
