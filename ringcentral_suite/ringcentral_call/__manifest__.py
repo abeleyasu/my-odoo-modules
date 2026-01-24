@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral Call',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.0.1',
     'category': 'Phone',
     'summary': 'RingCentral Voice Calling - Click-to-Dial, Call Logging, Call Control',
     'description': '''
@@ -47,6 +47,10 @@ Extends base_phone module for native click-to-dial functionality.
             'ringcentral_call/static/src/actions/**/*.js',
         ],
     },
+    'images': [
+        'static/description/banner.svg',
+        'static/description/icon.png',
+    ],
     'installable': True,
     'auto_install': False,
 }
