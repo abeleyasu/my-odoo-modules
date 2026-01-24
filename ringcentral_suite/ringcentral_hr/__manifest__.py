@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral HR Integration',
-    'version': '18.0.1.0.1',
+    'version': '18.0.1.0.2',
     'category': 'Human Resources/Phone',
     'summary': 'RingCentral integration for HR module',
     'description': """
@@ -21,7 +21,7 @@ This module integrates RingCentral with the HR module:
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
     'price': 50,
-    'currency': 'USD',
+    'currency': 'EUR',
     'depends': [
         'hr',
         'ringcentral_base',

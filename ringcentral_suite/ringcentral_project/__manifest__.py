@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral Project',
-    'version': '18.0.1.0.1',
+    'version': '18.0.1.0.2',
     'category': 'Phone',
     'summary': 'Project and timesheet integration',
     'description': """
@@ -20,7 +20,7 @@ This module provides project/timesheet features:
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
     'price': 50,
-    'currency': 'USD',
+    'currency': 'EUR',
     'depends': [
         'ringcentral_base',
         'ringcentral_call',
