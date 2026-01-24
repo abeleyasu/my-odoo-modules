@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'RingCentral Multi-Line & Department Configuration',
-    'version': '18.0.1.0.2',
+    'version': '19.0.1.0.2',
     'summary': 'Per-department and per-app phone number configuration for RingCentral',
     'description': """
 RingCentral Multi-Line & Department Configuration

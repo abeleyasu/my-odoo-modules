@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral Fax',
-    'version': '18.0.1.0.2',
+    'version': '19.0.1.0.2',
     'category': 'Phone',
     'summary': 'Send and receive faxes via RingCentral',
     'description': """
