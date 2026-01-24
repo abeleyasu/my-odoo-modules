@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral Helpdesk Integration',
-    'version': '18.0.1.0.1',
+    'version': '18.0.1.0.2',
     'category': 'Phone',
     'summary': 'Helpdesk ticket integration with RingCentral',
     'description': """
@@ -21,7 +21,7 @@ This module integrates RingCentral with Helpdesk:
     'website': 'https://www.alkezz.site',
     'license': 'LGPL-3',
     'price': 50,
-    'currency': 'USD',
+    'currency': 'EUR',
     'depends': [
         'ringcentral_base',
         'ringcentral_call',

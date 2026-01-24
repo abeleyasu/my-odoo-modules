@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral Base',
-    'version': '18.0.1.1.1',
+    'version': '18.0.1.1.2',
     'category': 'Phone',
     'summary': 'RingCentral Integration Base Module - Core SDK and Authentication',
     'description': '''
@@ -27,7 +27,7 @@ This is the foundation module for all RingCentral integrations.
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
     'price': 100,
-    'currency': 'USD',
+    'currency': 'EUR',
     'depends': [
         'base',
         'mail',
