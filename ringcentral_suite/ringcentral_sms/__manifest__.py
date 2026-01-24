@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral SMS',
-    'version': '18.0.1.1.0',
+    'version': '18.0.1.1.1',
     'category': 'Phone',
     'summary': 'RingCentral SMS/MMS Messaging Integration',
     'description': '''
