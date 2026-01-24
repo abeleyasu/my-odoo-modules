@@ -26,6 +26,8 @@ This is the foundation module for all RingCentral integrations.
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
+    'price': 100,
+    'currency': 'USD',
     'depends': [
         'base',
         'mail',

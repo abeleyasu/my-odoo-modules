@@ -20,6 +20,8 @@ This module integrates RingCentral with the HR module:
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
+    'price': 50,
+    'currency': 'USD',
     'depends': [
         'hr',
         'ringcentral_base',

@@ -9,6 +9,8 @@
     'author': 'Abel Eyasu',
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
+    'price': 50,
+    'currency': 'USD',
     'price': 200.00,
     'currency': 'USD',
     'images': ['static/description/banner.png'],
