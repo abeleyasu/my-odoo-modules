@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral Video Meetings',
-    'version': '18.0.1.0.1',
+    'version': '18.0.1.0.2',
     'category': 'Phone',
     'summary': 'Video meetings integration with RingCentral',
     'description': """
@@ -22,7 +22,7 @@ This module provides video meeting integration:
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
     'price': 50,
-    'currency': 'USD',
+    'currency': 'EUR',
     'depends': [
         'ringcentral_base',
         'calendar',

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral SMS',
-    'version': '18.0.1.1.1',
+    'version': '18.0.1.1.2',
     'category': 'Phone',
     'summary': 'RingCentral SMS/MMS Messaging Integration',
     'description': '''
@@ -27,7 +27,7 @@ Integrates with contacts, CRM, and other Odoo apps.
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
     'price': 50,
-    'currency': 'USD',
+    'currency': 'EUR',
     'depends': [
         'ringcentral_base',
         'mail',

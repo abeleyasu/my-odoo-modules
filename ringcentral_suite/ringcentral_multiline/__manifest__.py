@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': 'RingCentral Multi-Line & Department Configuration',
-    'version': '18.0.1.0.1',
+    'version': '18.0.1.0.2',
     'summary': 'Per-department and per-app phone number configuration for RingCentral',
     'description': """
 RingCentral Multi-Line & Department Configuration
@@ -31,7 +31,7 @@ Industry Standards Implemented:
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
     'price': 50,
-    'currency': 'USD',
+    'currency': 'EUR',
     'depends': [
         'ringcentral_base',
         'ringcentral_webrtc',

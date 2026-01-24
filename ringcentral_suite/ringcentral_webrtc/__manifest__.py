@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral WebRTC',
-    'version': '18.0.1.0.1',
+    'version': '18.0.1.0.2',
     'category': 'Phone',
     'summary': 'Browser-based softphone using WebRTC',
     'description': """
@@ -22,7 +22,7 @@ This module provides a browser-based softphone:
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
     'price': 50,
-    'currency': 'USD',
+    'currency': 'EUR',
     'depends': [
         'ringcentral_base',
         'ringcentral_call',
