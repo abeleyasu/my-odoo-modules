@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6A00;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#EE0000;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF6A00;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="overlayGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:rgba(255,255,255,0);stop-opacity:0" />
+      <stop offset="50%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:0" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="320" fill="url(#bgGradient)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="700" cy="60" r="180" fill="rgba(255,255,255,0.05)"/>
+  <circle cx="100" cy="280" r="120" fill="rgba(255,255,255,0.05)"/>
+  <circle cx="750" cy="250" r="100" fill="rgba(255,255,255,0.03)"/>
+  
+  <!-- Phone icon -->
+  <g transform="translate(60, 90)">
+    <circle cx="55" cy="55" r="55" fill="rgba(255,255,255,0.2)"/>
+    <g fill="white" transform="translate(25, 25) scale(0.6)">
+      <path d="M47.5 36.2c-1.5-1.5-3.5-2.3-5.5-2.3s-4 .8-5.5 2.3l-3.2 3.2c-.3-.2-.6-.3-.9-.5-1.3-.7-3.1-1.6-5-3.5-2-2-3-3.9-3.7-5.2-.2-.3-.3-.5-.4-.7l2.2-2.2 1-1c3-3 3-7.9 0-10.9l-5.1-5.1c-.6-.6-1.2-1.2-1.8-1.7-1.2-1.2-2.4-2.4-3.7-3.5-1.5-1.4-3.4-2.2-5.4-2.2s-3.9.8-5.4 2.2L2.3 8.5C.6 10.2-.3 12.4-.3 14.8c.1 4.5 1.8 8.7 3.2 11.6 3.4 7.1 8.3 13.7 15.4 20.7 8.6 8.6 19 14.5 30.8 17.5 4.5 1.1 10.5 2.5 17.1 1.8 3.6-.3 6.8-1.8 9-4.1l.1-.1c1.3-1.4 2.4-2.9 3.3-4 1.4-1.7 1.4-4.1.1-5.9l-10.2-10.3c-2.8-2.9-7.7-2.9-10.5-.1l-3.2 3.2c-.2-.1-.4-.2-.6-.3-.9-.5-1.7-.9-2.5-1.6z"/>
+    </g>
+  </g>
+  
+  <!-- Main title -->
+  <text x="200" y="105" font-family="Segoe UI, Arial, sans-serif" font-size="48" fill="white" font-weight="700">RingCentral Suite</text>
+  
+  <!-- Subtitle -->
+  <text x="200" y="145" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="rgba(255,255,255,0.95)">Complete Business Communications for Odoo 18</text>
+  
+  <!-- Feature pills -->
+  <g transform="translate(200, 170)">
+    <rect x="0" y="0" width="100" height="30" rx="15" fill="rgba(255,255,255,0.2)"/>
+    <text x="50" y="20" font-family="Arial" font-size="12" fill="white" text-anchor="middle" font-weight="600">Voice Calls</text>
+    
+    <rect x="110" y="0" width="85" height="30" rx="15" fill="rgba(255,255,255,0.2)"/>
+    <text x="152" y="20" font-family="Arial" font-size="12" fill="white" text-anchor="middle" font-weight="600">SMS/MMS</text>
+    
+    <rect x="205" y="0" width="95" height="30" rx="15" fill="rgba(255,255,255,0.2)"/>
+    <text x="252" y="20" font-family="Arial" font-size="12" fill="white" text-anchor="middle" font-weight="600">Softphone</text>
+    
+    <rect x="310" y="0" width="115" height="30" rx="15" fill="rgba(255,255,255,0.2)"/>
+    <text x="367" y="20" font-family="Arial" font-size="12" fill="white" text-anchor="middle" font-weight="600">AI Transcription</text>
+    
+    <rect x="435" y="0" width="70" height="30" rx="15" fill="rgba(255,255,255,0.2)"/>
+    <text x="470" y="20" font-family="Arial" font-size="12" fill="white" text-anchor="middle" font-weight="600">CRM</text>
+  </g>
+  
+  <!-- Bottom section -->
+  <rect x="0" y="230" width="800" height="90" fill="rgba(0,0,0,0.15)"/>
+  
+  <!-- Stats row -->
+  <g transform="translate(60, 250)">
+    <!-- 22 Modules -->
+    <g transform="translate(0, 0)">
+      <text x="0" y="25" font-family="Segoe UI, Arial" font-size="32" fill="white" font-weight="700">22</text>
+      <text x="0" y="48" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.8)">Modules</text>
+    </g>
+    
+    <!-- Unlimited Users -->
+    <g transform="translate(120, 0)">
+      <text x="0" y="25" font-family="Segoe UI, Arial" font-size="32" fill="white" font-weight="700">∞</text>
+      <text x="0" y="48" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.8)">Users</text>
+    </g>
+    
+    <!-- One-Time -->
+    <g transform="translate(220, 0)">
+      <text x="0" y="25" font-family="Segoe UI, Arial" font-size="32" fill="white" font-weight="700">1x</text>
+      <text x="0" y="48" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.8)">Payment</text>
+    </g>
+  </g>
+  
+  <!-- Price tag -->
+  <g transform="translate(580, 245)">
+    <rect x="0" y="0" width="160" height="60" rx="10" fill="white"/>
+    <text x="80" y="30" font-family="Segoe UI, Arial" font-size="28" fill="#FF6A00" text-anchor="middle" font-weight="700">$200</text>
+    <text x="80" y="48" font-family="Arial" font-size="11" fill="#666" text-anchor="middle">One-Time Purchase</text>
+  </g>
+  
+  <!-- Brand -->
+  <text x="780" y="25" font-family="Arial" font-size="12" fill="rgba(255,255,255,0.7)" text-anchor="end">Alkez ERP by Abel Eyasu</text>
+  
+  <!-- Odoo badge -->
+  <g transform="translate(20, 10)">
+    <rect x="0" y="0" width="90" height="28" rx="4" fill="rgba(255,255,255,0.9)"/>
+    <text x="45" y="18" font-family="Arial" font-size="11" fill="#714B67" text-anchor="middle" font-weight="600">Odoo 18</text>
+  </g>
+</svg>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- SMS Menu under Communications -->
+    <menuitem id="menu_ringcentral_sms"
+              name="SMS"
+              parent="ringcentral_base.menu_ringcentral_communications"
+              action="action_ringcentral_sms"
+              sequence="20"/>
+    
+    <!-- SMS Templates Menu -->
+    <menuitem id="menu_ringcentral_sms_templates"
+              name="SMS Templates"
+              parent="ringcentral_base.menu_ringcentral_config"
+              action="action_ringcentral_sms_template"
+              sequence="30"
+              groups="ringcentral_base.group_ringcentral_manager"/>
+</odoo>

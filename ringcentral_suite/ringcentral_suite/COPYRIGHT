@@ -1,0 +1,33 @@
+Copyright 2025-2026 Abel Eyasu - Alkez ERP (https://www.alkezz.site)
+
+The following modules are part of the RingCentral Suite:
+
+- ringcentral_base
+- ringcentral_call
+- ringcentral_sms
+- ringcentral_webrtc
+- ringcentral_recording
+- ringcentral_ai
+- ringcentral_voicemail
+- alkez_ringcentral_fax
+- ringcentral_presence
+- ringcentral_meet
+- ringcentral_portal
+- ringcentral_website
+- ringcentral_analytics
+- ringcentral_compliance
+- ringcentral_quality
+- ringcentral_crm
+- ringcentral_sale
+- ringcentral_project
+- ringcentral_helpdesk
+- ringcentral_hr
+- ringcentral_contact_center
+- ringcentral_multiline
+- ringcentral_suite (this module)
+
+All rights reserved.
+
+For licensing inquiries, contact:
+- Website: https://www.alkezz.site
+- Developer: Abel Eyasu

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ================================== -->
+        <!-- User Form Extension -->
+        <!-- ================================== -->
+        
+        <record id="view_users_form_ringcentral_multiline" model="ir.ui.view">
+            <field name="name">res.users.form.ringcentral.multiline</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="RingCentral" name="ringcentral" groups="ringcentral_multiline.group_ringcentral_user">
+                        <group>
+                            <group string="Extension">
+                                <field name="rc_multiline_ext_id"/>
+                                <field name="rc_multiline_ext_number"/>
+                                <field name="rc_multiline_ext_status"/>
+                                <button name="action_link_ringcentral_extension" 
+                                        string="Auto-Link Extension" type="object"
+                                        class="btn-link" icon="fa-magic"
+                                        invisible="rc_multiline_ext_id"
+                                        groups="ringcentral_multiline.group_ringcentral_manager"/>
+                                <button name="action_sync_extension" 
+                                        string="Sync Extension" type="object"
+                                        class="btn-link" icon="fa-refresh"
+                                        invisible="not rc_multiline_ext_id"
+                                        groups="ringcentral_multiline.group_ringcentral_manager"/>
+                            </group>
+                            <group string="Caller ID Settings">
+                                <field name="ringcentral_default_from_number_id"/>
+                                <field name="ringcentral_default_from_number"/>
+                                <field name="ringcentral_use_personal_number"/>
+                                <field name="ringcentral_can_change_caller_id" groups="ringcentral_multiline.group_ringcentral_manager"/>
+                            </group>
+                        </group>
+                        <group string="Available Phone Numbers" groups="ringcentral_multiline.group_ringcentral_manager">
+                            <field name="ringcentral_available_number_ids" nolabel="1">
+                                <list>
+                                    <field name="phone_number"/>
+                                    <field name="formatted_number"/>
+                                    <field name="usage_type"/>
+                                    <field name="can_be_caller_id"/>
+                                </list>
+                            </field>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        
+        <!-- User Tree Extension (add column) -->
+        <record id="view_users_tree_ringcentral_multiline" model="ir.ui.view">
+            <field name="name">res.users.tree.ringcentral.multiline</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_tree"/>
+            <field name="arch" type="xml">
+                                <field name="login" position="after">
+                    <field name="rc_multiline_ext_number" optional="hide" string="RC Ext"/>
+                </field>
+            </field>
+        </record>
+        
+        <!-- ================================== -->
+        <!-- HR Department Form Extension -->
+        <!-- ================================== -->
+        
+        <record id="view_department_form_ringcentral_multiline" model="ir.ui.view">
+            <field name="name">hr.department.form.ringcentral.multiline</field>
+            <field name="model">hr.department</field>
+            <field name="inherit_id" ref="hr.view_department_form"/>
+            <field name="arch" type="xml">
+                <sheet position="inside">
+                    <notebook position="inside">
+                        <page string="RingCentral" name="ringcentral" groups="ringcentral_multiline.group_ringcentral_user">
+                            <group>
+                                <group string="Call Queue">
+                                    <field name="ringcentral_call_queue_id"/>
+                                    <field name="ringcentral_queue_name"/>
+                                    <field name="ringcentral_queue_extension"/>
+                                    <button name="action_link_call_queue" 
+                                            string="Link Call Queue" type="object"
+                                            class="btn-link" icon="fa-link"
+                                            invisible="ringcentral_call_queue_id"
+                                            groups="ringcentral_multiline.group_ringcentral_manager"/>
+                                    <button name="action_sync_queue" 
+                                            string="Sync Queue" type="object"
+                                            class="btn-link" icon="fa-refresh"
+                                            invisible="not ringcentral_call_queue_id"
+                                            groups="ringcentral_multiline.group_ringcentral_manager"/>
+                                </group>
+                                <group string="Phone Settings">
+                                    <field name="ringcentral_phone_number_id"/>
+                                    <field name="ringcentral_phone"/>
+                                    <field name="ringcentral_routing_enabled"/>
+                                    <field name="ringcentral_use_queue_for_outbound"/>
+                                </group>
+                            </group>
+                            <group string="Statistics">
+                                <field name="ringcentral_member_count"/>
+                                <field name="ringcentral_active_extension_count"/>
+                                <button name="action_view_queue_members" 
+                                        string="View Queue Members" type="object"
+                                        class="btn-link" icon="fa-users"
+                                        invisible="not ringcentral_call_queue_id"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </field>
+        </record>
+        
+        <!-- Department Tree Extension -->
+        <record id="view_department_tree_ringcentral_multiline" model="ir.ui.view">
+            <field name="name">hr.department.tree.ringcentral.multiline</field>
+            <field name="model">hr.department</field>
+            <field name="inherit_id" ref="hr.view_department_tree"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="ringcentral_queue_extension" optional="hide" string="RC Queue"/>
+                    <field name="ringcentral_phone" optional="hide" string="RC Phone"/>
+                </field>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

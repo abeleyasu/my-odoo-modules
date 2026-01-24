@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- Click to Call Widget -->
+    <t t-name="ringcentral_webrtc.ClickToCallWidget">
+        <div class="d-flex align-items-center gap-2">
+            <span t-if="hasPhone" class="o_field_phone" t-esc="formattedPhone"/>
+            <span t-else="" class="text-muted">No phone</span>
+            
+            <div class="btn-group btn-group-sm" t-if="hasPhone">
+                <button type="button" 
+                        class="btn btn-sm btn-outline-success rc-call-btn"
+                        t-on-click="onCallClick"
+                        title="Call">
+                    <i class="fa fa-phone"></i>
+                </button>
+                <button type="button" 
+                        class="btn btn-sm btn-outline-primary rc-sms-btn"
+                        t-on-click="onSMSClick"
+                        title="Send SMS">
+                    <i class="fa fa-comment"></i>
+                </button>
+            </div>
+        </div>
+    </t>
+    
+    <!-- Phone with Call Button Widget -->
+    <t t-name="ringcentral_webrtc.PhoneCallWidget">
+        <div class="d-flex align-items-center gap-1">
+            <a t-if="hasPhone" 
+               t-att-href="'tel:' + phoneNumber" 
+               class="o_field_phone_link">
+                <t t-esc="phoneNumber"/>
+            </a>
+            <span t-else="" class="text-muted fst-italic">-</span>
+            
+            <button t-if="hasPhone"
+                    type="button" 
+                    class="btn btn-link btn-sm p-0 ms-1 text-success rc-inline-call"
+                    t-on-click="onCallClick"
+                    title="Call with RingCentral">
+                <i class="fa fa-phone"></i>
+            </button>
+        </div>
+    </t>
+</templates>

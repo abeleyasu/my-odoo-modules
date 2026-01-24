@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sale Order Form Extension -->
+    <record id="view_order_form_ringcentral" model="ir.ui.view">
+        <field name="name">sale.order.form.ringcentral</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_calls" type="object" class="oe_stat_button" icon="fa-phone"
+                        groups="ringcentral_base.group_ringcentral_user">
+                    <field string="Calls" name="call_count" widget="statinfo"/>
+                </button>
+                <button name="action_view_sms" type="object" class="oe_stat_button" icon="fa-comments"
+                        groups="ringcentral_base.group_ringcentral_user">
+                    <field string="SMS" name="sms_count" widget="statinfo"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="last_communication_date" readonly="1" invisible="not last_communication_date"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Sale Order Tree Extension with Quick Actions -->
+    <record id="view_order_tree_ringcentral" model="ir.ui.view">
+        <field name="name">sale.order.tree.ringcentral</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <button name="action_quick_call" type="object" icon="fa-phone" title="Quick Call"/>
+                <button name="action_send_sms" type="object" icon="fa-comment" title="Send SMS"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Call Form Extension -->
+    <record id="ringcentral_call_view_form_sale" model="ir.ui.view">
+        <field name="name">ringcentral.call.form.sale</field>
+        <field name="model">ringcentral.call</field>
+        <field name="inherit_id" ref="ringcentral_call.ringcentral_call_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="sale_order_id" domain="[('partner_id', '=', partner_id)]"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- SMS Form Extension -->
+    <record id="ringcentral_sms_view_form_sale" model="ir.ui.view">
+        <field name="name">ringcentral.sms.form.sale</field>
+        <field name="model">ringcentral.sms</field>
+        <field name="inherit_id" ref="ringcentral_sms.ringcentral_sms_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="sale_order_id" domain="[('partner_id', '=', partner_id)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

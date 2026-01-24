@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ringcentral_sms_user,ringcentral.sms.user,model_ringcentral_sms,ringcentral_base.group_ringcentral_user,1,1,1,0
+access_ringcentral_sms_manager,ringcentral.sms.manager,model_ringcentral_sms,ringcentral_base.group_ringcentral_manager,1,1,1,1
+access_ringcentral_sms_template_user,ringcentral.sms.template.user,model_ringcentral_sms_template,ringcentral_base.group_ringcentral_user,1,0,0,0
+access_ringcentral_sms_template_manager,ringcentral.sms.template.manager,model_ringcentral_sms_template,ringcentral_base.group_ringcentral_manager,1,1,1,1
+access_ringcentral_sms_compose,ringcentral.sms.compose,model_ringcentral_sms_compose,ringcentral_base.group_ringcentral_user,1,1,1,1

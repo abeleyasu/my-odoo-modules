@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Share Appointment Wizard Form -->
+    <record id="view_appointment_share_form" model="ir.ui.view">
+        <field name="name">appointment.share.form</field>
+        <field name="model">appointment.share</field>
+        <field name="arch" type="xml">
+            <form string="Share Appointment">
+                <group>
+                    <field name="appointment_type_id" readonly="1"/>
+                    <field name="share_link" readonly="1" widget="CopyClipboardChar"/>
+                </group>
+                <notebook>
+                    <page string="Inline Embed">
+                        <field name="embed_code_inline" readonly="1" widget="CopyClipboardText"/>
+                    </page>
+                    <page string="Popup Embed">
+                        <field name="embed_code_popup" readonly="1" widget="CopyClipboardText"/>
+                    </page>
+                </notebook>
+                <footer>
+                    <button string="Send by Email" name="action_send_by_email" type="object" class="btn-primary"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Share Appointment Wizard Action -->
+    <record id="action_appointment_share" model="ir.actions.act_window">
+        <field name="name">Share</field>
+        <field name="res_model">appointment.share</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

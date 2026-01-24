@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- APPOINTMENT MENUS -->
+    <!-- ============================================ -->
+
+    <!-- Root Menu -->
+    <menuitem id="appointment_menu_root"
+              name="Appointment"
+              web_icon="appointment,static/description/icon.png"
+              sequence="50"/>
+
+    <!-- Dashboard Menu (Bookings) -->
+    <menuitem id="appointment_menu_bookings"
+              name="Scheduled Events"
+              parent="appointment_menu_root"
+              action="action_appointment_booking"
+              sequence="10"/>
+
+    <!-- Event Types Menu -->
+    <menuitem id="appointment_menu_event_types"
+              name="Event Types"
+              parent="appointment_menu_root"
+              action="action_appointment_type"
+              sequence="20"/>
+
+    <!-- Invitations Menu -->
+    <menuitem id="appointment_menu_invites"
+              name="Invitation Links"
+              parent="appointment_menu_root"
+              action="action_appointment_invite"
+              sequence="30"/>
+
+    <!-- ============================================ -->
+    <!-- CONFIGURATION MENU -->
+    <!-- ============================================ -->
+
+    <menuitem id="appointment_menu_config"
+              name="Configuration"
+              parent="appointment_menu_root"
+              groups="base.group_system"
+              sequence="100"/>
+
+    <!-- All Bookings -->
+    <menuitem id="appointment_menu_all_bookings"
+              name="All Bookings"
+              parent="appointment_menu_config"
+              action="action_appointment_booking_all"
+              sequence="10"/>
+
+    <!-- Questions -->
+    <menuitem id="appointment_menu_questions"
+              name="Form Questions"
+              parent="appointment_menu_config"
+              action="action_appointment_question"
+              sequence="20"/>
+
+    <!-- Branding -->
+    <menuitem id="appointment_menu_branding"
+              name="Branding"
+              parent="appointment_menu_config"
+              action="action_appointment_branding"
+              sequence="30"/>
+    
+    <!-- Calendar Sync -->
+    <menuitem id="appointment_menu_calendar_sync"
+              name="Calendar Connections"
+              parent="appointment_menu_config"
+              action="action_appointment_calendar_sync"
+              sequence="40"/>
+
+    <!-- ============================================ -->
+    <!-- CALENDAR INTEGRATION MENU -->
+    <!-- ============================================ -->
+    
+    <!-- Show Appointments in Calendar module too -->
+    <menuitem id="appointment_menu_calendar"
+              name="Appointments"
+              parent="calendar.mail_menu_calendar"
+              action="action_appointment_booking"
+              sequence="50"/>
+</odoo>

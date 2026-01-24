@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ================================== -->
+        <!-- RingCentral App Configuration Views -->
+        <!-- ================================== -->
+        
+        <!-- Tree View -->
+        <record id="view_ringcentral_app_config_tree" model="ir.ui.view">
+            <field name="name">ringcentral.app.config.tree</field>
+            <field name="model">ringcentral.app.config</field>
+            <field name="arch" type="xml">
+                <list string="App Phone Configurations" editable="bottom">
+                    <field name="sequence" widget="handle"/>
+                    <field name="app_type"/>
+                    <field name="phone_number_id"/>
+                    <field name="phone_number"/>
+                    <field name="sms_enabled"/>
+                    <field name="allow_user_override"/>
+                    <field name="call_queue_id"/>
+                    <field name="active"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </list>
+            </field>
+        </record>
+        
+        <!-- Kanban View -->
+        <record id="view_ringcentral_app_config_kanban" model="ir.ui.view">
+            <field name="name">ringcentral.app.config.kanban</field>
+            <field name="model">ringcentral.app.config</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_dashboard" default_group_by="app_type">
+                    <field name="app_type"/>
+                    <field name="phone_number"/>
+                    <field name="formatted_phone"/>
+                    <field name="app_icon"/>
+                    <field name="sms_enabled"/>
+                    <field name="call_queue_id"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="row mb8">
+                                <div class="col-2">
+                                    <i t-attf-class="fa #{record.app_icon.raw_value} fa-2x text-primary"/>
+                                </div>
+                                <div class="col-10">
+                                    <strong><field name="app_type"/></strong>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <span class="badge bg-primary">
+                                        <i class="fa fa-phone"/> <field name="formatted_phone"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row mt8" t-if="record.sms_enabled.raw_value">
+                                <div class="col-12">
+                                    <span class="badge bg-success">
+                                        <i class="fa fa-comment"/> SMS Enabled
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row mt8" t-if="record.call_queue_id.raw_value">
+                                <div class="col-12">
+                                    <span class="badge bg-info">
+                                        <i class="fa fa-users"/> Queue Linked
+                                    </span>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        
+        <!-- Form View -->
+        <record id="view_ringcentral_app_config_form" model="ir.ui.view">
+            <field name="name">ringcentral.app.config.form</field>
+            <field name="model">ringcentral.app.config</field>
+            <field name="arch" type="xml">
+                <form string="App Phone Configuration">
+                    <header>
+                        <button name="action_test_configuration" string="Test Configuration" 
+                                type="object" class="btn-secondary" icon="fa-check"/>
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Inactive" bg_color="bg-secondary" invisible="active"/>
+                        <group>
+                            <group string="Application">
+                                <field name="app_type"/>
+                                <field name="sequence"/>
+                                <field name="active"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                            <group string="Phone Configuration">
+                                <field name="phone_number_id"/>
+                                <field name="phone_number"/>
+                                <field name="formatted_phone"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Fallback">
+                                <field name="fallback_to_general"/>
+                                <field name="fallback_phone_number_id" invisible="not fallback_to_general"/>
+                            </group>
+                            <group string="SMS">
+                                <field name="sms_enabled"/>
+                                <field name="sms_phone_number_id" invisible="not sms_enabled"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Routing">
+                                <field name="call_queue_id"/>
+                            </group>
+                            <group string="User Override">
+                                <field name="allow_user_override"/>
+                            </group>
+                        </group>
+                        <field name="description" placeholder="Additional notes about this configuration..."/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Search View -->
+        <record id="view_ringcentral_app_config_search" model="ir.ui.view">
+            <field name="name">ringcentral.app.config.search</field>
+            <field name="model">ringcentral.app.config</field>
+            <field name="arch" type="xml">
+                <search string="Search App Configurations">
+                    <field name="app_type"/>
+                    <field name="phone_number_id"/>
+                    <separator/>
+                    <filter name="filter_active" string="Active" domain="[('active', '=', True)]"/>
+                    <filter name="filter_sms" string="SMS Enabled" domain="[('sms_enabled', '=', True)]"/>
+                    <filter name="filter_with_queue" string="With Queue" domain="[('call_queue_id', '!=', False)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_app" string="Application" context="{'group_by': 'app_type'}"/>
+                        <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Action -->
+        <record id="action_ringcentral_app_config" model="ir.actions.act_window">
+            <field name="name">App Phone Configuration</field>
+            <field name="res_model">ringcentral.app.config</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="search_view_id" ref="view_ringcentral_app_config_search"/>
+            <field name="context">{'search_default_filter_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Configure phone numbers per application
+                </p>
+                <p>
+                    Assign different phone numbers to different Odoo apps.
+                    For example, use one number for Sales calls and another for HR.
+                </p>
+            </field>
+        </record>
+        
+        <!-- ================================== -->
+        <!-- Quick Setup Wizard Views -->
+        <!-- ================================== -->
+        
+        <record id="view_ringcentral_app_config_wizard_form" model="ir.ui.view">
+            <field name="name">ringcentral.app.config.wizard.form</field>
+            <field name="model">ringcentral.app.config.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Quick App Configuration">
+                    <group string="Quick Setup">
+                        <p class="text-muted">
+                            Quickly assign phone numbers to different Odoo applications.
+                            Leave blank to skip an app.
+                        </p>
+                    </group>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="crm_phone_id"/>
+                            <field name="sale_phone_id"/>
+                            <field name="hr_phone_id"/>
+                        </group>
+                        <group>
+                            <field name="helpdesk_phone_id"/>
+                            <field name="general_phone_id"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_apply_configuration" string="Apply Configuration" 
+                                type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_ringcentral_app_config_wizard" model="ir.actions.act_window">
+            <field name="name">Quick Setup</field>
+            <field name="res_model">ringcentral.app.config.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        
+    </data>
+</odoo>

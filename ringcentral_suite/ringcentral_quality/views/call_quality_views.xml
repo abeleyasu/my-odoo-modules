@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Call Quality Tree View -->
+    <record id="call_quality_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.call.quality.tree</field>
+        <field name="model">ringcentral.call.quality</field>
+        <field name="arch" type="xml">
+            <list string="Quality Metrics"
+                  decoration-success="mos_rating == 'excellent'"
+                  decoration-info="mos_rating == 'good'"
+                  decoration-warning="mos_rating in ('fair', 'poor')"
+                  decoration-danger="mos_rating == 'bad'">
+                <field name="measurement_time"/>
+                <field name="call_id"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="mos_score" widget="progressbar" options="{'max_value': 5}"/>
+                <field name="mos_rating" widget="badge"/>
+                <field name="jitter"/>
+                <field name="latency"/>
+                <field name="packet_loss"/>
+                <field name="has_issues" widget="boolean"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Call Quality Form View -->
+    <record id="call_quality_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.call.quality.form</field>
+        <field name="model">ringcentral.call.quality</field>
+        <field name="arch" type="xml">
+            <form string="Quality Metrics">
+                <sheet>
+                    <group>
+                        <group string="Call Information">
+                            <field name="call_id"/>
+                            <field name="user_id"/>
+                            <field name="measurement_time"/>
+                        </group>
+                        <group string="Voice Quality">
+                            <field name="mos_score"/>
+                            <field name="mos_rating" widget="badge"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Network Metrics">
+                            <field name="jitter"/>
+                            <field name="latency"/>
+                            <field name="packet_loss"/>
+                        </group>
+                        <group string="Technical">
+                            <field name="bitrate"/>
+                            <field name="codec"/>
+                            <field name="network_type"/>
+                        </group>
+                    </group>
+                    <group string="Issues" invisible="not has_issues">
+                        <field name="has_issues" invisible="1"/>
+                        <field name="issue_description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Quality Graph View -->
+    <record id="call_quality_view_graph" model="ir.ui.view">
+        <field name="name">ringcentral.call.quality.graph</field>
+        <field name="model">ringcentral.call.quality</field>
+        <field name="arch" type="xml">
+            <graph string="Quality Trends" type="line">
+                <field name="measurement_time" type="row" interval="hour"/>
+                <field name="mos_score" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Quality Pivot View -->
+    <record id="call_quality_view_pivot" model="ir.ui.view">
+        <field name="name">ringcentral.call.quality.pivot</field>
+        <field name="model">ringcentral.call.quality</field>
+        <field name="arch" type="xml">
+            <pivot string="Quality Analysis">
+                <field name="user_id" type="row"/>
+                <field name="mos_rating" type="col"/>
+                <field name="mos_score" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- Quality Search View -->
+    <record id="call_quality_view_search" model="ir.ui.view">
+        <field name="name">ringcentral.call.quality.search</field>
+        <field name="model">ringcentral.call.quality</field>
+        <field name="arch" type="xml">
+            <search string="Quality Metrics">
+                <field name="call_id"/>
+                <field name="user_id"/>
+                <filter name="filter_issues" string="Has Issues" domain="[('has_issues', '=', True)]"/>
+                <filter name="filter_poor" string="Poor Quality" domain="[('mos_rating', 'in', ('poor', 'bad'))]"/>
+                <separator/>
+                <filter name="group_user" string="User" context="{'group_by': 'user_id'}"/>
+                <filter name="group_rating" string="Rating" context="{'group_by': 'mos_rating'}"/>
+                <filter name="group_date" string="Date" context="{'group_by': 'measurement_time:day'}"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Quality Action -->
+    <record id="action_call_quality" model="ir.actions.act_window">
+        <field name="name">Quality Metrics</field>
+        <field name="res_model">ringcentral.call.quality</field>
+        <field name="view_mode">list,graph,pivot,form</field>
+        <field name="search_view_id" ref="call_quality_view_search"/>
+    </record>
+    
+    <!-- Alert Rules Tree View -->
+    <record id="alert_rule_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.call.quality.alert.rule.tree</field>
+        <field name="model">ringcentral.call.quality.alert.rule</field>
+        <field name="arch" type="xml">
+            <list string="Alert Rules">
+                <field name="name"/>
+                <field name="metric"/>
+                <field name="operator"/>
+                <field name="threshold"/>
+                <field name="severity" widget="badge"/>
+                <field name="active" widget="boolean"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Alert Rules Form View -->
+    <record id="alert_rule_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.call.quality.alert.rule.form</field>
+        <field name="model">ringcentral.call.quality.alert.rule</field>
+        <field name="arch" type="xml">
+            <form string="Alert Rule">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="severity"/>
+                        </group>
+                    </group>
+                    <group string="Condition">
+                        <field name="metric"/>
+                        <field name="operator"/>
+                        <field name="threshold"/>
+                    </group>
+                    <group string="Notifications">
+                        <field name="notification_user_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Alert Rules Action -->
+    <record id="action_alert_rules" model="ir.actions.act_window">
+        <field name="name">Alert Rules</field>
+        <field name="res_model">ringcentral.call.quality.alert.rule</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    
+    <!-- Quality Alerts Tree View -->
+    <record id="quality_alert_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.call.quality.alert.tree</field>
+        <field name="model">ringcentral.call.quality.alert</field>
+        <field name="arch" type="xml">
+            <list string="Quality Alerts"
+                  decoration-danger="severity == 'critical'"
+                  decoration-warning="severity == 'high'"
+                  decoration-info="severity == 'medium'">
+                <field name="create_date"/>
+                <field name="rule_id"/>
+                <field name="call_id"/>
+                <field name="severity" widget="badge"/>
+                <field name="state" widget="badge"/>
+                <button name="action_acknowledge" type="object" string="Acknowledge" icon="fa-check" invisible="state != 'new'"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Quality Alerts Action -->
+    <record id="action_quality_alerts" model="ir.actions.act_window">
+        <field name="name">Quality Alerts</field>
+        <field name="res_model">ringcentral.call.quality.alert</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '!=', 'resolved')]</field>
+    </record>
+</odoo>

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Voicemail Tree View -->
+    <record id="ringcentral_voicemail_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.voicemail.tree</field>
+        <field name="model">ringcentral.voicemail</field>
+        <field name="arch" type="xml">
+            <list string="Voicemails" default_order="received_at desc"
+                  decoration-bf="state == 'new'"
+                  decoration-info="state == 'callback'"
+                  decoration-muted="state in ('archived', 'deleted')">
+                <field name="received_at"/>
+                <field name="caller_name"/>
+                <field name="caller_number"/>
+                <field name="partner_id"/>
+                <field name="duration_display" string="Duration"/>
+                <field name="state" widget="badge"/>
+                <field name="is_urgent" widget="boolean_toggle"/>
+                <field name="transcription_state" widget="badge" optional="show"/>
+                <button name="action_play" type="object" icon="fa-play" title="Play"/>
+                <button name="action_callback" type="object" icon="fa-phone" title="Callback"/>
+                <button name="action_mark_read" type="object" icon="fa-check" title="Mark Read" invisible="state != 'new'"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Voicemail Form View -->
+    <record id="ringcentral_voicemail_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.voicemail.form</field>
+        <field name="model">ringcentral.voicemail</field>
+        <field name="arch" type="xml">
+            <form string="Voicemail">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_play" type="object" string="Play" class="btn-primary" icon="fa-play"/>
+                    <button name="action_callback" type="object" string="Call Back" class="btn-success" icon="fa-phone"/>
+                    <button name="action_schedule_callback" type="object" string="Schedule Callback" icon="fa-calendar"/>
+                    <button name="action_mark_read" type="object" string="Mark Read" invisible="state != 'new'"/>
+                    <button name="action_mark_unread" type="object" string="Mark Unread" invisible="state == 'new'"/>
+                    <button name="action_transcribe" type="object" string="Transcribe" invisible="transcription_state == 'completed'"/>
+                    <button name="action_archive" type="object" string="Archive" invisible="state == 'archived'"/>
+                    <button name="action_delete" type="object" string="Delete" confirm="Are you sure you want to delete this voicemail?"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_partner" type="object" class="oe_stat_button" icon="fa-user" invisible="not partner_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Contact</span>
+                            </div>
+                        </button>
+                        <button name="action_create_partner" type="object" class="oe_stat_button" icon="fa-user-plus" invisible="partner_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Create Contact</span>
+                            </div>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Urgent" bg_color="bg-danger" invisible="not is_urgent"/>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Caller">
+                            <field name="caller_name"/>
+                            <field name="caller_number" widget="phone"/>
+                            <field name="partner_id"/>
+                        </group>
+                        <group string="Details">
+                            <field name="received_at"/>
+                            <field name="duration_display"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Audio Player -->
+                    <group string="Audio" invisible="not audio_content">
+                        <field name="audio_content" widget="audio" colspan="2" nolabel="1"/>
+                    </group>
+                    
+                    <!-- Transcription -->
+                    <group string="Transcription">
+                        <field name="transcription_state" widget="badge"/>
+                        <field name="transcription" nolabel="1" colspan="2" placeholder="Transcription will appear here..." readonly="1"/>
+                    </group>
+                    
+                    <!-- Notes -->
+                    <group string="Notes">
+                        <field name="notes" nolabel="1" colspan="2" placeholder="Add notes..."/>
+                    </group>
+                    
+                    <!-- Technical -->
+                    <group string="Technical" groups="ringcentral_base.group_ringcentral_admin">
+                        <field name="ringcentral_message_id"/>
+                        <field name="extension_id"/>
+                        <field name="content_uri"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Voicemail Kanban View -->
+    <record id="ringcentral_voicemail_view_kanban" model="ir.ui.view">
+        <field name="name">ringcentral.voicemail.kanban</field>
+        <field name="model">ringcentral.voicemail</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_mobile">
+                <field name="caller_name"/>
+                <field name="caller_number"/>
+                <field name="duration_display"/>
+                <field name="state"/>
+                <field name="is_urgent"/>
+                <field name="partner_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click #{record.is_urgent.raw_value ? 'bg-danger-subtle' : ''}">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong class="o_kanban_record_title">
+                                            <field name="caller_name"/>
+                                        </strong>
+                                    </div>
+                                    <span class="o_kanban_record_subtitle">
+                                        <field name="duration_display"/>
+                                    </span>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <field name="caller_number"/>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="received_at"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <a t-if="record.caller_number.raw_value" type="object" name="action_callback" class="btn btn-sm btn-primary">
+                                            <i class="fa fa-phone"/> Call
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    
+    <!-- Voicemail Search View -->
+    <record id="ringcentral_voicemail_view_search" model="ir.ui.view">
+        <field name="name">ringcentral.voicemail.search</field>
+        <field name="model">ringcentral.voicemail</field>
+        <field name="arch" type="xml">
+            <search string="Voicemails">
+                <field name="caller_name"/>
+                <field name="caller_number"/>
+                <field name="partner_id"/>
+                <field name="transcription"/>
+                <filter name="filter_new" string="Unread" domain="[('state', '=', 'new')]"/>
+                <filter name="filter_urgent" string="Urgent" domain="[('is_urgent', '=', True)]"/>
+                <separator/>
+                <filter name="filter_today" string="Today" domain="[('received_at', '>=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_week" string="This Week" domain="[('received_at', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="filter_my" string="My Voicemails" domain="[('user_id', '=', uid)]"/>
+                <separator/>
+                <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                <filter name="group_partner" string="Contact" context="{'group_by': 'partner_id'}"/>
+                <filter name="group_date" string="Date" context="{'group_by': 'received_at:day'}"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Action -->
+    <record id="action_ringcentral_voicemail" model="ir.actions.act_window">
+        <field name="name">Voicemails</field>
+        <field name="res_model">ringcentral.voicemail</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="ringcentral_voicemail_view_search"/>
+        <field name="context">{'search_default_filter_my': 1, 'search_default_filter_new': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No voicemails yet
+            </p>
+        </field>
+    </record>
+    
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ringcentral_callback_request_public,ringcentral.callback.request.public,model_ringcentral_callback_request,base.group_public,0,0,1,0
+access_ringcentral_callback_request_user,ringcentral.callback.request.user,model_ringcentral_callback_request,ringcentral_base.group_ringcentral_user,1,1,1,0
+access_ringcentral_callback_request_manager,ringcentral.callback.request.manager,model_ringcentral_callback_request,ringcentral_base.group_ringcentral_manager,1,1,1,1

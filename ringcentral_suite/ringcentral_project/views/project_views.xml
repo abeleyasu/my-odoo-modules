@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Task Form Extension -->
+    <record id="view_task_form_ringcentral" model="ir.ui.view">
+        <field name="name">project.task.form.ringcentral</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_calls" type="object" class="oe_stat_button" icon="fa-phone"
+                        groups="ringcentral_base.group_ringcentral_user">
+                    <field string="Calls" name="call_count" widget="statinfo"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Call Form Extension -->
+    <record id="ringcentral_call_view_form_project" model="ir.ui.view">
+        <field name="name">ringcentral.call.form.project</field>
+        <field name="model">ringcentral.call</field>
+        <field name="inherit_id" ref="ringcentral_call.ringcentral_call_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="task_id" domain="[('partner_id', '=', partner_id)]"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <group string="Timesheet" groups="hr_timesheet.group_hr_timesheet_user">
+                    <field name="auto_create_timesheet"/>
+                    <field name="timesheet_id"/>
+                    <button name="action_create_timesheet" type="object" 
+                            string="Create Timesheet" class="btn-secondary"
+                            invisible="timesheet_id or not task_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

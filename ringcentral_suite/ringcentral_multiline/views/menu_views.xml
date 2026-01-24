@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ================================== -->
+        <!-- RingCentral Multi-line Menu Items -->
+        <!-- ================================== -->
+        
+        <!-- Top Level Menu (under Settings or standalone) -->
+        <menuitem id="menu_ringcentral_multiline_root"
+                  name="RingCentral"
+                  sequence="90"
+                  web_icon="ringcentral_multiline,static/description/icon.png"
+                  groups="ringcentral_multiline.group_ringcentral_user"/>
+        
+        <!-- Configuration Submenu -->
+        <menuitem id="menu_ringcentral_configuration"
+                  name="Configuration"
+                  parent="menu_ringcentral_multiline_root"
+                  sequence="10"
+                  groups="ringcentral_multiline.group_ringcentral_manager"/>
+        
+        <!-- Extensions -->
+        <menuitem id="menu_ringcentral_extensions"
+                  name="Extensions"
+                  parent="menu_ringcentral_configuration"
+                  action="action_ringcentral_extension"
+                  sequence="10"/>
+        
+        <!-- Phone Numbers -->
+        <menuitem id="menu_ringcentral_phone_numbers"
+                  name="Phone Numbers"
+                  parent="menu_ringcentral_configuration"
+                  action="action_ringcentral_phone_number"
+                  sequence="20"/>
+        
+        <!-- Call Queues -->
+        <menuitem id="menu_ringcentral_call_queues"
+                  name="Call Queues"
+                  parent="menu_ringcentral_configuration"
+                  action="action_ringcentral_call_queue"
+                  sequence="30"/>
+        
+        <!-- App Configuration -->
+        <menuitem id="menu_ringcentral_app_config"
+                  name="App Phone Config"
+                  parent="menu_ringcentral_configuration"
+                  action="action_ringcentral_app_config"
+                  sequence="40"/>
+        
+        <!-- Quick Setup Wizard -->
+        <menuitem id="menu_ringcentral_quick_setup"
+                  name="Quick Setup Wizard"
+                  parent="menu_ringcentral_configuration"
+                  action="action_ringcentral_app_config_wizard"
+                  sequence="50"/>
+        
+    </data>
+</odoo>

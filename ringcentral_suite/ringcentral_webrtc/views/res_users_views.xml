@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- WebRTC Settings in User Preferences -->
+    <record id="res_users_view_form_webrtc" model="ir.ui.view">
+        <field name="name">res.users.form.webrtc</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='preferences']" position="after">
+                <page string="Softphone" name="softphone" groups="ringcentral_base.group_ringcentral_user">
+                    <group string="WebRTC Softphone">
+                        <group>
+                            <field name="ringcentral_webrtc_enabled"/>
+                            <field name="ringcentral_softphone_position"/>
+                        </group>
+                        <group>
+                            <field name="ringcentral_ring_sound"/>
+                        </group>
+                    </group>
+                    <group string="Auto Answer">
+                        <field name="ringcentral_auto_answer"/>
+                        <field name="ringcentral_auto_answer_delay" invisible="not ringcentral_auto_answer"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

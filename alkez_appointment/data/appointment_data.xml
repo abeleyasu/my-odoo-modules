@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- DEFAULT APPOINTMENT DATA -->
+    <!-- Enterprise Grade Automation -->
+    <!-- ============================================ -->
+
+    <!-- Cron Job: Send Reminders -->
+    <record id="ir_cron_appointment_reminder" model="ir.cron">
+        <field name="name">Appointment: Send Reminders</field>
+        <field name="model_id" ref="model_appointment_booking"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_send_reminders()</field>
+        <field name="interval_number">15</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+        <field name="priority">5</field>
+    </record>
+
+    <!-- Cron Job: Send Follow-ups (New) -->
+    <record id="ir_cron_appointment_followup" model="ir.cron">
+        <field name="name">Appointment: Send Follow-up Emails</field>
+        <field name="model_id" ref="model_appointment_booking"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_send_followups()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="active">True</field>
+        <field name="priority">10</field>
+    </record>
+
+    <!-- Cron Job: Auto Complete Past Appointments -->
+    <record id="ir_cron_appointment_auto_complete" model="ir.cron">
+        <field name="name">Appointment: Auto Complete Past Events</field>
+        <field name="model_id" ref="model_appointment_booking"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_mark_completed()</field>
+        <field name="interval_number">30</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+        <field name="priority">15</field>
+    </record>
+
+    <!-- Cron Job: Cleanup Expired Invites -->
+    <record id="ir_cron_appointment_cleanup_invites" model="ir.cron">
+        <field name="name">Appointment: Cleanup Expired Invites</field>
+        <field name="model_id" ref="model_appointment_invite"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_expire_invites()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+        <field name="priority">20</field>
+    </record>
+
+    <!-- Cron Job: Sync External Calendars -->
+    <record id="ir_cron_appointment_calendar_sync" model="ir.cron">
+        <field name="name">Appointment: Sync External Calendars</field>
+        <field name="model_id" ref="model_appointment_calendar_sync"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_sync_calendars()</field>
+        <field name="interval_number">15</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+        <field name="priority">5</field>
+    </record>
+    
+    <!-- ============================================ -->
+    <!-- SYSTEM PARAMETERS FOR INTEGRATIONS -->
+    <!-- ============================================ -->
+    
+    <record id="config_param_google_client_id" model="ir.config_parameter">
+        <field name="key">appointment.google_client_id</field>
+        <field name="value"></field>
+    </record>
+    
+    <record id="config_param_google_client_secret" model="ir.config_parameter">
+        <field name="key">appointment.google_client_secret</field>
+        <field name="value"></field>
+    </record>
+    
+    <record id="config_param_outlook_client_id" model="ir.config_parameter">
+        <field name="key">appointment.outlook_client_id</field>
+        <field name="value"></field>
+    </record>
+    
+    <record id="config_param_outlook_client_secret" model="ir.config_parameter">
+        <field name="key">appointment.outlook_client_secret</field>
+        <field name="value"></field>
+    </record>
+</odoo>

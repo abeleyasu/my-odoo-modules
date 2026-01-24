@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main RingCentral Suite Menu - appears as root app -->
+    <record id="ringcentral_suite_root_menu" model="ir.ui.menu">
+        <field name="name">RingCentral</field>
+        <field name="sequence">35</field>
+        <field name="web_icon">ringcentral_suite,static/description/icon.png</field>
+    </record>
+
+    <!-- Configuration submenu for quick access -->
+    <menuitem id="ringcentral_suite_config_menu"
+        name="RingCentral Suite Settings"
+        parent="base.menu_administration"
+        action="ringcentral_base.action_ringcentral_config_settings"
+        sequence="99"
+        groups="base.group_system"/>
+</odoo>

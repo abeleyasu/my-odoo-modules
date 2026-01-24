@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend appointment layout to include inline JS -->
+    <template id="appointment_layout_js" inherit_id="alkez_appointment.appointment_layout" name="Appointment Layout JS">
+        <xpath expr="//div[contains(@t-attf-class, 'appointment-container')]" position="inside">
+            <script>
+                (function() {
+                    function init() {
+                        console.log('[Appointment] Checking for wrapper...');
+                        var wrapper = document.querySelector('.calendly-booking-wrapper');
+                        if (!wrapper) {
+                            console.log('[Appointment] No wrapper found');
+                            return;
+                        }
+                        if (wrapper.dataset.calInit === 'done') return;
+                        wrapper.dataset.calInit = 'done';
+                        
+                        console.log('[Appointment] Starting calendar init');
+                        
+                        var cfg = window.appointmentConfig || {};
+                        var currentDate = new Date();
+                        var selectedDate = null;
+                        var selectedSlot = null;
+                        var availableSlots = {};
+                        var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+                        
+                        var minDays = Math.ceil((cfg.minScheduleNotice || 4) / 24);
+                        var minDate = new Date();
+                        minDate.setDate(minDate.getDate() + minDays);
+                        minDate.setHours(0, 0, 0, 0);
+                        
+                        var maxDate = new Date();
+                        maxDate.setDate(maxDate.getDate() + (cfg.maxScheduleDays || 60));
+                        
+                        function fmt(d) {
+                            return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+                        }
+                        
+                        function render() {
+                            var c = document.getElementById('calendar-days');
+                            var m = document.getElementById('month-year-display');
+                            if (!c || !m) return;
+                            
+                            var mn = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+                            m.textContent = mn[currentDate.getMonth()] + ' ' + currentDate.getFullYear();
+                            
+                            var y = currentDate.getFullYear();
+                            var mo = currentDate.getMonth();
+                            var fd = new Date(y, mo, 1);
+                            var ld = new Date(y, mo + 1, 0);
+                            
+                            var so = fd.getDay() - 1;
+                            if (so &lt; 0) so = 6;
+                            
+                            var td = new Date();
+                            td.setHours(0, 0, 0, 0);
+                            
+                            var h = '';
+                            var pm = new Date(y, mo, 0);
+                            for (var i = so - 1; i >= 0; i--) {
+                                h += '&lt;div class="calendar-day other-month">' + (pm.getDate() - i) + '&lt;/div>';
+                            }
+                            
+                            for (var day = 1; day &lt;= ld.getDate(); day++) {
+                                var dt = new Date(y, mo, day);
+                                var ds = fmt(dt);
+                                var cls = ['calendar-day'];
+                                
+                                if (dt.getTime() === td.getTime()) cls.push('today');
+                                if (selectedDate &amp;&amp; ds === fmt(selectedDate)) cls.push('selected');
+                                
+                                if (dt &lt; minDate || dt > maxDate) {
+                                    cls.push('disabled');
+                                } else if (availableSlots[ds] &amp;&amp; availableSlots[ds].length > 0) {
+                                    cls.push('available');
+                                } else if (Object.keys(availableSlots).length === 0) {
+                                    cls.push('available');
+                                } else {
+                                    cls.push('disabled');
+                                }
+                                
+                                h += '&lt;div class="' + cls.join(' ') + '" data-date="' + ds + '">' + day + '&lt;/div>';
+                            }
+                            
+                            var tc = so + ld.getDate();
+                            var rc = tc &lt;= 35 ? 35 - tc : 42 - tc;
+                            for (var x = 1; x &lt;= rc; x++) {
+                                h += '&lt;div class="calendar-day other-month">' + x + '&lt;/div>';
+                            }
+                            
+                            c.innerHTML = h;
+                            console.log('[Appointment] Rendered', ld.getDate(), 'days');
+                            
+                            var days = c.querySelectorAll('.calendar-day.available');
+                            for (var j = 0; j &lt; days.length; j++) {
+                                (function(el) {
+                                    el.onclick = function() {
+                                        selectedDate = new Date(el.getAttribute('data-date') + 'T00:00:00');
+                                        selectedSlot = null;
+                                        render();
+                                        slots();
+                                    };
+                                })(days[j]);
+                            }
+                        }
+                        
+                        function slots() {
+                            var p = document.getElementById('timeslots-panel');
+                            var hd = document.getElementById('timeslots-header');
+                            var ls = document.getElementById('timeslots-list');
+                            if (!p || !hd || !ls || !selectedDate) return;
+                            
+                            var ds = fmt(selectedDate);
+                            var sl = availableSlots[ds] || [];
+                            
+                            hd.textContent = selectedDate.toLocaleDateString('en-US', {weekday:'long',month:'long',day:'numeric'});
+                            
+                            if (sl.length === 0) {
+                                ls.innerHTML = '&lt;div class="no-slots">No available times&lt;/div>';
+                            } else {
+                                var h = '';
+                                for (var i = 0; i &lt; sl.length; i++) {
+                                    var s = sl[i];
+                                    var t = s.display_time || s.start_formatted || s.start.split('T')[1].substring(0,5);
+                                    var sel = selectedSlot &amp;&amp; selectedSlot.start === s.start;
+                                    h += '&lt;div class="timeslot-item">&lt;button type="button" class="timeslot-btn' + (sel ? ' selected' : '') + '" data-start="' + s.start + '" data-end="' + s.end + '" data-t="' + t + '">' + t + '&lt;/button>';
+                                    if (sel) h += '&lt;button type="button" class="timeslot-confirm">Next&lt;/button>';
+                                    h += '&lt;/div>';
+                                }
+                                ls.innerHTML = h;
+                                
+                                var btns = ls.querySelectorAll('.timeslot-btn');
+                                for (var j = 0; j &lt; btns.length; j++) {
+                                    (function(b) {
+                                        b.onclick = function() {
+                                            selectedSlot = {start: b.getAttribute('data-start'), end: b.getAttribute('data-end'), displayTime: b.getAttribute('data-t')};
+                                            slots();
+                                        };
+                                    })(btns[j]);
+                                }
+                                
+                                var confs = ls.querySelectorAll('.timeslot-confirm');
+                                for (var k = 0; k &lt; confs.length; k++) {
+                                    confs[k].onclick = function(e) {
+                                        e.preventDefault();
+                                        if (!selectedDate || !selectedSlot) return;
+                                        document.getElementById('calendar-panel').style.display = 'none';
+                                        document.getElementById('timeslots-panel').style.display = 'none';
+                                        document.getElementById('form-panel').style.display = 'block';
+                                        document.getElementById('back-to-calendar').style.display = 'flex';
+                                        var sd = document.getElementById('selected-time-display');
+                                        var dt = document.getElementById('selected-datetime-text');
+                                        var tz2 = document.getElementById('selected-timezone-text');
+                                        if (sd &amp;&amp; dt &amp;&amp; tz2) {
+                                            dt.textContent = selectedSlot.displayTime + ', ' + selectedDate.toLocaleDateString('en-US', {weekday:'long',month:'long',day:'numeric',year:'numeric'});
+                                            tz2.textContent = tz;
+                                            sd.style.display = 'block';
+                                        }
+                                        document.getElementById('form-datetime').value = selectedSlot.start;
+                                        document.getElementById('form-timezone').value = tz;
+                                    };
+                                }
+                            }
+                            p.style.display = 'block';
+                        }
+                        
+                        function fetch() {
+                            var sd = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                            var ed = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                            console.log('[Appointment] Fetching', fmt(sd), 'to', fmt(ed));
+                            var xhr = new XMLHttpRequest();
+                            xhr.open('POST', '/appointment/slots', true);
+                            xhr.setRequestHeader('Content-Type', 'application/json');
+                            xhr.onreadystatechange = function() {
+                                if (xhr.readyState === 4 &amp;&amp; xhr.status === 200) {
+                                    try {
+                                        var d = JSON.parse(xhr.responseText);
+                                        console.log('[Appointment] Got slots:', d);
+                                        if (d.result &amp;&amp; d.result.slots) {
+                                            availableSlots = d.result.slots;
+                                            render();
+                                        }
+                                    } catch(e) { console.error(e); }
+                                }
+                            };
+                            xhr.send(JSON.stringify({jsonrpc:'2.0',method:'call',params:{appointment_type_id:cfg.appointmentTypeId,user_id:cfg.userId,start_date:fmt(sd),end_date:fmt(ed),timezone:tz},id:Date.now()}));
+                        }
+                        
+                        // Nav
+                        var pv = document.getElementById('prev-month');
+                        var nx = document.getElementById('next-month');
+                        if (pv) pv.onclick = function(e) { e.preventDefault(); currentDate.setMonth(currentDate.getMonth()-1); selectedDate=null; selectedSlot=null; document.getElementById('timeslots-panel').style.display='none'; fetch(); };
+                        if (nx) nx.onclick = function(e) { e.preventDefault(); currentDate.setMonth(currentDate.getMonth()+1); selectedDate=null; selectedSlot=null; document.getElementById('timeslots-panel').style.display='none'; fetch(); };
+                        
+                        // Back
+                        var bk = document.getElementById('back-to-calendar');
+                        if (bk) bk.onclick = function(e) { e.preventDefault(); document.getElementById('calendar-panel').style.display='block'; document.getElementById('timeslots-panel').style.display='block'; document.getElementById('form-panel').style.display='none'; bk.style.display='none'; document.getElementById('selected-time-display').style.display='none'; };
+                        
+                        // Guests
+                        var ag = document.getElementById('add-guests-btn');
+                        if (ag) ag.onclick = function(e) { e.preventDefault(); document.getElementById('guests-container').style.display='block'; ag.style.display='none'; };
+                        
+                        // TZ - Set initial value and handle changes
+                        var tzSelect = document.getElementById('timezone-select');
+                        if (tzSelect) {
+                            // Set initial value to detected timezone if available
+                            var options = tzSelect.options;
+                            var found = false;
+                            for (var i = 0; i &lt; options.length; i++) {
+                                if (options[i].value === tz) {
+                                    tzSelect.selectedIndex = i;
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if (!found) {
+                                // Add detected timezone as first option if not in list
+                                var opt = document.createElement('option');
+                                opt.value = tz;
+                                opt.text = tz.replace(/_/g, ' ');
+                                tzSelect.insertBefore(opt, tzSelect.firstChild);
+                                tzSelect.selectedIndex = 0;
+                            }
+                            
+                            // Handle timezone change
+                            tzSelect.onchange = function() {
+                                tz = tzSelect.value;
+                                console.log('[Appointment] Timezone changed to:', tz);
+                                // Refetch slots with new timezone
+                                fetch();
+                            };
+                        }
+                        
+                        render();
+                        fetch();
+                    }
+                    
+                    if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', init);
+                    } else {
+                        setTimeout(init, 50);
+                    }
+                })();
+            </script>
+        </xpath>
+    </template>
+</odoo>

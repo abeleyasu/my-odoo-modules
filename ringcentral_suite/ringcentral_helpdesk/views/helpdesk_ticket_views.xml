@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Helpdesk Ticket Form View (OCA helpdesk_mgmt) -->
+    <record id="helpdesk_ticket_view_form_ringcentral" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.ringcentral</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add communication buttons to button box -->
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_view_calls" type="object" class="oe_stat_button" icon="fa-phone" groups="ringcentral_base.group_ringcentral_user">
+                    <field name="call_count" widget="statinfo" string="Calls"/>
+                </button>
+                <button name="action_view_sms" type="object" class="oe_stat_button" icon="fa-comment" groups="ringcentral_base.group_ringcentral_user">
+                    <field name="sms_count" widget="statinfo" string="SMS"/>
+                </button>
+            </xpath>
+            
+            <!-- Add quick action buttons -->
+            <xpath expr="//header" position="inside">
+                <button name="action_call" type="object" string="Call" class="btn-primary" icon="fa-phone" groups="ringcentral_base.group_ringcentral_user"/>
+                <button name="action_send_sms" type="object" string="SMS" icon="fa-comment" groups="ringcentral_base.group_ringcentral_user"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Extend Helpdesk Ticket Tree View (OCA helpdesk_mgmt) -->
+    <record id="helpdesk_ticket_view_tree_ringcentral" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.tree.ringcentral</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk_mgmt.ticket_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <button name="action_call" type="object" icon="fa-phone" title="Call" class="text-primary" groups="ringcentral_base.group_ringcentral_user"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

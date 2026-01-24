@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- SMS Compose Wizard Form -->
+    <record id="ringcentral_sms_compose_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.sms.compose.form</field>
+        <field name="model">ringcentral.sms.compose</field>
+        <field name="arch" type="xml">
+            <form string="Send SMS">
+                <group>
+                    <field name="phone_number" placeholder="+1234567890"/>
+                    <field name="partner_id"/>
+                    <field name="template_id" options="{'no_create': True}"/>
+                </group>
+                <group string="Message">
+                    <field name="body" nolabel="1" colspan="2" placeholder="Type your message here..."/>
+                </group>
+                <group>
+                    <div class="text-muted">
+                        <field name="char_count" class="oe_inline"/> characters
+                        (<field name="sms_count" class="oe_inline"/> SMS part(s))
+                    </div>
+                </group>
+                <group string="Attachments (MMS)">
+                    <field name="attachment_ids" nolabel="1" colspan="2"/>
+                </group>
+                <field name="res_model" invisible="1"/>
+                <field name="res_id" invisible="1"/>
+                <footer>
+                    <button name="action_send" type="object" string="Send" class="btn-primary" icon="fa-paper-plane"/>
+                    <button name="action_send_and_new" type="object" string="Send &amp; New" class="btn-secondary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <!-- SMS Compose Action -->
+    <record id="action_ringcentral_sms_compose" model="ir.actions.act_window">
+        <field name="name">Send SMS</field>
+        <field name="res_model">ringcentral.sms.compose</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

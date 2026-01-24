@@ -1,0 +1,202 @@
+.rc-softphone {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    font-family: inherit;
+}
+
+.rc-softphone-toggle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #4CAF50;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+    position: relative;
+}
+
+.rc-softphone-toggle:hover {
+    transform: scale(1.1);
+}
+
+.rc-softphone.in-call .rc-softphone-toggle {
+    background: #f44336;
+    animation: pulse-ring 1.5s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+    0% {
+        box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(244, 67, 54, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(244, 67, 54, 0);
+    }
+}
+
+.rc-call-indicator {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 15px;
+    height: 15px;
+    background: #f44336;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.rc-softphone.expanded .rc-softphone-toggle {
+    display: none;
+}
+
+.rc-softphone-panel {
+    width: 280px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.rc-softphone-header {
+    background: #4a4a4a;
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rc-softphone-header .btn {
+    color: white;
+}
+
+.rc-softphone-body {
+    padding: 15px;
+}
+
+.rc-phone-display {
+    margin-bottom: 15px;
+}
+
+.rc-phone-display input {
+    text-align: center;
+    font-size: 18px;
+}
+
+.rc-dialpad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.rc-dialpad-key {
+    width: 60px;
+    height: 50px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.rc-dialpad-key:hover {
+    background: #e9e9e9;
+}
+
+.rc-dialpad-key:active {
+    background: #d9d9d9;
+}
+
+.rc-softphone-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.rc-call-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 24px;
+}
+
+.rc-hangup-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.rc-in-call {
+    text-align: center;
+}
+
+.rc-call-info {
+    margin-bottom: 20px;
+}
+
+.rc-caller-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.rc-duration {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4CAF50;
+}
+
+.rc-call-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.rc-call-controls .btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile responsive */
+@media (max-width: 576px) {
+    .rc-softphone {
+        bottom: 10px;
+        right: 10px;
+    }
+    
+    .rc-softphone-panel {
+        width: calc(100vw - 20px);
+        max-width: 320px;
+    }
+}
+
+/* Dark mode support */
+.o_dark .rc-softphone-panel {
+    background: #2a2a2a;
+    color: #fff;
+}
+
+.o_dark .rc-dialpad-key {
+    background: #3a3a3a;
+    border-color: #4a4a4a;
+    color: #fff;
+}
+
+.o_dark .rc-dialpad-key:hover {
+    background: #4a4a4a;
+}
