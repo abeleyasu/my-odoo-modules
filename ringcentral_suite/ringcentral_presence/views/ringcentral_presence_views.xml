@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Presence Tree View -->
+    <record id="ringcentral_presence_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.presence.tree</field>
+        <field name="model">ringcentral.presence</field>
+        <field name="arch" type="xml">
+            <list string="User Presence"
+                  decoration-success="presence_status == 'available'"
+                  decoration-warning="presence_status in ('busy', 'away')"
+                  decoration-danger="presence_status == 'dnd'"
+                  decoration-muted="presence_status == 'offline'">
+                <field name="user_id" widget="many2one_avatar_user"/>
+                <field name="presence_status" widget="badge"/>
+                <field name="telephony_status" widget="badge"/>
+                <field name="dnd_status"/>
+                <field name="status_message"/>
+                <field name="last_update"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Presence Form View -->
+    <record id="ringcentral_presence_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.presence.form</field>
+        <field name="model">ringcentral.presence</field>
+        <field name="arch" type="xml">
+            <form string="Presence">
+                <header>
+                    <button name="action_set_available" type="object" string="Available" class="btn-success"/>
+                    <button name="action_set_busy" type="object" string="Busy" class="btn-warning"/>
+                    <button name="action_set_dnd" type="object" string="Do Not Disturb" class="btn-danger"/>
+                    <button name="action_set_away" type="object" string="Away"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="User">
+                            <field name="user_id"/>
+                            <field name="extension_id"/>
+                        </group>
+                        <group string="Status">
+                            <field name="presence_status" widget="badge"/>
+                            <field name="user_status"/>
+                            <field name="dnd_status"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Activity">
+                            <field name="telephony_status"/>
+                            <field name="meeting_status"/>
+                        </group>
+                        <group string="Message">
+                            <field name="status_message"/>
+                            <field name="last_update"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Presence Kanban View -->
+    <record id="ringcentral_presence_view_kanban" model="ir.ui.view">
+        <field name="name">ringcentral.presence.kanban</field>
+        <field name="model">ringcentral.presence</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="presence_status">
+                <field name="user_id"/>
+                <field name="presence_status"/>
+                <field name="telephony_status"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <img t-att-src="kanban_image('res.users', 'avatar_128', record.user_id.raw_value)"
+                                     class="o_kanban_image rounded-circle" alt="User"/>
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="user_id"/>
+                                    </strong>
+                                    <small class="o_kanban_record_subtitle text-muted">
+                                        <field name="telephony_status"/>
+                                    </small>
+                                </div>
+                                <div t-attf-style="width: 12px; height: 12px; border-radius: 50%; background-color: #{record.color.raw_value};"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    
+    <!-- Action -->
+    <record id="action_ringcentral_presence" model="ir.actions.act_window">
+        <field name="name">User Presence</field>
+        <field name="res_model">ringcentral.presence</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No presence data available
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Call Queue Tree View -->
+    <record id="call_queue_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.call.queue.tree</field>
+        <field name="model">ringcentral.call.queue</field>
+        <field name="arch" type="xml">
+            <list string="Call Queues">
+                <field name="name"/>
+                <field name="extension"/>
+                <field name="routing_type"/>
+                <field name="agent_count"/>
+                <field name="available_agent_count"/>
+                <field name="calls_waiting"/>
+                <field name="service_level" widget="progressbar"/>
+                <field name="active" widget="boolean"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Call Queue Form View -->
+    <record id="call_queue_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.call.queue.form</field>
+        <field name="model">ringcentral.call.queue</field>
+        <field name="arch" type="xml">
+            <form string="Call Queue">
+                <header>
+                    <button name="action_sync_from_ringcentral" type="object" string="Sync from RingCentral"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_agents" type="object" class="oe_stat_button" icon="fa-users">
+                            <field string="Agents" name="agent_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Queue Name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Configuration">
+                            <field name="extension"/>
+                            <field name="ringcentral_queue_id"/>
+                            <field name="routing_type"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group string="Wait Settings">
+                            <field name="max_wait_time"/>
+                            <field name="hold_music_id"/>
+                        </group>
+                    </group>
+                    <group string="Overflow">
+                        <field name="overflow_action"/>
+                        <field name="overflow_extension" invisible="overflow_action != 'extension'"/>
+                    </group>
+                    <notebook>
+                        <page string="Agents" name="agents">
+                            <field name="agent_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="user_id"/>
+                                    <field name="skill_level"/>
+                                    <field name="is_available" widget="boolean"/>
+                                    <field name="calls_handled_today"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Statistics" name="stats">
+                            <group>
+                                <field name="calls_waiting"/>
+                                <field name="avg_wait_time"/>
+                                <field name="calls_today"/>
+                                <field name="service_level" widget="progressbar"/>
+                            </group>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Call Queue Action -->
+    <record id="action_call_queue" model="ir.actions.act_window">
+        <field name="name">Call Queues</field>
+        <field name="res_model">ringcentral.call.queue</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

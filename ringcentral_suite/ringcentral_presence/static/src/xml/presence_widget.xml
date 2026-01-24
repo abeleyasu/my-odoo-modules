@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="ringcentral_presence.PresenceWidget">
+        <div class="rc-presence-widget dropdown">
+            <button class="btn btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="rc-status-indicator" t-attf-style="background-color: {{ getStatusColor(state.myStatus) }};"></span>
+                <span class="d-none d-md-inline" t-esc="state.myStatus"/>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a class="dropdown-item" href="#" t-on-click.prevent="() => this.onStatusChange('available')">
+                        <span class="rc-status-dot" style="background-color: #28a745;"></span>
+                        Available
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#" t-on-click.prevent="() => this.onStatusChange('busy')">
+                        <span class="rc-status-dot" style="background-color: #ffc107;"></span>
+                        Busy
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#" t-on-click.prevent="() => this.onStatusChange('dnd')">
+                        <span class="rc-status-dot" style="background-color: #dc3545;"></span>
+                        Do Not Disturb
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#" t-on-click.prevent="() => this.onStatusChange('away')">
+                        <span class="rc-status-dot" style="background-color: #fd7e14;"></span>
+                        Away
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </t>
+</templates>

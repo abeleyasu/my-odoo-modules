@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- APPOINTMENT TYPE VIEWS -->
+    <!-- ============================================ -->
+
+    <!-- Appointment Type Form View -->
+    <record id="appointment_type_view_form" model="ir.ui.view">
+        <field name="name">appointment.type.form</field>
+        <field name="model">appointment.type</field>
+        <field name="arch" type="xml">
+            <form string="Appointment Type">
+                <header>
+                    <button name="action_open_public_url" type="object" string="Open Public URL" 
+                            class="oe_highlight" icon="fa-external-link"
+                            invisible="not user_ids"
+                            help="Open the public booking page"/>
+                    <button name="action_copy_embed_code" type="object" string="Get Embed Code" icon="fa-code"
+                            invisible="not user_ids"
+                            help="Get embed codes for your website"/>
+                    <div class="alert alert-info m-3" role="alert" invisible="user_ids">
+                        <i class="fa fa-info-circle"></i>
+                        Public URL and embed codes will be available after assigning team members.
+                    </div>
+                </header>
+                <sheet>
+                    <!-- Alert: No Users Assigned -->
+                    <div class="alert alert-warning" role="alert" invisible="user_ids">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        <strong>Action Required:</strong> 
+                        This appointment type cannot be booked until at least one team member is assigned.
+                        Scroll down to assign team members.
+                    </div>
+                    
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_bookings" type="object" class="oe_stat_button" icon="fa-calendar-check-o">
+                            <field name="booking_count" widget="statinfo" string="Bookings"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" 
+                            invisible="active"/>
+                    <field name="active" invisible="1"/>
+                    
+                    <div class="d-flex align-items-center mb-3">
+                        <field name="color" widget="color_picker" class="me-3"/>
+                        <div class="flex-grow-1">
+                            <h1>
+                                <field name="name" placeholder="Event Type Name (e.g., 30 Minute Meeting)"/>
+                            </h1>
+                        </div>
+                    </div>
+                    
+                    <group>
+                        <group name="basic">
+                            <field name="slug"/>
+                            <field name="description" placeholder="Brief description shown to invitees"/>
+                        </group>
+                        <group name="assignment">
+                            <label for="user_ids" string="Team Members" class="fw-bold text-danger"/>
+                            <div>
+                                <field name="user_ids" widget="many2many_tags" 
+                                       options="{'color_field': 'color'}" 
+                                       placeholder="Select at least one team member (required)"
+                                       class="oe_inline"
+                                       required="1"/>
+                                <div class="text-muted small">
+                                    <i class="fa fa-info-circle"></i> At least one team member must be assigned for this appointment type to be bookable.
+                                </div>
+                            </div>
+                            <field name="assign_method"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <!-- Duration & Scheduling Tab -->
+                        <page string="Scheduling" name="scheduling">
+                            <group>
+                                <group string="Duration">
+                                    <field name="duration" widget="float_time"/>
+                                    <field name="slot_duration" widget="float_time"/>
+                                </group>
+                                <group string="Buffer Times">
+                                    <field name="buffer_time_before" widget="float_time"/>
+                                    <field name="buffer_time_after" widget="float_time"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Availability Window">
+                                    <field name="min_schedule_notice" widget="float_time"/>
+                                    <field name="max_schedule_days"/>
+                                </group>
+                                <group string="Limits">
+                                    <field name="max_bookings_per_day"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <!-- Group Booking Tab -->
+                        <page string="Group Booking" name="group_booking">
+                            <group>
+                                <group string="Group Settings">
+                                    <field name="allow_group_booking"/>
+                                    <field name="max_attendees" invisible="not allow_group_booking"/>
+                                    <field name="min_attendees" invisible="not allow_group_booking"/>
+                                    <field name="show_remaining_seats" invisible="not allow_group_booking"/>
+                                </group>
+                                <group string="Info" invisible="not allow_group_booking">
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fa fa-users"/> Group bookings allow multiple people to book the same time slot.
+                                        Perfect for webinars, classes, or group sessions.
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <!-- Recurring Appointments Tab -->
+                        <page string="Recurring" name="recurring">
+                            <group>
+                                <group string="Recurring Settings">
+                                    <field name="allow_recurring"/>
+                                    <field name="recurring_patterns" invisible="not allow_recurring"/>
+                                    <field name="recurring_max_occurrences" invisible="not allow_recurring"/>
+                                </group>
+                                <group string="Info" invisible="not allow_recurring">
+                                    <div class="alert alert-info" role="alert">
+                                        <i class="fa fa-repeat"/> Recurring appointments allow invitees to book 
+                                        a series of meetings at once (e.g., weekly coaching sessions).
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <!-- Availability Tab -->
+                        <page string="Availability" name="availability">
+                            <group string="Weekly Hours">
+                                <field name="availability_ids" nolabel="1"/>
+                            </group>
+                            <group string="Date Exceptions" col="1">
+                                <field name="exception_ids" nolabel="1"/>
+                            </group>
+                        </page>
+                        
+                        <!-- Location Tab -->
+                        <page string="Location" name="location">
+                            <group>
+                                <field name="location_type"/>
+                                <field name="location" invisible="location_type == 'online'" 
+                                       placeholder="Address or location details"/>
+                                <field name="video_conference_type" invisible="location_type != 'online'"/>
+                                <field name="video_conference_link" invisible="location_type != 'online' or video_conference_type != 'custom'"
+                                       placeholder="Custom video conference URL"/>
+                            </group>
+                        </page>
+                        
+                        <!-- Questions Tab -->
+                        <page string="Questions" name="questions">
+                            <field name="question_ids" nolabel="1"/>
+                        </page>
+                        
+                        <!-- Notifications Tab -->
+                        <page string="Notifications" name="notifications">
+                            <group>
+                                <group string="Email Notifications">
+                                    <field name="confirmation_email"/>
+                                    <field name="reminder_enabled"/>
+                                    <field name="reminder_hours" widget="float_time" invisible="not reminder_enabled"/>
+                                    <field name="follow_up_enabled"/>
+                                    <field name="follow_up_hours" widget="float_time" invisible="not follow_up_enabled"/>
+                                </group>
+                                <group string="Calendar">
+                                    <field name="alarm_ids" widget="many2many_tags"/>
+                                    <field name="categ_ids" widget="many2many_tags"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <!-- Embed & Sharing Tab -->
+                        <page string="Embed &amp; Share" name="embed">
+                            <group string="Public URL">
+                                <div class="alert alert-info" role="alert">
+                                    <strong>Your Booking Link:</strong><br/>
+                                    <field name="public_url" widget="CopyClipboardURL"/>
+                                </div>
+                            </group>
+                            <group string="Embed Options">
+                                <div col="2">
+                                    <p>Copy and paste this code into your website to embed the booking widget:</p>
+                                </div>
+                                <group string="Inline Widget">
+                                    <field name="embed_code_inline" widget="CopyClipboardText" nolabel="1"/>
+                                </group>
+                                <group string="Popup Widget">
+                                    <field name="embed_code_popup" widget="CopyClipboardText" nolabel="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Appointment Type Tree View -->
+    <record id="appointment_type_view_tree" model="ir.ui.view">
+        <field name="name">appointment.type.tree</field>
+        <field name="model">appointment.type</field>
+        <field name="arch" type="xml">
+            <list string="Appointment Types" decoration-muted="not active">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="duration"/>
+                <field name="user_ids" widget="many2many_tags"/>
+                <field name="booking_count"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Appointment Type Kanban View -->
+    <record id="appointment_type_view_kanban" model="ir.ui.view">
+        <field name="name">appointment.type.kanban</field>
+        <field name="model">appointment.type</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="active" sample="1" class="o_kanban_dashboard">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="color"/>
+                <field name="duration"/>
+                <field name="location_type"/>
+                <field name="user_ids"/>
+                <field name="booking_count"/>
+                <field name="public_url"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record p-0 mb-2 shadow-sm border rounded bg-white">
+                            <!-- Color Bar -->
+                            <div t-attf-style="background-color: #{record.color.raw_value or '#0069ff'}; height: 6px; width: 100%; border-radius: 4px 4px 0 0;"/>
+                            
+                            <div class="p-3">
+                                <!-- Header -->
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div class="o_kanban_record_title w-100">
+                                        <field name="name" class="fw-bold fs-5 d-block text-dark mb-1"/>
+                                        <div class="text-muted small d-flex align-items-center">
+                                            <span class="me-2"><i class="fa fa-clock-o me-1"/> <field name="duration"/> min</span>
+                                            <span class="me-2">•</span>
+                                            <span t-if="record.location_type.raw_value == 'online'"><i class="fa fa-video-camera me-1"/> Online</span>
+                                            <span t-if="record.location_type.raw_value == 'in_person'"><i class="fa fa-map-marker me-1"/> In Person</span>
+                                            <span t-if="record.location_type.raw_value == 'phone_outgoing'"><i class="fa fa-phone me-1"/> Phone</span>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_manage_button_section ms-2">
+                                        <a class="o_kanban_manage_toggle_button text-muted" href="#"><i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/></a>
+                                    </div>
+                                </div>
+
+                                <!-- Body -->
+                                <div class="mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <t t-if="record.user_ids.raw_value and record.user_ids.raw_value.length">
+                                            <a name="action_open_public_url" type="object" class="text-primary text-decoration-none small fw-bold">
+                                                View booking page
+                                            </a>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="text-muted small">
+                                                <i class="fa fa-exclamation-triangle text-warning me-1"/>
+                                                Assign team members to enable
+                                            </span>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- Footer / Actions -->
+                                <div class="d-flex justify-content-between align-items-center border-top pt-3 mt-2">
+                                    <div class="text-muted small">
+                                        <field name="booking_count"/> bookings
+                                    </div>
+                                    <button name="action_copy_embed_code" type="object" class="btn btn-link btn-sm text-primary p-0 text-decoration-none">
+                                        <i class="fa fa-share-alt me-1"/> Share
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Appointment Type Search View -->
+    <record id="appointment_type_view_search" model="ir.ui.view">
+        <field name="name">appointment.type.search</field>
+        <field name="model">appointment.type</field>
+        <field name="arch" type="xml">
+            <search string="Search Appointment Types">
+                <field name="name"/>
+                <field name="user_ids"/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="archived" string="Archived" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter name="my_types" string="My Event Types" domain="[('user_ids', 'in', uid)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_duration" string="Duration" context="{'group_by': 'duration'}"/>
+                    <filter name="group_by_location" string="Location Type" context="{'group_by': 'location_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Appointment Type Action -->
+    <record id="action_appointment_type" model="ir.actions.act_window">
+        <field name="name">Event Types</field>
+        <field name="res_model">appointment.type</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="appointment_type_view_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first event type
+            </p>
+            <p>
+                Event types are the different kinds of meetings people can schedule with you,
+                like "30 Minute Meeting" or "Product Demo".
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- AVAILABILITY VIEWS -->
+    <!-- ============================================ -->
+
+    <record id="appointment_type_availability_view_form" model="ir.ui.view">
+        <field name="name">appointment.type.availability.form</field>
+        <field name="model">appointment.type.availability</field>
+        <field name="arch" type="xml">
+            <form string="Availability">
+                <group>
+                    <field name="appointment_type_id"/>
+                    <field name="weekday"/>
+                    <field name="start_hour" widget="float_time"/>
+                    <field name="end_hour" widget="float_time"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- EXCEPTION VIEWS -->
+    <!-- ============================================ -->
+
+    <record id="appointment_type_exception_view_form" model="ir.ui.view">
+        <field name="name">appointment.type.exception.form</field>
+        <field name="model">appointment.type.exception</field>
+        <field name="arch" type="xml">
+            <form string="Date Exception">
+                <group>
+                    <field name="appointment_type_id"/>
+                    <field name="date"/>
+                    <field name="exception_type"/>
+                    <field name="start_hour" widget="float_time" invisible="exception_type == 'blocked'"/>
+                    <field name="end_hour" widget="float_time" invisible="exception_type == 'blocked'"/>
+                    <field name="reason"/>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>

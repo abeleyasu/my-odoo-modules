@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- RingCentral Main Menu -->
+    
+    <menuitem id="menu_ringcentral_root"
+              name="RingCentral"
+              web_icon="ringcentral_base,static/description/icon.png"
+              sequence="45"
+              groups="ringcentral_base.group_ringcentral_user"/>
+    
+    <!-- Communications Group -->
+    <menuitem id="menu_ringcentral_communications"
+              name="Communications"
+              parent="menu_ringcentral_root"
+              sequence="10"
+              groups="ringcentral_base.group_ringcentral_user"/>
+    
+    <!-- Advanced Features Group -->
+    <menuitem id="menu_ringcentral_advanced"
+              name="Advanced Features"
+              parent="menu_ringcentral_root"
+              sequence="50"
+              groups="ringcentral_base.group_ringcentral_user"/>
+    
+    <!-- Configuration Menu -->
+    <menuitem id="menu_ringcentral_config"
+              name="Configuration"
+              parent="menu_ringcentral_root"
+              sequence="100"
+              groups="ringcentral_base.group_ringcentral_admin"/>
+    
+    <menuitem id="menu_ringcentral_settings"
+              name="Settings"
+              parent="menu_ringcentral_config"
+              action="action_ringcentral_settings"
+              sequence="10"
+              groups="ringcentral_base.group_ringcentral_admin"/>
+    
+    <menuitem id="menu_ringcentral_api_logs"
+              name="API Logs"
+              parent="menu_ringcentral_config"
+              action="action_ringcentral_api_log"
+              sequence="20"
+              groups="ringcentral_base.group_ringcentral_manager"/>
+    
+</odoo>

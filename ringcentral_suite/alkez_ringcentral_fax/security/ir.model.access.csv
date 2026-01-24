@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ringcentral_fax_user,ringcentral.fax.user,model_ringcentral_fax,ringcentral_base.group_ringcentral_user,1,1,1,0
+access_ringcentral_fax_manager,ringcentral.fax.manager,model_ringcentral_fax,ringcentral_base.group_ringcentral_manager,1,1,1,1
+access_ringcentral_fax_cover_page_user,ringcentral.fax.cover.page.user,model_ringcentral_fax_cover_page,ringcentral_base.group_ringcentral_user,1,0,0,0
+access_ringcentral_fax_cover_page_manager,ringcentral.fax.cover.page.manager,model_ringcentral_fax_cover_page,ringcentral_base.group_ringcentral_manager,1,1,1,1
+access_ringcentral_fax_send,ringcentral.fax.send,model_ringcentral_fax_send,ringcentral_base.group_ringcentral_user,1,1,1,1

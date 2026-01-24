@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- RingCentral Configuration Settings View -->
+    
+    <record id="res_config_settings_view_form_ringcentral" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.ringcentral</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority">50</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="RingCentral" string="RingCentral" name="ringcentral_base" groups="ringcentral_base.group_ringcentral_admin">
+                    <block title="RingCentral Integration" name="ringcentral_settings">
+                        <setting string="Enable RingCentral" help="Enable RingCentral integration for this company">
+                            <field name="ringcentral_enabled"/>
+                        </setting>
+                    </block>
+                    
+                    <block title="Authentication" name="ringcentral_auth" invisible="not ringcentral_enabled">
+                        <setting string="API Credentials" help="RingCentral App credentials from developer portal">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="ringcentral_client_id" class="col-lg-3 o_light_label"/>
+                                    <field name="ringcentral_client_id" class="col-lg-9"/>
+                                </div>
+                                <div class="row">
+                                    <label for="ringcentral_client_secret" class="col-lg-3 o_light_label"/>
+                                    <field name="ringcentral_client_secret" class="col-lg-9" password="True"/>
+                                </div>
+                            </div>
+                        </setting>
+                        
+                        <setting string="JWT Authentication (Recommended)" help="JWT token for server-to-server authentication">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="ringcentral_jwt_token" class="col-lg-3 o_light_label"/>
+                                    <field name="ringcentral_jwt_token" class="col-lg-9" password="True"/>
+                                </div>
+                            </div>
+                        </setting>
+                        
+                        <setting string="OAuth Authentication (Alternative)" help="Username/password authentication">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="ringcentral_username" class="col-lg-3 o_light_label"/>
+                                    <field name="ringcentral_username" class="col-lg-9"/>
+                                </div>
+                                <div class="row">
+                                    <label for="ringcentral_password" class="col-lg-3 o_light_label"/>
+                                    <field name="ringcentral_password" class="col-lg-9" password="True"/>
+                                </div>
+                                <div class="row">
+                                    <label for="ringcentral_extension" class="col-lg-3 o_light_label"/>
+                                    <field name="ringcentral_extension" class="col-lg-9"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    
+                    <block title="Server Configuration" name="ringcentral_server" invisible="not ringcentral_enabled">
+                        <setting string="Environment" help="Choose production or sandbox environment">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="ringcentral_server_url" class="col-lg-3 o_light_label"/>
+                                    <field name="ringcentral_server_url" class="col-lg-9"/>
+                                </div>
+                            </div>
+                        </setting>
+                        
+                        <setting string="Webhooks" help="Configure webhook URL for real-time events">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="ringcentral_webhook_url" class="col-lg-3 o_light_label"/>
+                                    <field name="ringcentral_webhook_url" class="col-lg-9" placeholder="https://your-odoo.com/ringcentral/webhook"/>
+                                </div>
+                                <div class="row">
+                                    <label for="ringcentral_webhook_secret" class="col-lg-3 o_light_label"/>
+                                    <field name="ringcentral_webhook_secret" class="col-lg-9" password="True"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    
+                    <block title="Call Settings" name="ringcentral_call_settings" invisible="not ringcentral_enabled">
+                        <setting string="Default Caller ID" help="Default outbound caller ID number">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="ringcentral_default_caller_id" class="col-lg-3 o_light_label"/>
+                                    <field name="ringcentral_default_caller_id" class="col-lg-9"/>
+                                </div>
+                            </div>
+                        </setting>
+                        
+                        <setting string="Call Recording" help="Automatic call recording settings">
+                            <field name="ringcentral_auto_record_calls"/>
+                        </setting>
+                        
+                        <setting string="Connection Prompt" help="Play prompt when RingOut call connects">
+                            <field name="ringcentral_call_prompt"/>
+                        </setting>
+                    </block>
+                    
+                    <block title="Connection Status" name="ringcentral_status" invisible="not ringcentral_enabled">
+                        <setting string="Health Status">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="ringcentral_health_status" class="col-lg-3 o_light_label"/>
+                                    <field name="ringcentral_health_status" class="col-lg-9"/>
+                                </div>
+                                <div class="row">
+                                    <label for="ringcentral_last_health_check" class="col-lg-3 o_light_label"/>
+                                    <field name="ringcentral_last_health_check" class="col-lg-9"/>
+                                </div>
+                                <div class="row">
+                                    <label for="ringcentral_health_latency" class="col-lg-3 o_light_label"/>
+                                    <field name="ringcentral_health_latency" class="col-lg-9"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    
+                    <block title="Actions" name="ringcentral_actions" invisible="not ringcentral_enabled">
+                        <setting>
+                            <div class="content-group">
+                                <button name="action_test_connection" type="object" string="Test Connection" class="btn-primary me-2" icon="fa-plug"/>
+                                <button name="action_setup_webhooks" type="object" string="Setup Webhooks" class="btn-secondary me-2" icon="fa-link"/>
+                                <button name="action_sync_phone_numbers" type="object" string="Sync Phone Numbers" class="btn-secondary me-2" icon="fa-refresh"/>
+                                <button name="action_view_api_logs" type="object" string="View API Logs" class="btn-secondary" icon="fa-list"/>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Action to open RingCentral Settings -->
+    <record id="action_ringcentral_settings" model="ir.actions.act_window">
+        <field name="name">RingCentral Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'ringcentral_base', 'bin_size': False}</field>
+    </record>
+    
+</odoo>

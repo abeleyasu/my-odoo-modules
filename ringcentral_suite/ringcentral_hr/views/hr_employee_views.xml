@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Employee Form View -->
+    <record id="hr_employee_view_form_ringcentral" model="ir.ui.view">
+        <field name="name">hr.employee.form.ringcentral</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <!-- Add communication buttons to button box -->
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_view_calls" type="object" class="oe_stat_button" icon="fa-phone" groups="ringcentral_base.group_ringcentral_user">
+                    <field name="call_count" widget="statinfo" string="Calls"/>
+                </button>
+                <button name="action_view_sms" type="object" class="oe_stat_button" icon="fa-comment" groups="ringcentral_base.group_ringcentral_user">
+                    <field name="sms_count" widget="statinfo" string="SMS"/>
+                </button>
+            </xpath>
+            
+            <!-- Add quick action buttons in header -->
+            <xpath expr="//header" position="inside">
+                <button name="action_call" type="object" string="Call" class="btn-primary" icon="fa-phone" groups="ringcentral_base.group_ringcentral_user"/>
+                <button name="action_send_sms" type="object" string="SMS" icon="fa-comment" groups="ringcentral_base.group_ringcentral_user"/>
+                <button name="action_schedule_meeting" type="object" string="Meeting" icon="fa-video-camera" groups="ringcentral_base.group_ringcentral_user"/>
+            </xpath>
+            
+            <!-- Add RingCentral extension info -->
+            <xpath expr="//field[@name='work_phone']" position="after">
+                <field name="ringcentral_extension" groups="ringcentral_base.group_ringcentral_user"/>
+                <field name="ringcentral_direct_number" groups="ringcentral_base.group_ringcentral_user"/>
+            </xpath>
+            
+            <!-- Add communication tab -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Communication" name="communication" groups="ringcentral_base.group_ringcentral_user">
+                    <group>
+                        <group string="Statistics">
+                            <field name="call_count"/>
+                            <field name="sms_count"/>
+                        </group>
+                        <group string="Last Contact">
+                            <field name="last_call_date"/>
+                            <field name="last_sms_date"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Extend Employee Tree View -->
+    <record id="hr_employee_view_tree_ringcentral" model="ir.ui.view">
+        <field name="name">hr.employee.tree.ringcentral</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='work_phone']" position="after">
+                <button name="action_call" type="object" icon="fa-phone" title="Call" class="text-primary" groups="ringcentral_base.group_ringcentral_user"/>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Extend Employee Kanban View -->
+    <record id="hr_employee_view_kanban_ringcentral" model="ir.ui.view">
+        <field name="name">hr.employee.kanban.ringcentral</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.hr_kanban_view_employees"/>
+        <field name="arch" type="xml">
+            <!-- Add call icon after work_phone in kanban -->
+            <xpath expr="//field[@name='work_phone']" position="after">
+                <a name="action_call" type="object" class="btn btn-link btn-sm text-primary p-0 ms-1" groups="ringcentral_base.group_ringcentral_user" title="Call">
+                    <i class="fa fa-phone"/>
+                </a>
+            </xpath>
+        </field>
+    </record>
+</odoo>

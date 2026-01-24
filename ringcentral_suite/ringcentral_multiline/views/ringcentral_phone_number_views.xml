@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ================================== -->
+        <!-- RingCentral Phone Number Views -->
+        <!-- ================================== -->
+        
+        <!-- Tree View -->
+        <record id="view_ringcentral_phone_number_tree" model="ir.ui.view">
+            <field name="name">ringcentral.phone.number.tree</field>
+            <field name="model">ringcentral.phone.number</field>
+            <field name="arch" type="xml">
+                <list string="RingCentral Phone Numbers">
+                    <field name="phone_number"/>
+                    <field name="formatted_number"/>
+                    <field name="usage_type"/>
+                    <field name="extension_id"/>
+                    <field name="can_be_caller_id" widget="boolean_toggle"/>
+                    <field name="can_send_sms" widget="boolean_toggle"/>
+                    <field name="use_for_crm" widget="boolean_toggle"/>
+                    <field name="use_for_sale" widget="boolean_toggle"/>
+                    <field name="use_for_hr" widget="boolean_toggle"/>
+                    <field name="use_for_helpdesk" widget="boolean_toggle"/>
+                    <field name="is_primary"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </list>
+            </field>
+        </record>
+        
+        <!-- Form View -->
+        <record id="view_ringcentral_phone_number_form" model="ir.ui.view">
+            <field name="name">ringcentral.phone.number.form</field>
+            <field name="model">ringcentral.phone.number</field>
+            <field name="arch" type="xml">
+                <form string="RingCentral Phone Number">
+                    <header>
+                        <button name="action_set_as_primary" string="Set as Primary" 
+                                type="object" class="btn-primary"
+                                invisible="is_primary"
+                                groups="ringcentral_multiline.group_ringcentral_manager"/>
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Primary" bg_color="bg-success" invisible="not is_primary"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="formatted_number" placeholder="+1 (555) 123-4567"/>
+                            </h1>
+                            <h3>
+                                <field name="phone_number" class="oe_inline" readonly="1"/>
+                            </h3>
+                        </div>
+                        <group>
+                            <group string="Number Details">
+                                <field name="rc_phone_id" readonly="1"/>
+                                <field name="usage_type"/>
+                                <field name="payment_type"/>
+                                <field name="type_field"/>
+                            </group>
+                            <group string="Assignment">
+                                <field name="extension_id"/>
+                                <field name="call_queue_id"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="is_primary"/>
+                            </group>
+                        </group>
+                        <group string="Capabilities">
+                            <group>
+                                <field name="can_be_caller_id"/>
+                                <field name="can_send_sms"/>
+                            </group>
+                            <group>
+                                <field name="can_receive_sms"/>
+                                <field name="can_receive_fax"/>
+                            </group>
+                        </group>
+                        <group string="App Assignment" groups="ringcentral_multiline.group_ringcentral_manager">
+                            <group>
+                                <field name="use_for_crm"/>
+                                <field name="use_for_sale"/>
+                                <field name="use_for_hr"/>
+                            </group>
+                            <group>
+                                <field name="use_for_helpdesk"/>
+                                <field name="use_for_project"/>
+                                <field name="use_for_general"/>
+                            </group>
+                        </group>
+                        <group string="Sync Info" groups="ringcentral_multiline.group_ringcentral_manager">
+                            <field name="last_sync_date"/>
+                            <field name="features_json" widget="json"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <!-- Search View -->
+        <record id="view_ringcentral_phone_number_search" model="ir.ui.view">
+            <field name="name">ringcentral.phone.number.search</field>
+            <field name="model">ringcentral.phone.number</field>
+            <field name="arch" type="xml">
+                <search string="Search Phone Numbers">
+                    <field name="phone_number"/>
+                    <field name="formatted_number"/>
+                    <field name="extension_id"/>
+                    <separator/>
+                    <filter name="filter_caller_id" string="Can Be Caller ID" domain="[('can_be_caller_id', '=', True)]"/>
+                    <filter name="filter_sms" string="SMS Capable" domain="[('can_send_sms', '=', True)]"/>
+                    <filter name="filter_primary" string="Primary Numbers" domain="[('is_primary', '=', True)]"/>
+                    <filter name="filter_main" string="Main Company" domain="[('usage_type', '=', 'MainCompanyNumber')]"/>
+                    <separator/>
+                    <filter name="filter_crm" string="CRM" domain="[('use_for_crm', '=', True)]"/>
+                    <filter name="filter_sale" string="Sales" domain="[('use_for_sale', '=', True)]"/>
+                    <filter name="filter_hr" string="HR" domain="[('use_for_hr', '=', True)]"/>
+                    <filter name="filter_helpdesk" string="Helpdesk" domain="[('use_for_helpdesk', '=', True)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_usage" string="Usage Type" context="{'group_by': 'usage_type'}"/>
+                        <filter name="group_extension" string="Extension" context="{'group_by': 'extension_id'}"/>
+                        <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <!-- Action -->
+        <record id="action_ringcentral_phone_number" model="ir.actions.act_window">
+            <field name="name">Phone Numbers</field>
+            <field name="res_model">ringcentral.phone.number</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_ringcentral_phone_number_search"/>
+            <field name="context">{'search_default_filter_caller_id': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No phone numbers found
+                </p>
+                <p>
+                    Phone numbers will be synced from your RingCentral account.
+                    Click "Sync" in Settings to import them.
+                </p>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

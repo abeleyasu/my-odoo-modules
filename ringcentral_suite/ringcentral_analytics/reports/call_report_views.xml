@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Call Report Pivot View -->
+    <record id="ringcentral_call_report_view_pivot" model="ir.ui.view">
+        <field name="name">ringcentral.call.report.pivot</field>
+        <field name="model">ringcentral.call.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Call Analysis">
+                <field name="date" type="row" interval="day"/>
+                <field name="direction" type="col"/>
+                <field name="call_count" type="measure"/>
+                <field name="duration" type="measure"/>
+                <field name="avg_duration" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- Call Report Graph View -->
+    <record id="ringcentral_call_report_view_graph" model="ir.ui.view">
+        <field name="name">ringcentral.call.report.graph</field>
+        <field name="model">ringcentral.call.report</field>
+        <field name="arch" type="xml">
+            <graph string="Call Analysis" type="line">
+                <field name="date" type="row" interval="day"/>
+                <field name="call_count" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Call Report Tree View -->
+    <record id="ringcentral_call_report_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.call.report.tree</field>
+        <field name="model">ringcentral.call.report</field>
+        <field name="arch" type="xml">
+            <list string="Call Analysis">
+                <field name="date"/>
+                <field name="user_id"/>
+                <field name="direction"/>
+                <field name="state"/>
+                <field name="call_count"/>
+                <field name="duration" sum="Total Duration"/>
+                <field name="avg_duration" avg="Average"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Call Report Search View -->
+    <record id="ringcentral_call_report_view_search" model="ir.ui.view">
+        <field name="name">ringcentral.call.report.search</field>
+        <field name="model">ringcentral.call.report</field>
+        <field name="arch" type="xml">
+            <search string="Call Analysis">
+                <field name="user_id"/>
+                <field name="partner_id"/>
+                <filter name="filter_inbound" string="Inbound" domain="[('direction', '=', 'inbound')]"/>
+                <filter name="filter_outbound" string="Outbound" domain="[('direction', '=', 'outbound')]"/>
+                <separator/>
+                <filter name="filter_answered" string="Answered" domain="[('state', '=', 'ended')]"/>
+                <filter name="filter_missed" string="Missed" domain="[('state', '=', 'missed')]"/>
+                <separator/>
+                <filter name="filter_today" string="Today" domain="[('date', '=', context_today())]"/>
+                <filter name="filter_week" string="This Week" domain="[('date', '&gt;=', (context_today() - datetime.timedelta(days=7)))]"/>
+                <filter name="filter_month" string="This Month" domain="[('date', '&gt;=', time.strftime('%Y-%m-01'))]"/>
+                <separator/>
+                <filter name="group_direction" string="Direction" context="{'group_by': 'direction'}"/>
+                <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                <filter name="group_user" string="User" context="{'group_by': 'user_id'}"/>
+                <filter name="group_date" string="Date" context="{'group_by': 'date:day'}"/>
+                <filter name="group_hour" string="Hour" context="{'group_by': 'hour'}"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Action -->
+    <record id="action_ringcentral_call_report" model="ir.actions.act_window">
+        <field name="name">Call Analysis</field>
+        <field name="res_model">ringcentral.call.report</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="search_view_id" ref="ringcentral_call_report_view_search"/>
+        <field name="context">{'search_default_filter_month': 1}</field>
+    </record>
+</odoo>

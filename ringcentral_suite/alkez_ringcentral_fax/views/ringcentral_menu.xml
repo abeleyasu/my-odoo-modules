@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_ringcentral_fax"
+              name="Fax"
+              parent="ringcentral_base.menu_ringcentral_communications"
+              action="action_ringcentral_fax"
+              sequence="30"/>
+    
+    <menuitem id="menu_ringcentral_fax_cover_pages"
+              name="Fax Cover Pages"
+              parent="ringcentral_base.menu_ringcentral_config"
+              action="action_ringcentral_fax_cover_page"
+              sequence="50"
+              groups="ringcentral_base.group_ringcentral_manager"/>
+</odoo>

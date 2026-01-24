@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    
+    <!-- RingCentral Call Control Widget -->
+    <t t-name="ringcentral_call.CallControlWidget">
+        <div t-if="state.visible" 
+             class="o_ringcentral_call_control"
+             t-att-class="{ 'minimized': state.minimized }">
+            
+            <!-- Minimized View - Just a small floating button -->
+            <div t-if="state.minimized" class="call-control-minimized" t-on-click="toggleMinimize">
+                <div class="call-mini-indicator">
+                    <i class="fa fa-phone fa-lg text-success"/>
+                    <span class="call-timer-mini" t-esc="formatDuration(state.callDuration)"/>
+                </div>
+            </div>
+            
+            <!-- Expanded View - Full Control Panel -->
+            <div t-else="" class="call-control-expanded">
+                <!-- Header with minimize/close -->
+                <div class="call-control-header">
+                    <span class="call-direction">
+                        <i t-att-class="'fa ' + directionIcon"/>
+                        <t t-if="state.direction === 'inbound'">Incoming Call</t>
+                        <t t-else="">Outgoing Call</t>
+                    </span>
+                    <div class="call-control-actions-header">
+                        <button class="btn btn-link btn-sm" t-on-click="toggleMinimize" title="Minimize">
+                            <i class="fa fa-minus"/>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Call Info -->
+                <div class="call-info">
+                    <div class="call-avatar">
+                        <i class="fa fa-user-circle fa-3x"/>
+                    </div>
+                    <div class="call-details">
+                        <div class="call-name" t-esc="displayName"/>
+                        <div class="call-number" t-esc="state.phoneNumber"/>
+                        <div class="call-status" t-att-class="{ 
+                            'text-warning': state.callState === 'ringing',
+                            'text-success': state.callState === 'answered',
+                            'text-info': state.callState === 'on_hold',
+                            'text-danger': state.callState === 'failed'
+                        }">
+                            <t t-esc="statusText"/>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Call Control Buttons -->
+                <div class="call-control-buttons">
+                    <!-- Mute Button -->
+                    <button class="call-btn" 
+                            t-att-class="{ 'active': state.isMuted }"
+                            t-on-click="onMute"
+                            t-att-title="state.isMuted ? 'Unmute' : 'Mute'"
+                            t-att-disabled="state.callState !== 'answered' and state.callState !== 'on_hold'">
+                        <i t-att-class="state.isMuted ? 'fa fa-microphone-slash' : 'fa fa-microphone'"/>
+                        <span t-esc="state.isMuted ? 'Unmute' : 'Mute'"/>
+                    </button>
+                    
+                    <!-- Hold Button -->
+                    <button class="call-btn"
+                            t-att-class="{ 'active': state.isOnHold }"
+                            t-on-click="onHold"
+                            t-att-title="state.isOnHold ? 'Resume' : 'Hold'"
+                            t-att-disabled="state.callState !== 'answered' and state.callState !== 'on_hold'">
+                        <i t-att-class="state.isOnHold ? 'fa fa-play' : 'fa fa-pause'"/>
+                        <span t-esc="state.isOnHold ? 'Resume' : 'Hold'"/>
+                    </button>
+                    
+                    <!-- Record Button -->
+                    <button class="call-btn"
+                            t-att-class="{ 'active recording': state.isRecording }"
+                            t-on-click="onRecord"
+                            title="Record"
+                            t-att-disabled="state.callState !== 'answered'">
+                        <i class="fa fa-circle"/>
+                        <span>Record</span>
+                    </button>
+                    
+                    <!-- Transfer Button -->
+                    <button class="call-btn"
+                            t-att-class="{ 'active': state.showTransfer }"
+                            t-on-click="onTransfer"
+                            title="Transfer"
+                            t-att-disabled="state.callState !== 'answered'">
+                        <i class="fa fa-exchange"/>
+                        <span>Transfer</span>
+                    </button>
+                </div>
+                
+                <!-- Transfer Panel (shown when transfer button clicked) -->
+                <div t-if="state.showTransfer" class="call-transfer-panel">
+                    <div class="input-group">
+                        <input type="tel" 
+                               class="form-control" 
+                               placeholder="Enter number to transfer..."
+                               t-att-value="state.transferNumber"
+                               t-on-input="onTransferInputChange"/>
+                        <button class="btn btn-primary" t-on-click="doTransfer">
+                            <i class="fa fa-arrow-right"/> Transfer
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Hang Up Button -->
+                <div class="call-hangup-section">
+                    <button class="call-btn-hangup" t-on-click="onHangup" title="Hang Up">
+                        <i class="fa fa-phone fa-rotate-135"/>
+                        <span>End Call</span>
+                    </button>
+                </div>
+                
+                <!-- View Call Details Link -->
+                <div class="call-details-link">
+                    <a href="#" t-on-click.prevent="openCallDetails">
+                        <i class="fa fa-external-link"/> View call details
+                    </a>
+                </div>
+            </div>
+        </div>
+    </t>
+    
+</templates>

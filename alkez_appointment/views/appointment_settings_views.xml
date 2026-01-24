@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============================================ -->
+    <!-- BRANDING VIEWS -->
+    <!-- ============================================ -->
+    
+    <record id="appointment_branding_view_form" model="ir.ui.view">
+        <field name="name">appointment.branding.form</field>
+        <field name="model">appointment.branding</field>
+        <field name="arch" type="xml">
+            <form string="Appointment Branding">
+                <sheet>
+                    <group>
+                        <group string="Identity">
+                            <field name="user_id" readonly="1"/>
+                            <field name="company_name" placeholder="Display name (defaults to your name)"/>
+                            <field name="tagline" placeholder="Short tagline"/>
+                            <field name="logo" widget="image" class="oe_avatar"/>
+                        </group>
+                        <group string="Colors">
+                            <field name="primary_color" widget="color"/>
+                            <field name="secondary_color" widget="color"/>
+                            <field name="text_color" widget="color"/>
+                            <field name="background_color" widget="color"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Appearance" name="appearance">
+                            <group>
+                                <group string="Typography">
+                                    <field name="font_family"/>
+                                </group>
+                                <group string="Background">
+                                    <field name="background_style"/>
+                                    <field name="background_image" widget="image" 
+                                           invisible="background_style == 'none'"/>
+                                </group>
+                            </group>
+                            <group string="Footer">
+                                <field name="show_powered_by"/>
+                                <field name="custom_footer"/>
+                            </group>
+                        </page>
+                        
+                        <page string="Banner" name="banner">
+                            <group>
+                                <group>
+                                    <field name="show_banner"/>
+                                    <field name="banner_text" invisible="not show_banner"/>
+                                </group>
+                                <group>
+                                    <field name="banner_color" widget="color" invisible="not show_banner"/>
+                                    <field name="banner_text_color" widget="color" invisible="not show_banner"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Social Links" name="social">
+                            <group>
+                                <group>
+                                    <field name="website_url" widget="url"/>
+                                    <field name="linkedin_url" widget="url"/>
+                                    <field name="twitter_url" widget="url"/>
+                                </group>
+                                <group>
+                                    <field name="facebook_url" widget="url"/>
+                                    <field name="instagram_url" widget="url"/>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Legal" name="legal">
+                            <group>
+                                <field name="privacy_url" widget="url"/>
+                                <field name="terms_url" widget="url"/>
+                            </group>
+                        </page>
+                        
+                        <page string="Advanced" name="advanced">
+                            <group string="Custom CSS">
+                                <field name="custom_css" nolabel="1" 
+                                       placeholder="/* Your custom CSS here */"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="appointment_branding_view_tree" model="ir.ui.view">
+        <field name="name">appointment.branding.tree</field>
+        <field name="model">appointment.branding</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="user_id"/>
+                <field name="company_name"/>
+                <field name="primary_color" widget="color"/>
+                <field name="font_family"/>
+            </list>
+        </field>
+    </record>
+    
+    <record id="action_appointment_branding" model="ir.actions.act_window">
+        <field name="name">Branding</field>
+        <field name="res_model">appointment.branding</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    
+    <!-- ============================================ -->
+    <!-- CALENDAR SYNC VIEWS -->
+    <!-- ============================================ -->
+    
+    <record id="appointment_calendar_sync_view_form" model="ir.ui.view">
+        <field name="name">appointment.calendar.sync.form</field>
+        <field name="model">appointment.calendar.sync</field>
+        <field name="arch" type="xml">
+            <form string="Calendar Sync">
+                <header>
+                    <button name="action_connect" type="object" string="Connect" 
+                            class="oe_highlight" invisible="state == 'connected'"/>
+                    <button name="action_disconnect" type="object" string="Disconnect" 
+                            invisible="state != 'connected'"/>
+                    <button name="action_sync_now" type="object" string="Sync Now" 
+                            invisible="state != 'connected'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Connection">
+                            <field name="user_id" readonly="1"/>
+                            <field name="provider"/>
+                            <field name="sync_calendar_name" readonly="1" invisible="not sync_calendar_name"/>
+                        </group>
+                        <group string="Settings">
+                            <field name="sync_direction"/>
+                            <field name="block_external_events"/>
+                            <field name="auto_sync"/>
+                            <field name="sync_interval" invisible="not auto_sync"/>
+                        </group>
+                    </group>
+                    
+                    <group string="iCal URL" invisible="provider != 'ical'">
+                        <field name="sync_calendar_id" placeholder="https://calendar.example.com/feed.ics"/>
+                    </group>
+                    
+                    <group string="Last Sync">
+                        <field name="last_sync"/>
+                        <field name="last_sync_status"/>
+                        <field name="last_sync_message" invisible="not last_sync_message"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="appointment_calendar_sync_view_tree" model="ir.ui.view">
+        <field name="name">appointment.calendar.sync.tree</field>
+        <field name="model">appointment.calendar.sync</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="user_id"/>
+                <field name="provider"/>
+                <field name="state"/>
+                <field name="last_sync"/>
+                <field name="last_sync_status"/>
+            </list>
+        </field>
+    </record>
+    
+    <record id="action_appointment_calendar_sync" model="ir.actions.act_window">
+        <field name="name">Calendar Connections</field>
+        <field name="res_model">appointment.calendar.sync</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    
+    <!-- ============================================ -->
+    <!-- ATTENDEE VIEWS -->
+    <!-- ============================================ -->
+    
+    <record id="appointment_booking_attendee_view_form" model="ir.ui.view">
+        <field name="name">appointment.booking.attendee.form</field>
+        <field name="model">appointment.booking.attendee</field>
+        <field name="arch" type="xml">
+            <form string="Attendee">
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="email"/>
+                        <field name="phone"/>
+                    </group>
+                    <group>
+                        <field name="partner_id"/>
+                        <field name="confirmed"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+    
+    <record id="appointment_booking_attendee_view_tree" model="ir.ui.view">
+        <field name="name">appointment.booking.attendee.tree</field>
+        <field name="model">appointment.booking.attendee</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="booking_id"/>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="confirmed"/>
+            </list>
+        </field>
+    </record>
+</odoo>

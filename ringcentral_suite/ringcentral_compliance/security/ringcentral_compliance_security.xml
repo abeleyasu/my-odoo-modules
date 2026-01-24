@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Compliance Officer Group (add to base) -->
+    <record id="ringcentral_base.group_ringcentral_compliance" model="res.groups">
+        <field name="name">RingCentral / Compliance Officer</field>
+        <field name="category_id" ref="base.module_category_phone"/>
+        <field name="implied_ids" eval="[(4, ref('ringcentral_base.group_ringcentral_manager'))]"/>
+    </record>
+    
+    <!-- Record Rules -->
+    <record id="rule_audit_log_compliance_only" model="ir.rule">
+        <field name="name">Audit Log: Compliance Officers Only</field>
+        <field name="model_id" ref="model_ringcentral_compliance_audit_log"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('ringcentral_base.group_ringcentral_compliance'))]"/>
+    </record>
+</odoo>

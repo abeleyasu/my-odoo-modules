@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_call_queue_user,ringcentral.call.queue.user,model_ringcentral_call_queue,ringcentral_base.group_ringcentral_user,1,0,0,0
+access_call_queue_manager,ringcentral.call.queue.manager,model_ringcentral_call_queue,ringcentral_base.group_ringcentral_manager,1,1,1,1
+access_call_queue_agent_user,ringcentral.call.queue.agent.user,model_ringcentral_call_queue_agent,ringcentral_base.group_ringcentral_user,1,0,0,0
+access_call_queue_agent_manager,ringcentral.call.queue.agent.manager,model_ringcentral_call_queue_agent,ringcentral_base.group_ringcentral_manager,1,1,1,1
+access_ivr_menu_user,ringcentral.ivr.menu.user,model_ringcentral_ivr_menu,ringcentral_base.group_ringcentral_user,1,0,0,0
+access_ivr_menu_manager,ringcentral.ivr.menu.manager,model_ringcentral_ivr_menu,ringcentral_base.group_ringcentral_manager,1,1,1,1
+access_ivr_menu_option_user,ringcentral.ivr.menu.option.user,model_ringcentral_ivr_menu_option,ringcentral_base.group_ringcentral_user,1,0,0,0
+access_ivr_menu_option_manager,ringcentral.ivr.menu.option.manager,model_ringcentral_ivr_menu_option,ringcentral_base.group_ringcentral_manager,1,1,1,1

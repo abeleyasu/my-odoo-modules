@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Calendar Event Form -->
+    <record id="calendar_event_view_form_ringcentral" model="ir.ui.view">
+        <field name="name">calendar.event.form.ringcentral</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button name="action_create_ringcentral_meeting" type="object"
+                        class="oe_stat_button" icon="fa-video-camera"
+                        invisible="ringcentral_meeting_id"
+                        groups="ringcentral_base.group_ringcentral_user">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Add RC Meeting</span>
+                    </div>
+                </button>
+                <button name="action_join_ringcentral_meeting" type="object"
+                        class="oe_stat_button" icon="fa-video-camera"
+                        invisible="not ringcentral_meeting_id"
+                        groups="ringcentral_base.group_ringcentral_user">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Join Meeting</span>
+                    </div>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='videocall_location']" position="after">
+                <field name="ringcentral_meeting_id" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

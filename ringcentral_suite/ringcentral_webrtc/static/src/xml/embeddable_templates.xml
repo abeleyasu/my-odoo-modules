@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- RingCentral Embeddable Toggle Button in Systray -->
+    <t t-name="ringcentral_webrtc.EmbeddableToggle">
+        <div class="rc-embeddable-toggle o-dropdown dropdown">
+            <button class="btn dropdown-toggle rc-phone-btn" 
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    t-att-class="{ 'rc-in-call': rcState.inCall }"
+                    t-att-title="rcState.widgetReady ? 'RingCentral Phone' : 'RingCentral - Connecting...'">
+                <i class="fa fa-phone" t-att-class="{ 'text-success': rcState.widgetReady and rcState.loggedIn, 'text-warning': rcState.widgetReady and !rcState.loggedIn, 'text-muted': !rcState.widgetReady }"></i>
+                <span t-if="rcState.inCall" class="rc-call-pulse"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <a class="dropdown-item" href="#" t-on-click.prevent="onDialerClick" t-att-class="{ 'text-muted': !rcState.widgetReady }">
+                        <i class="fa fa-phone-square me-2"></i>
+                        Open Dialer
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="#" t-on-click.prevent="onToggle" t-att-class="{ 'text-muted': !rcState.widgetReady }">
+                        <i class="fa fa-expand me-2" t-if="rcState.minimized"></i>
+                        <i class="fa fa-compress me-2" t-if="!rcState.minimized"></i>
+                        <t t-if="rcState.minimized">Show Phone</t>
+                        <t t-else="">Hide Phone</t>
+                    </a>
+                </li>
+                <li t-if="!rcState.widgetReady">
+                    <a class="dropdown-item" href="#" t-on-click.prevent="onReconnect">
+                        <i class="fa fa-refresh me-2"></i>
+                        Reconnect
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"/></li>
+                <li>
+                    <span class="dropdown-item-text small">
+                        <t t-if="rcState.widgetReady and rcState.loggedIn">
+                            <i class="fa fa-circle me-1 text-success"></i>
+                            <span class="text-success">Ready</span>
+                        </t>
+                        <t t-elif="rcState.widgetReady and !rcState.loggedIn">
+                            <i class="fa fa-circle me-1 text-warning"></i>
+                            <span class="text-warning">Not Logged In</span>
+                        </t>
+                        <t t-else="">
+                            <i class="fa fa-circle me-1 text-danger"></i>
+                            <span class="text-muted">Disconnected</span>
+                        </t>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </t>
+
+    <!-- RingCentral Call Action Template -->
+    <t t-name="ringcentral_webrtc.CallActionTemplate">
+        <div class="o_action"/>
+    </t>
+</templates>

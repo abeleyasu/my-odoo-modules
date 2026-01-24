@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- AI Transcript Tree View -->
+    <record id="ai_transcript_view_tree" model="ir.ui.view">
+        <field name="name">ringcentral.ai.transcript.tree</field>
+        <field name="model">ringcentral.ai.transcript</field>
+        <field name="arch" type="xml">
+            <list string="AI Transcripts"
+                  decoration-success="sentiment in ('positive', 'very_positive')"
+                  decoration-danger="sentiment in ('negative', 'very_negative')"
+                  decoration-muted="state == 'failed'">
+                <field name="name"/>
+                <field name="recording_id"/>
+                <field name="partner_id"/>
+                <field name="sentiment" widget="badge"/>
+                <field name="topics_display"/>
+                <field name="action_items_count"/>
+                <field name="confidence" widget="progressbar"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- AI Transcript Form View -->
+    <record id="ai_transcript_view_form" model="ir.ui.view">
+        <field name="name">ringcentral.ai.transcript.form</field>
+        <field name="model">ringcentral.ai.transcript</field>
+        <field name="arch" type="xml">
+            <form string="AI Transcript">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_process_transcript" type="object" string="Process" class="btn-primary" invisible="state not in ('pending', 'failed')"/>
+                    <button name="action_retry" type="object" string="Retry" invisible="state != 'failed'"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Recording Info">
+                            <field name="recording_id"/>
+                            <field name="call_id"/>
+                            <field name="partner_id"/>
+                        </group>
+                        <group string="Analysis">
+                            <field name="sentiment" widget="badge"/>
+                            <field name="sentiment_score"/>
+                            <field name="confidence"/>
+                            <field name="processing_time"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Summary" name="summary">
+                            <group>
+                                <field name="summary" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Full Transcript" name="transcript">
+                            <group>
+                                <field name="transcript_text" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Topics" name="topics">
+                            <group>
+                                <field name="topics" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Action Items" name="actions">
+                            <group>
+                                <field name="action_items" nolabel="1"/>
+                                <field name="action_items_count"/>
+                            </group>
+                        </page>
+                        <page string="Error" name="error" invisible="state != 'failed'">
+                            <group>
+                                <field name="error_message" nolabel="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- AI Transcript Search View -->
+    <record id="ai_transcript_view_search" model="ir.ui.view">
+        <field name="name">ringcentral.ai.transcript.search</field>
+        <field name="model">ringcentral.ai.transcript</field>
+        <field name="arch" type="xml">
+            <search string="AI Transcripts">
+                <field name="recording_id"/>
+                <field name="partner_id"/>
+                <filter name="filter_completed" string="Completed" domain="[('state', '=', 'completed')]"/>
+                <filter name="filter_pending" string="Pending" domain="[('state', '=', 'pending')]"/>
+                <separator/>
+                <filter name="filter_positive" string="Positive" domain="[('sentiment', 'in', ('positive', 'very_positive'))]"/>
+                <filter name="filter_negative" string="Negative" domain="[('sentiment', 'in', ('negative', 'very_negative'))]"/>
+                <separator/>
+                <filter name="group_sentiment" string="Sentiment" context="{'group_by': 'sentiment'}"/>
+                <filter name="group_partner" string="Contact" context="{'group_by': 'partner_id'}"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Sentiment Pivot View -->
+    <record id="ai_transcript_view_pivot" model="ir.ui.view">
+        <field name="name">ringcentral.ai.transcript.pivot</field>
+        <field name="model">ringcentral.ai.transcript</field>
+        <field name="arch" type="xml">
+            <pivot string="Sentiment Analysis">
+                <field name="partner_id" type="row"/>
+                <field name="sentiment" type="col"/>
+                <field name="create_date" interval="month" type="col"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- AI Transcript Action -->
+    <record id="action_ai_transcript" model="ir.actions.act_window">
+        <field name="name">AI Transcripts</field>
+        <field name="res_model">ringcentral.ai.transcript</field>
+        <field name="view_mode">list,form,pivot</field>
+        <field name="search_view_id" ref="ai_transcript_view_search"/>
+        <field name="context">{'search_default_filter_completed': 1}</field>
+    </record>
+</odoo>

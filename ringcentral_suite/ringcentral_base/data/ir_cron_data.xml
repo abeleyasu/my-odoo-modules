@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    
+    <!-- Health Check Cron - Every 15 minutes - Uses API Log model to call health check -->
+    <record id="ir_cron_ringcentral_health_check" model="ir.cron">
+        <field name="name">RingCentral: Health Check</field>
+        <field name="model_id" ref="model_ringcentral_api_log"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_health_check()</field>
+        <field name="interval_number">15</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+    </record>
+
+    <!-- Webhook Retry Queue Processing - Every 5 minutes -->
+    <record id="ir_cron_ringcentral_webhook_retry" model="ir.cron">
+        <field name="name">RingCentral: Process Webhook Retry Queue</field>
+        <field name="model_id" ref="model_ringcentral_webhook_log"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_process_retry_queue()</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+    </record>
+
+    <!-- Webhook Log Cleanup - Daily -->
+    <record id="ir_cron_ringcentral_webhook_cleanup" model="ir.cron">
+        <field name="name">RingCentral: Cleanup Old Webhook Logs</field>
+        <field name="model_id" ref="model_ringcentral_webhook_log"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_cleanup_old_logs()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+
+    <!-- API Log Cleanup - Daily -->
+    <record id="ir_cron_ringcentral_api_log_cleanup" model="ir.cron">
+        <field name="name">RingCentral: Cleanup Old API Logs</field>
+        <field name="model_id" ref="model_ringcentral_api_log"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_cleanup_old_logs()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+
+</odoo>

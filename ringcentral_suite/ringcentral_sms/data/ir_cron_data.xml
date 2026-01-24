@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    
+    <!-- Cron job to process pending SMS queue -->
+    <record id="ir_cron_ringcentral_sms_queue" model="ir.cron">
+        <field name="name">RingCentral: Process SMS Queue</field>
+        <field name="model_id" ref="model_ringcentral_sms"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_process_sms_queue()</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+    </record>
+    
+    <!-- Cron job to retry failed SMS -->
+    <record id="ir_cron_ringcentral_sms_retry" model="ir.cron">
+        <field name="name">RingCentral: Retry Failed SMS</field>
+        <field name="model_id" ref="model_ringcentral_sms"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_retry_failed_sms()</field>
+        <field name="interval_number">30</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+    </record>
+
+</odoo>

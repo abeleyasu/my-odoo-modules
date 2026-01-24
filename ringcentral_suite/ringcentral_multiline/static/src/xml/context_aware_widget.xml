@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Caller ID Widget Template -->
+    <t t-name="ringcentral_multiline.CallerIdWidget">
+        <div class="rc-caller-id-widget o_dropdown">
+            <button class="btn btn-sm btn-outline-secondary" 
+                    t-on-click="toggleDropdown"
+                    t-att-title="'Current Caller ID: ' + (state.formattedNumber || state.currentNumber || 'Not set')">
+                <i class="fa fa-phone me-1"/>
+                <span t-if="state.currentNumber" t-esc="state.formattedNumber || state.currentNumber"/>
+                <span t-else="" class="text-muted">No Caller ID</span>
+                <i class="fa fa-caret-down ms-1"/>
+            </button>
+            
+            <div t-if="state.showDropdown" class="dropdown-menu show" style="max-height: 300px; overflow-y: auto;">
+                <div class="dropdown-header">
+                    <i class="fa fa-map-marker me-1"/>
+                    Context: <span t-esc="state.appType" class="badge bg-primary"/>
+                </div>
+                <div class="dropdown-divider"/>
+                
+                <t t-if="state.availableNumbers.length > 0">
+                    <t t-foreach="state.availableNumbers" t-as="number" t-key="number.phoneNumber">
+                        <a class="dropdown-item" 
+                           href="#"
+                           t-on-click.prevent="() => this.selectNumber(number)"
+                           t-att-class="{'active': state.currentNumber === number.phoneNumber}">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span t-esc="number.formattedNumber || number.phoneNumber"/>
+                                    <br/>
+                                    <small class="text-muted" t-esc="number.label"/>
+                                </div>
+                                <i t-if="state.currentNumber === number.phoneNumber" 
+                                   class="fa fa-check text-success"/>
+                            </div>
+                        </a>
+                    </t>
+                </t>
+                <t t-else="">
+                    <div class="dropdown-item disabled text-muted">
+                        No phone numbers available
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+    
+    <!-- Caller ID Display (for chatter/forms) -->
+    <t t-name="ringcentral_multiline.CallerIdDisplay">
+        <div class="rc-caller-id-display d-inline-flex align-items-center">
+            <span class="badge bg-light text-dark border">
+                <i class="fa fa-phone-square text-primary me-1"/>
+                <span t-if="props.phoneNumber" t-esc="props.formattedNumber || props.phoneNumber"/>
+                <span t-else="" class="text-muted">No Caller ID</span>
+            </span>
+        </div>
+    </t>
+
+</templates>

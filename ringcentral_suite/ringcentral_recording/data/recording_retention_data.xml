@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Default Retention Policy -->
+    <record id="retention_policy_standard" model="ringcentral.recording.retention">
+        <field name="name">Standard (90 days)</field>
+        <field name="retention_days">90</field>
+        <field name="apply_to">all</field>
+        <field name="compliance_type">standard</field>
+    </record>
+    
+    <record id="retention_policy_gdpr" model="ringcentral.recording.retention">
+        <field name="name">GDPR Compliant (30 days)</field>
+        <field name="retention_days">30</field>
+        <field name="apply_to">all</field>
+        <field name="compliance_type">gdpr</field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+    
+    <record id="retention_policy_hipaa" model="ringcentral.recording.retention">
+        <field name="name">HIPAA Compliant (7 years)</field>
+        <field name="retention_days">2555</field>
+        <field name="apply_to">all</field>
+        <field name="compliance_type">hipaa</field>
+    </record>
+    
+    <record id="retention_policy_extended" model="ringcentral.recording.retention">
+        <field name="name">Extended (1 year)</field>
+        <field name="retention_days">365</field>
+        <field name="apply_to">all</field>
+        <field name="compliance_type">standard</field>
+    </record>
+
+    <!-- Server Actions for Cron Jobs -->
+    <record id="ir_actions_server_cleanup_expired_recordings" model="ir.actions.server">
+        <field name="name">RingCentral: Cleanup Expired Recordings</field>
+        <field name="model_id" ref="model_ringcentral_recording"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_cleanup_expired_recordings()</field>
+    </record>
+    
+    <record id="ir_actions_server_download_pending_recordings" model="ir.actions.server">
+        <field name="name">RingCentral: Download Pending Recordings</field>
+        <field name="model_id" ref="model_ringcentral_recording"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_download_pending_recordings()</field>
+    </record>
+
+    <record id="ir_actions_server_poll_pending_transcriptions" model="ir.actions.server">
+        <field name="name">RingCentral: Poll Pending Transcriptions</field>
+        <field name="model_id" ref="model_ringcentral_recording"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_poll_pending_transcriptions()</field>
+    </record>
+
+    <!-- Cron Jobs -->
+    <record id="ir_cron_cleanup_expired_recordings" model="ir.cron">
+        <field name="name">RingCentral: Cleanup Expired Recordings</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+        <field name="ir_actions_server_id" ref="ir_actions_server_cleanup_expired_recordings"/>
+    </record>
+    
+    <record id="ir_cron_download_pending_recordings" model="ir.cron">
+        <field name="name">RingCentral: Download Pending Recordings</field>
+        <field name="interval_number">15</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+        <field name="ir_actions_server_id" ref="ir_actions_server_download_pending_recordings"/>
+    </record>
+
+    <record id="ir_cron_poll_pending_transcriptions" model="ir.cron">
+        <field name="name">RingCentral: Poll Pending Transcriptions</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="active">True</field>
+        <field name="ir_actions_server_id" ref="ir_actions_server_poll_pending_transcriptions"/>
+    </record>
+</odoo>

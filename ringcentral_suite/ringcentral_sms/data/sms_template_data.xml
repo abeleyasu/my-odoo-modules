@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Default SMS Templates -->
+    
+    <record id="sms_template_welcome" model="ringcentral.sms.template">
+        <field name="name">Welcome Message</field>
+        <field name="body">Hello {{partner_name}}, welcome to {{company_name}}! We're glad to have you. Reply HELP for assistance.</field>
+    </record>
+    
+    <record id="sms_template_appointment_reminder" model="ringcentral.sms.template">
+        <field name="name">Appointment Reminder</field>
+        <field name="body">Hi {{partner_name}}, this is a reminder about your appointment on {{date}}. Reply YES to confirm or call us to reschedule.</field>
+    </record>
+    
+    <record id="sms_template_follow_up" model="ringcentral.sms.template">
+        <field name="name">Follow Up</field>
+        <field name="body">Hi {{partner_name}}, I wanted to follow up on our recent conversation. Please let me know if you have any questions. - {{user_name}}</field>
+    </record>
+    
+    <record id="sms_template_thank_you" model="ringcentral.sms.template">
+        <field name="name">Thank You</field>
+        <field name="body">Thank you for choosing {{company_name}}! We appreciate your business. Have a great day!</field>
+    </record>
+    
+</odoo>
