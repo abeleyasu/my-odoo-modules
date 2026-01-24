@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'RingCentral Call',
-    'version': '18.0.1.0.1',
+    'version': '18.0.1.0.2',
     'category': 'Phone',
     'summary': 'RingCentral Voice Calling - Click-to-Dial, Call Logging, Call Control',
     'description': '''
@@ -25,7 +25,7 @@ Extends base_phone module for native click-to-dial functionality.
     'website': 'https://www.alkezz.site',
     'license': 'OPL-1',
     'price': 50,
-    'currency': 'USD',
+    'currency': 'EUR',
     'depends': [
         'ringcentral_base',
         'mail',
